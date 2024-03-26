@@ -9,9 +9,9 @@ const Wrapper = styled.div`
 function LoanHistoryPast(){
     return (
         <Wrapper>
-            <p>
+            <h1>
                 대출 이력
-            </p>
+            </h1>
         </Wrapper>
     )
 }

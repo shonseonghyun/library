@@ -6,17 +6,28 @@ const { persistAtom } = recoilPersist({
     storage: localStorage,
   })
 
-export const accessTokenAtom = atom({
-    key: 'accessToken', 
-    default:'',
+
+interface IAuthUserInfo{
+    accessToken: string,
+    userId: string,
+    userNo: number
+}
+
+export const AuthUserInfoAtom = atom<IAuthUserInfo>({
+    key: 'authUserInfo', 
+    default: {
+        accessToken:'',
+        userId:'',
+        userNo: 0
+    },
     effects_UNSTABLE : [persistAtom]
 });
 
 export const isLoginSelector = selector({
     key     :   'isLoginSelector',
     get     :   ({get}) => { 
-        const accessToken = get(accessTokenAtom);
+        const authUserInfo = get(AuthUserInfoAtom);
 
-        return !!(accessToken); 
+        return !!(authUserInfo.accessToken); 
     }
 })

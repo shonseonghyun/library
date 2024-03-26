@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import styled from "styled-components";
-import { accessTokenAtom } from "../../../atoms/AcessToken";
+import { AuthUserInfoAtom } from "../../../atoms/AuthUserInfo";
 
 const LogoutBtn = styled.button`
     all:unset;
@@ -12,17 +12,18 @@ const LogoutBtn = styled.button`
 
 function UtilMenuForUser(){
     const navigate = useNavigate();
-    const [accessToken,setAccessToken] = useRecoilState(accessTokenAtom);
+    const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
+    const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
 
     const LogoutOnClick = ()=>{
         alert("로그아웃 진행");
-        setAccessToken("");
+        resetAuthUserInfo();
         navigate("/");
     }
 
     return (
         <div>
-            <p>{ accessToken + "님"}</p>
+            <p>{ authUserInfo.userId + "님"}</p>
             <ul>
                 <li>
                     <LogoutBtn onClick={LogoutOnClick}>로그아웃</LogoutBtn>

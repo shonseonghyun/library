@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { accessTokenAtom } from "../../../atoms/AcessToken";
+import { AuthUserInfoAtom  } from "../../../atoms/AuthUserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ interface FormValue{
     userPwd    :   string
 }
 
-interface ResponseIF{
+export interface ResponseIF{
     code    :   string,
     msg     :   string,
     data    :   ResponseDataIF
@@ -47,14 +47,13 @@ const Wrapper = styled.div`
 function Login(){
     const {register,handleSubmit,getValues,formState:{errors}} = useForm<FormValue>();
     const [isLoading,setIsLoading] = useState(false);
-    const [accessToken,setAccessToken] = useRecoilState(accessTokenAtom);
+    const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
     const location = useLocation();
     const from = location?.state?.redirectedFrom?.pathname||'/';
 
     const onSubmit = async (value:FormValue) =>{
         setIsLoading(true);
-        
         const loginParams : FormValue = {
             userId: getValues("userId"),
             userPwd: getValues("userPwd"),
@@ -72,9 +71,15 @@ function Login(){
      )
      .then((response)=>response.json())
      .then((data)=>{
-         console.log(data);
          if(data.code=="S00"){
-             setAccessToken(data.data.accessToken);
+            alert("로그인 성공");            
+
+            setAuthUserInfo({
+                accessToken:data.data.accessToken,
+                userId:data.data.userId,
+                userNo:data.data.userNo
+            });
+
              navigate(from);
          }else{
              alert(data.msg);

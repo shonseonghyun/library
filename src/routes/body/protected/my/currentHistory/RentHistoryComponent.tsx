@@ -6,12 +6,13 @@ const Wrapper = styled.div`
     background-color: yellow;
 `;
 
-function LoanHistoryCurrent(){
+function RentHistory(){
     return (
         <Wrapper>
-            <h1>대출현황</h1>
+            <h1>대출 이력</h1>
+            
         </Wrapper>
     )
 }
 
-export default LoanHistoryCurrent;
+export default RentHistory;

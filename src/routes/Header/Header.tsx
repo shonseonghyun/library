@@ -3,7 +3,7 @@ import styled from "styled-components";
 import UtilMenuForUser from "./List/UtilMenuForUser";
 import UtilMenuForGuest from "./List/UtilMenuForGuest";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { accessTokenAtom, isLoginSelector } from "../../atoms/AcessToken";
+import {  AuthUserInfoAtom, isLoginSelector } from "../../atoms/AuthUserInfo";
 
 const Wrapper = styled.div`
 
@@ -29,8 +29,6 @@ const UtilMenuWrapper = styled.div`
 
 
 function Header(){
-    const accessToken = useRecoilState(accessTokenAtom);
-
     const isLogin = useRecoilValue(isLoginSelector);
 
     return (
@@ -43,7 +41,7 @@ function Header(){
 
             <SearchFormWrapper>
                 <SearchForm>
-                    <select name="selectOptions" id="">
+                    <select name="selectOptions" id="selectOptions">
                         <option value="저자">저자</option>
                         <option value="도서제목">도서 제목</option>
                     </select>

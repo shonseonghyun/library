@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import Main from "./nonprotected/Main";
 import MyLibrary from "./protected/my/MyLibrary";
-import LoanHistoryCurrent from "./protected/my/LoanHistoryCurrent";
-import LoanHistoryPast from "./protected/my/LoanHistoryPast";
 import Login from "./nonprotected/Login";
 import Join from "./nonprotected/Join";
 import PublicRoute from "./nonprotected/PublicRoute";
 import PrivateRoute from "./protected/PrivateRoute";
+import MyBookCase from "./protected/my/heart/MyBookCase";
+import RentStatus from "./protected/my/currentHistory/RentStatusComponent";
+import RentHistory from "./protected/my/currentHistory/RentHistoryComponent";
 
 function Body(){
     return (
@@ -22,8 +23,9 @@ function Body(){
                 {/* 회원 전용 */}
                 <Route element={<PrivateRoute />}>
                     <Route path="/myLibrary" element={<MyLibrary /> }>
-                        <Route path="LoanHistoryCurrent" element={<LoanHistoryCurrent />}/>
-                        <Route path="LoanHistoryPast" element={<LoanHistoryPast />}/>
+                        <Route path="LoanHistoryCurrent" element={<RentStatus />}/>
+                        <Route path="LoanHistoryPast" element={<RentHistory />}/>
+                        <Route path="myBookcase" element={<MyBookCase />}/>
                     </ Route>
                 </Route>
             </Routes>

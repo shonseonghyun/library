@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { isLoginSelector } from "../../../atoms/AcessToken";
+import { isLoginSelector } from "../../../atoms/AuthUserInfo";
 import { useEffect } from "react";
 
 function PrivateRoute(){
