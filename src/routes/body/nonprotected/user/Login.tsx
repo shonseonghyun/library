@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { AuthUserInfoAtom  } from "../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom  } from "../../../../atoms/AuthUserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -51,6 +51,7 @@ function Login(){
     const navigate = useNavigate();
     const location = useLocation();
     const from = location?.state?.redirectedFrom?.pathname||'/';
+    console.log(from);
 
     const onSubmit = async (value:FormValue) =>{
         setIsLoading(true);

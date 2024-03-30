@@ -1,24 +1,16 @@
 import { Link, Outlet, Route, Routes } from "react-router-dom";
 import styled from "styled-components"
 
-const ContentContainer = styled.div`
-    width:1000px;
-    margin:0 auto;
-    text-align:center;
-    background-color : yellow;
-`;
 
 const Wrapper = styled.div`
-    width:1000px;
-    margin:0 auto;
     text-align:center;
-    background-color : yellow;
+    background-color:yellow;
+
 `;
 
 const OutletWrapper = styled.div`
-    width:100%;
-    height:300px;
-    background-color: yellow;
+  text-align:center;
+  background-color:red;
 `;
 
 
@@ -43,10 +35,10 @@ function MyLibrary(){
 
             <Lists>
                 <List>
-                    <Link to="LoanHistoryCurrent">대출 현황</Link>
+                    <Link to="rentStatus">대출 현황</Link>
                 </List>
                 <List>
-                    <Link to="LoanHistoryPast">대출 이력</Link>
+                    <Link to="rentHistory">대출 이력</Link>
                 </List>
                 <List>
                     <Link to="myBookcase">내 책장</Link>

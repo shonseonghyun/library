@@ -5,7 +5,7 @@ const Wrapper = styled.div`
     display:line-box;
 `;
 
-function UtilMenuForGuest(){
+function MenuForGuest(){
     return (
         <Wrapper>
             <ul>
@@ -20,4 +20,4 @@ function UtilMenuForGuest(){
     )
 }
 
-export default UtilMenuForGuest;
+export default MenuForGuest;

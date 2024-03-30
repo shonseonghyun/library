@@ -7,7 +7,7 @@ const { persistAtom } = recoilPersist({
   })
 
 
-interface IAuthUserInfo{
+export interface IAuthUserInfo{
     accessToken: string,
     userId: string,
     userNo: number

@@ -10,7 +10,7 @@ const LogoutBtn = styled.button`
 
 
 
-function UtilMenuForUser(){
+function MenuForUser(){
     const navigate = useNavigate();
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
@@ -23,17 +23,17 @@ function UtilMenuForUser(){
 
     return (
         <div>
-            <p>{ authUserInfo.userId + "님"}</p>
+            <p>{authUserInfo.userId + "님"}</p>
             <ul>
                 <li>
                     <LogoutBtn onClick={LogoutOnClick}>로그아웃</LogoutBtn>
                 </li>
                 <li>
-                    <Link to="myLibrary">내 서재</Link>
+                    <Link to="myLibrary/rentStatus">내 서재</Link>
                 </li>
             </ul>
         </div>
     )
 }
 
-export default UtilMenuForUser;
+export default MenuForUser;

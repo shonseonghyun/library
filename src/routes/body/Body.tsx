@@ -1,13 +1,14 @@
 import { Route, Routes } from "react-router-dom";
-import Main from "./nonprotected/Main";
-import MyLibrary from "./protected/my/MyLibrary";
-import Login from "./nonprotected/Login";
-import Join from "./nonprotected/Join";
+import Main from "./nonprotected/common/Main";
+import MyLibrary from "./protected/user/myLibrary/MyLibrary";
+import Login from "./nonprotected/user/Login";
+import Join from "./nonprotected/user/Join";
 import PublicRoute from "./nonprotected/PublicRoute";
 import PrivateRoute from "./protected/PrivateRoute";
-import MyBookCase from "./protected/my/heart/MyBookCase";
-import RentStatus from "./protected/my/currentHistory/RentStatusComponent";
-import RentHistory from "./protected/my/currentHistory/RentHistoryComponent";
+import MyBookCase from "./protected/user/myLibrary/heart/MyBookCase";
+import RentStatus from "./protected/user/myLibrary/RentStatus/RentStatusComponent";
+import RentHistory from "./protected/user/myLibrary/RentHistory/RentHistoryComponent";
+import BookDetail from "./nonprotected/book/BookDetail";
 
 function Body(){
     return (
@@ -18,13 +19,14 @@ function Body(){
                     <Route path="/" element={<Main/> }/>
                     <Route path="/login" element={<Login />} />
                     <Route path="/join" element={<Join />} />
+                    <Route path="/book/:bookNo" element={<BookDetail />}></Route>
                 </Route>
 
                 {/* 회원 전용 */}
                 <Route element={<PrivateRoute />}>
                     <Route path="/myLibrary" element={<MyLibrary /> }>
-                        <Route path="LoanHistoryCurrent" element={<RentStatus />}/>
-                        <Route path="LoanHistoryPast" element={<RentHistory />}/>
+                        <Route path="rentStatus" element={<RentStatus />}/>
+                        <Route path="rentHistory" element={<RentHistory />}/>
                         <Route path="myBookcase" element={<MyBookCase />}/>
                     </ Route>
                 </Route>

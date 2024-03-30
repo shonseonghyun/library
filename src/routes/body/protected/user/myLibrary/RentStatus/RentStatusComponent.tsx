@@ -1,11 +1,11 @@
 import React, {  useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import styled from "styled-components";
-import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import RentRuleExplainComponent from "./RentRuleExplainComponent";
 
-const ExplainTextContainer = styled.div`
-    text-align:left;
-`;
+
 
 const Table = styled.table`
     border-spacing: 0;
@@ -49,14 +49,16 @@ function RentStatus(){
     const [datas,setDatas]= useState<IBookInfo[]>([]);
     const [checkItems,setCheckItems] = useState<number[]>([]);
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
+    const navigate = useNavigate();
+    const currentLocation = useLocation();
+    const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
+    const [updateFlg,setUpdateFlg] = useState(false);
    
     useEffect(()=>{
+        console.log("랜더링");
+        console.log(updateFlg);
         getRentStatusApi();
-
-        setDatas( [...datas].sort(function(a:IBookInfo,b:IBookInfo){
-            return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
-        }));    
-    },[])
+    },[updateFlg])
     ;
 
     //대여 현황 도서목록 가져오기 api
@@ -70,8 +72,13 @@ function RentStatus(){
                     "Content-Type": "application/json",
                 }
             }
-        );
+        )
+        // .catch(error => {alert("잠시 후 다시 시도해주세요")});
         const datas = await response.json();
+        if(datas.code=="T01"){
+            resetAuthUserInfo();
+            navigate("/login",{state:{redirectedFrom: currentLocation}})
+        }
         setDatas(datas.data);
     }
 
@@ -127,7 +134,7 @@ function RentStatus(){
             {
                 method:"PUT",
                 headers:{
-                    // Authorization: `Bearer ${authUserInfo.accessToken}`, 
+                    Authorization: `Bearer ${authUserInfo.accessToken}`, 
                     "Content-Type": "application/json",
                 }
             }
@@ -139,6 +146,7 @@ function RentStatus(){
         }else{
             alert(data.msg);
         }
+        setUpdateFlg(true);
     }
 
     return (
@@ -146,11 +154,7 @@ function RentStatus(){
         <h1>
             대출 현황
         </h1>
-            <ExplainTextContainer>
-                <p>* 대출정지 : 반납기일을 초과하여 반납하였을 경우 연체반납일로부터 7일 간 대출 정지</p>
-                <p>* 도서변상 : 대출도서의 분실 또는 훼손시에는 동일도서로 변상</p>
-            </ExplainTextContainer>
-
+        <RentRuleExplainComponent />
             <ArrangeSelectWrapper>
                 <select name="Arrange" id="Arrange" onChange={arrangeHandler}>
                     <option value="rentDt">대출일</option>
@@ -199,7 +203,9 @@ function RentStatus(){
                                         {data.bookNo}
                                     </td>
                                     <td>
-                                        {data.bookName}
+                                        <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none"}}>
+                                            {data.bookName}
+                                        </Link>
                                     </td>
                                     <td>
                                         {data.rentDt}
@@ -208,8 +214,7 @@ function RentStatus(){
                                         {data.haveToReturnDt}
                                     </td>
                                     <td>
-                                        "개발해야함"
-                                        {/* {data.status} */}
+                                        "개발안함"
                                     </td>
                                     <td>
                                         <button onClick={()=>extendRequestIndividualHandler(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
