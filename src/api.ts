@@ -14,6 +14,15 @@ export interface IReponse{
     msg:string
 }
 
+export interface IRequestField{
+    userId:string,
+    userName:string,
+    userPwd:string,
+    email:string,
+    tel:string,
+    gender:string,
+    useFlg:number
+}
 
 
 export const deleteHeartBookFetch = (userNo:number,bookNo:number,accessToken:string)=>{
@@ -53,4 +62,31 @@ export const getHeartBooksFetch = async  (heartNo:number,userNo:number,accessTok
         data:data,
         isLast: data.data.heartList?.length!=pageSize
     };
+}
+
+export const checkExistUserIdFetch= async (userId:string)=>{
+    return await fetch(
+        `${BaseUrl}/user/userId/${userId}/exist`,
+        {
+            method:"GET",
+            headers:{
+                "Content-Type": "application/json",
+            },
+            
+        }
+    ).then(response=>response.json());
+}
+
+export const joinUserFetch= async (requsetParam: IRequestField)=>{
+    return await fetch(
+        `${BaseUrl}/user/join`,
+        {
+            method:"POST",
+            headers:{
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(requsetParam)
+            
+        }
+    ).then(response=>response.json());
 }

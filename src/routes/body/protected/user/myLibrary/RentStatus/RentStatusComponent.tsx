@@ -64,7 +64,7 @@ function RentStatus(){
     //대여 현황 도서목록 가져오기 api
     const getRentStatusApi = async () =>{
         const response = await fetch(
-            `http://localhost:8000/user/myLibrary/rentStatus/${authUserInfo.userNo}`,
+            `http://localhost:8000/user/rentStatus/${authUserInfo.userNo}`,
             {
                 method:"GET",
                 headers:{
