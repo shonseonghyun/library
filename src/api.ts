@@ -64,6 +64,18 @@ export const getHeartBooksFetch = async  (heartNo:number,userNo:number,accessTok
     };
 }
 
+export const getReviewsOfBookFetch = async(bookNo:string)=>{
+    return await fetch(
+        `${BaseUrl}/review/book/${bookNo}`,
+        {
+            method:"GET",
+            headers:{
+                "Content-Type": "application/json",
+            },
+        }
+    ).then(response=>response.json());
+}
+
 export const checkExistUserIdFetch= async (userId:string)=>{
     return await fetch(
         `${BaseUrl}/user/userId/${userId}/exist`,

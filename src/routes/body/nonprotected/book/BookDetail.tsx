@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../atoms/AuthUserInfo";
+import BookReview from "./BookReview";
 
 const HeartBtn = styled.button`
     border: 0;
@@ -53,7 +54,7 @@ interface IBookInfo{
 
 
 function BookDetail(){
-    const {bookNo} = useParams();
+    const {bookNo} = useParams()  as { bookNo: string }; ;
     const [data,setData] = useState<IBookInfo>();
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
@@ -72,7 +73,6 @@ function BookDetail(){
     }
 
     const requestRentBook = async ()=>{
-        console.log("requestRentBook 들어옴");
         const response = await fetch(
             `http://localhost:8000/rent/${authUserInfo.userNo}/book/${bookNo}`,
             {
@@ -98,8 +98,6 @@ function BookDetail(){
     }
 
     const requestHeartBook = async ()=>{
-        console.log("requestHeartBook 들어옴");
-
         const response = await fetch(
             `http://localhost:8000/heart/${authUserInfo.userNo}/book/${bookNo}`,
             {
@@ -174,8 +172,7 @@ function BookDetail(){
             </div>
 
             <div>
-                <h1>review</h1>
-                <hr />
+                <BookReview bookNo={bookNo}/>
             </div>
         </>
     )
