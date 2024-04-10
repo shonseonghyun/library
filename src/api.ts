@@ -38,6 +38,13 @@ export const deleteHeartBookFetch = (userNo:number,bookNo:number,accessToken:str
     ).then((response)=>response.json());
 }
 
+export const getBookInfoByBookNoFetch = async (bookNo:string)=>{
+    return await fetch(
+        `${BaseUrl}/book/${bookNo}`,
+    )
+    .then(response=>response.json())
+}
+
 
 export const getHeartBooksFetch = async  (heartNo:number,userNo:number,accessToken:string,pageSize:number)=>{
     const url = heartNo 
@@ -75,6 +82,23 @@ export const getReviewsOfBookFetch = async(bookNo:string)=>{
         }
     ).then(response=>response.json());
 }
+
+export  const postReviewOfBookFetch = async(bookNo:string,userNo:number,reviewContent:string,accessToken:string)=>{
+    return await fetch(
+        `http://localhost:8000/review/user/${userNo}/book/${bookNo}`,
+        {
+            method:"POST",
+            headers:{
+                Authorization: `Bearer ${accessToken}`, 
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+                reviewContent:`${reviewContent}`
+            })
+        }
+    ).then(response=>response.json())
+}
+    
 
 export const checkExistUserIdFetch= async (userId:string)=>{
     return await fetch(

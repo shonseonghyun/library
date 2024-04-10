@@ -4,6 +4,8 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../atoms/AuthUserInfo";
 import BookReview from "./BookReview";
+import { useQuery, useQueryClient } from "react-query";
+import { getBookInfoByBookNoFetch } from "../../../../api";
 
 const HeartBtn = styled.button`
     border: 0;
@@ -48,29 +50,33 @@ interface IBookInfo{
     modifiedDt:string,
     modifiedTm:string,
     pubDate:string
-    review:[]
 }
 
 
 
 function BookDetail(){
-    const {bookNo} = useParams()  as { bookNo: string }; ;
-    const [data,setData] = useState<IBookInfo>();
+    const queryClient = useQueryClient();
+
+    const {bookNo} = useParams()  as { bookNo: string };
+    const [book,setBook] = useState<IBookInfo>();
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
-    const isLogin = useRecoilValue(isLoginSelector);
     const navigate = useNavigate();
     const currentLocation = useLocation();
-
-    const requestBookInfoByBookNo = async ()=>{
-        const response = await fetch(
-            `http://localhost:8000/book/${bookNo}`,
-        )
-        .then(response=>response.json())
-        .then(data=>{
-            setData(data.data);
-        })
-    }
+    const {data} = useQuery(
+        ["getBookInfoByBookNoFetch",bookNo],
+        ()=>getBookInfoByBookNoFetch(bookNo),
+        {
+            onSuccess(data) {
+                if(data.code!="S00"){
+                    alert(data.msg);
+                }else{
+                    setBook(data.data);
+                }
+            },
+            refetchOnWindowFocus: false,
+        }
+    )
 
     const requestRentBook = async ()=>{
         const response = await fetch(
@@ -87,6 +93,7 @@ function BookDetail(){
         .then(data=>{
             if(data.code=="S00"){
                 alert("대여 완료하였습니다.");
+                queryClient.invalidateQueries(["getBookInfoByBookNoFetch",bookNo]);
             }else{
                 alert(data.msg);
                 if(data.code=="T01"|| data.code=="A01"){
@@ -130,26 +137,21 @@ function BookDetail(){
         requestHeartBook();
     }
 
-    useEffect(()=>{
-        requestBookInfoByBookNo();
-    },[]);
-
     return (
         <>
             <h1>BookDetail</h1>
             <hr />
             <div>
                 <input type="hidden" name="bookNo" value={bookNo} />
-                <img src={data?.bookImage} />
-                <p>{data?.bookName}</p>
-                <p>{data?.bookAuthor}</p>
-                <p>{data?.pubDate}</p>
-                <p>{data?.bookState=="RENT_AVAILABLE" ? "대여가능" : "대여불가"}</p>
-                <p>{data?.bookPublisher}</p>
-                <p>{data?.bookLocation}</p>
+                <img src={book?.bookImage} />
+                <p>{book?.bookName}</p>
+                <p>{book?.bookAuthor}</p>
+                <p>{book?.pubDate}</p>
+                <p>{book?.bookPublisher}</p>
+                <p>{book?.bookLocation}</p>
                 <div>
                     {
-                        data?.bookState=="RENT_AVAILABLE" 
+                        book?.bookState=="RENT_AVAILABLE" 
                         ?
                         <RentBtn onClick={RentBtnClick}>
                             대여
@@ -168,7 +170,7 @@ function BookDetail(){
             <div>
                 <h1>책소개</h1>
                 <hr />
-                {data?.bookContent}
+                {book?.bookContent}
             </div>
 
             <div>
