@@ -10,7 +10,6 @@ function BookRegReview({bookNo}:IBookReview){
     
     const postReview = ()=>{
         const res = postReviewOfBookFetch(bookNo,authUserInfo.userNo,reviewContent,authUserInfo.accessToken);
-        res.then(data=>console.log(data));
     }
 
     const postReviewOfBookFetch = async(bookNo:string,userNo:number,reviewContent:string,accessToken:string)=>{
