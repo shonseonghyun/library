@@ -102,7 +102,7 @@ function Join(){
         response.then((response)=>{
             if(response.code="S00"){
                 alert("회원가입 완료되었습니다. 로그인 바랍니다.");
-                navigate("/");
+                navigate("/login");
             }
             else{
                 alert(response.msg);

@@ -36,7 +36,6 @@ function MyBookCase(){
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
-    const currentLocation = useLocation();
     const queryClient= useQueryClient();
     const {
         isLoading,
@@ -47,7 +46,8 @@ function MyBookCase(){
         ["getAllHearts"],
         ({pageParam})=>getHeartBooksFetch(pageParam ,authUserInfo.userNo,authUserInfo.accessToken,5),
         {
-            onSuccess:(data)=>{console.log(data); console.log(data.pages.length);},
+            onSuccess:(data)=>{},
+            onError:(error)=>{console.log("error"); console.log(error)},
             getNextPageParam: (lastPage) => {
                 return (lastPage.data.data.heartList.length==0 || lastPage.isLast) ? undefined : lastPage.data.data.heartList[4].heartNo; //해당값은 pageParam파라미터로 사용된다.
               },
@@ -60,6 +60,7 @@ function MyBookCase(){
 
     //언마운트시 모두 제거
     useEffect(()=>{
+        console.log("mybookCase 들어옴");
         return()=>{
             queryClient.removeQueries('getAllHearts');
         }

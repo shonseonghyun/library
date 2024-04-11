@@ -10,7 +10,7 @@ function BookRegReview({bookNo}:IBookReview){
     const [reviewContent,setReviewContent] = useState<string>("");
     
     const postReview = ()=>{
-        const response = postReviewOfBookFetch(bookNo,authUserInfo.userNo,reviewContent,authUserInfo.accessToken);
+        const response = postReviewOfBookFetch(bookNo,authUserInfo.userNo,reviewContent);
         response.then((data)=>{
             if(data.code != "S00"){
                 alert(data.msg);

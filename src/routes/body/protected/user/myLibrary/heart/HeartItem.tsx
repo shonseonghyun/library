@@ -28,15 +28,12 @@ function HeartItem({heart}:IHeartItemProps){
     const currentLocation = useLocation();
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const queryClient= useQueryClient();
-    const updateMutation = useMutation<IReponse>(() => deleteHeartBookFetch(authUserInfo.userNo,heart.bookCode,authUserInfo.accessToken),{
+    const updateMutation = useMutation<IReponse>(() => deleteHeartBookFetch(authUserInfo.userNo,heart.bookCode),{
         onSuccess: (data) => { 
+                console.log(data);
                 queryClient.invalidateQueries(); //이게 있으니 새로고침한듯 되네?
                 if(data.code=="S00"){
                     alert("찜 해제하였습니다.");
-                }
-                else if(data.code=="T01"){
-                        resetAuthUserInfo();
-                        navigate("/login",{state:{redirectedFrom: currentLocation}})
                 }
                 else{
                     alert(data.msg);

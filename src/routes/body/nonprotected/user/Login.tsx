@@ -8,7 +8,8 @@ import { useState } from "react";
 
 interface FormValue{
     userId     :   string,
-    userPwd    :   string
+    userPwd    :   string,
+    autoLogin  :   boolean
 }
 
 export interface ResponseIF{
@@ -50,14 +51,16 @@ function Login(){
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
     const location = useLocation();
+    console.log(location);
     const from = location?.state?.redirectedFrom?.pathname||'/';
-    console.log(from);
 
     const onSubmit = async (value:FormValue) =>{
         setIsLoading(true);
+        console.log(getValues("autoLogin"));
         const loginParams : FormValue = {
             userId: getValues("userId"),
             userPwd: getValues("userPwd"),
+            autoLogin:getValues("autoLogin") ? true :false
         }
         
      await fetch(
@@ -74,12 +77,17 @@ function Login(){
      .then((data)=>{
          if(data.code=="S00"){
             alert("로그인 성공");            
-
+            console.log(data);
+            console.log("아래는 로그인 후 응답받은 new 토큰");
+            console.log(data.data.accessToken);
             setAuthUserInfo({
                 accessToken:data.data.accessToken,
+                refreshToken:data.data.refreshToken,
                 userId:data.data.userId,
                 userNo:data.data.userNo
             });
+            console.log("아래는 로그인 후 응답받은  토큰을 local에 저장한 토큰 ");
+            console.log(authUserInfo.accessToken);
 
              navigate(from);
          }else{
@@ -101,7 +109,29 @@ function Login(){
     //Q. state의 변화(!!devtool에서 확인)로 랜더링 시 handleChange함수가 새로 생성되는지 기존껄 쓰는지 보고 싶은데..?
     //useEffect 의존성배열 안의 값이 변경된다면 useEffect 내 콜백 함수 수행 -> 즉, handleChange의 주소값이 변경된다면 useEffect 내 콜백함수 실행
 
+    const googleLogin= async () =>{
+        await fetch(
+            "http://localhost:8000/api/user/oauth2/authorize/google",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+    } 
 
+    const naverLogin= async () =>{
+        await fetch(
+            "http://localhost:8000/api/user/oauth2/authorize/naver",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+    } 
 
     return (
         <Wrapper>
@@ -130,9 +160,14 @@ function Login(){
                     }
                 )} />
                 {errors.userPwd && <p>{errors.userPwd.message}</p>}
-
+                <div>
+                    <label>자동로그인</label>
+                    <input id="autoLoginFlg" type="checkbox" value="doAutoLogin" {...register("autoLogin")} />
+                </div>
                 <button type="submit">로그인</button>
             </form>
+            <button onClick={googleLogin}>구글</button>
+            <button onClick={naverLogin}>네이버</button>
         </Wrapper>
     )
 }

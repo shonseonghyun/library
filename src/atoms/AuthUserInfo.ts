@@ -9,6 +9,7 @@ const { persistAtom } = recoilPersist({
 
 export interface IAuthUserInfo{
     accessToken: string,
+    refreshToken:string,
     userId: string,
     userNo: number
 }
@@ -17,6 +18,7 @@ export const AuthUserInfoAtom = atom<IAuthUserInfo>({
     key: 'authUserInfo', 
     default: {
         accessToken:'',
+        refreshToken:'',
         userId:'',
         userNo: 0
     },

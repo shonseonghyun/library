@@ -9,10 +9,12 @@ import MyBookCase from "./protected/user/myLibrary/heart/MyBookCase";
 import RentStatus from "./protected/user/myLibrary/RentStatus/RentStatusComponent";
 import RentHistory from "./protected/user/myLibrary/RentHistory/RentHistoryComponent";
 import BookDetail from "./nonprotected/book/BookDetail";
+import TokenRefresher from "./protected/TokenRefresher";
 
 function Body(){
     return (
         <div>
+            <TokenRefresher />
             <Routes>
                 {/* 비회원 */}
                 <Route element={<PublicRoute />}>
