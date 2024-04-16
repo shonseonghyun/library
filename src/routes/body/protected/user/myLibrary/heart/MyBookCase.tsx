@@ -5,7 +5,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
 import HeartItem from "./HeartItem";
 import { useInfiniteQuery, useQueryClient } from "react-query";
-import { getHeartBooksFetch } from "../../../../../../api";
+import { getHeartBooksFetch } from "../../../../../../api/api";
 
 const GridWrapper = styled.div`
 display: grid;

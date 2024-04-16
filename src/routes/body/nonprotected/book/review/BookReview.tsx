@@ -1,11 +1,9 @@
 import { useQuery } from "react-query";
-import { getReviewsOfBookFetch } from "../../../../api";
+import { getReviewsOfBookFetch } from "../../../../../api/api";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { AuthUserInfoAtom } from "../../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
 import BookRegReview from "./BookRegReview";
-import axios from "axios";
-import { PrivateAPI } from "../../../../axiosInstance";
 
 export interface IBookReview{
     bookNo:string
@@ -36,22 +34,9 @@ function BookReview({bookNo}:IBookReview){
     )
     ;
 
-    const onclick= async ()=>{
-        const response = await PrivateAPI.post('user/get/mypage',{
-            "userNo": authUserInfo.userNo
-        });
-        console.log("onClick성공");
-        console.log(response);
-    }
-
-
-
-
-
     return (
         <>
         <h1>Review</h1>
-        <button onClick={onclick}>x </button>
         
         <BookRegReview bookNo={bookNo} />
 

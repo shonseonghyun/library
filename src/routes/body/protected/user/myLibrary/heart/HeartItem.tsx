@@ -4,7 +4,7 @@ import { useRecoilValue, useResetRecoilState } from "recoil";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { IReponse, deleteHeartBookFetch } from "../../../../../../api";
+import { IReponse, deleteHeartBookFetch } from "../../../../../../api/api";
 
 interface IHeartItemProps{
     heart: IHeartInfo,

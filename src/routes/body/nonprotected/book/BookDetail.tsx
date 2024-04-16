@@ -3,9 +3,9 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../atoms/AuthUserInfo";
-import BookReview from "./BookReview";
+import BookReview from "./review/BookReview";
 import { useQuery, useQueryClient } from "react-query";
-import { getBookInfoByBookNoFetch } from "../../../../api";
+import { getBookInfoByBookNoFetch } from "../../../../api/api";
 import BookInfo from "./BookInfo";
 
 const HeartBtn = styled.button`

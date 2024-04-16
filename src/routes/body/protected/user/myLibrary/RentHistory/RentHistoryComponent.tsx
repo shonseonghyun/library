@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import { getRentHistory } from "../../../../../../api";
+import { getRentHistory } from "../../../../../../api/api";
 import { useQuery } from "react-query";
 
 const Wrapper = styled.div`
@@ -42,8 +42,6 @@ function RentHistory(){
                             <p>{item.bookName}</p>
                             <p>{item.bookName}</p>
                         </div>
-                        
-
                     )
                 )    
             }

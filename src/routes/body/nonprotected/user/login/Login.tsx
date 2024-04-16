@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { AuthUserInfoAtom  } from "../../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom  } from "../../../../../atoms/AuthUserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { loginNaver } from "../../../../../api/api";
+import { PublicAPI } from "../../../../../api/instance/axiosInstance";
 
 
 interface FormValue{
@@ -109,29 +111,18 @@ function Login(){
     //Q. state의 변화(!!devtool에서 확인)로 랜더링 시 handleChange함수가 새로 생성되는지 기존껄 쓰는지 보고 싶은데..?
     //useEffect 의존성배열 안의 값이 변경된다면 useEffect 내 콜백 함수 수행 -> 즉, handleChange의 주소값이 변경된다면 useEffect 내 콜백함수 실행
 
-    const googleLogin= async () =>{
-        await fetch(
-            "http://localhost:8000/api/user/oauth2/authorize/google",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        )
-    } 
 
-    const naverLogin= async () =>{
-        await fetch(
-            "http://localhost:8000/api/user/oauth2/authorize/naver",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        )
-    } 
+   
+    const naverLogin=  () =>{
+        const url = "http://localhost:8000/api/user/oauth2/authorize/naver"
+        window.location.href=url;
+    }
+
+    const naverGoogle=  () =>{
+        const url = "http://localhost:8000/api/user/oauth2/authorize/google"
+        window.location.href=url;
+    }
+
 
     return (
         <Wrapper>
@@ -166,8 +157,8 @@ function Login(){
                 </div>
                 <button type="submit">로그인</button>
             </form>
-            <button onClick={googleLogin}>구글</button>
             <button onClick={naverLogin}>네이버</button>
+            <button onClick={naverGoogle}>구글</button>
         </Wrapper>
     )
 }

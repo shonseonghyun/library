@@ -2,9 +2,9 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { AuthUserInfoAtom } from "../../../atoms/AuthUserInfo";
-import { PrivateAPI } from "../../../axiosInstance";
-import { baseUrl } from "../../../api";
+import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import { PrivateAPI } from "../../../../../api/instance/axiosInstance";
+import { baseUrl } from "../../../../../api/api";
 
 
 
@@ -28,7 +28,7 @@ function TokenRefresher(){
             (config) => {
                 console.log(localStorage);
                 console.log("요청 인터셉터 헤더 세팅");
-                let accessToken = authUserInfo.accessToken;
+                let accessToken = authUserInfo.accessToken; //여기서 안되네? 로그인 후 요청 인터셉터 들어올 때, 그 전 accessToken 세팅이 된다..? 
                 console.log("세팅한 accessToken");
                 console.log(accessToken);
                 config.headers['Content-Type'] = 'application/json';
@@ -78,7 +78,7 @@ function TokenRefresher(){
                             then에서 직접 다 처리하지 않는다.
                             이유는 refreshAPI요청에 대한 await를 사용하지 못하므로 
                          */
-                        console.log("재발급 진행");
+                        console.log("재발급 진행 요청");
 
                         //accessToken 재발급 요청
                         const response = await axios.post(`${baseUrl}/user/auth/refreshToken/reissue`,{

@@ -2,11 +2,15 @@ import Header from './routes/headers/Header';
 import Footer from './routes/footer/Footer';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Body from './routes/body/Body';
+import styled from 'styled-components';
 
+const AppWrapper= styled.div`
+    background-color : #808080
+`
 
 function App() {
   return (
-    <div className="App">
+    <AppWrapper className="App">
       <BrowserRouter>
         {/* 헤더 */}
         <Header />
@@ -17,7 +21,7 @@ function App() {
         {/* 푸터 */}
         <Footer/>
       </BrowserRouter>
-    </div>
+    </AppWrapper>
   );
 }
 

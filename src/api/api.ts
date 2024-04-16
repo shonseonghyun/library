@@ -1,4 +1,5 @@
-import { PrivateAPI, PublicAPI } from "./axiosInstance";
+import axios from "axios";
+import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
 
 export const baseUrl="http://localhost:8000";
 
@@ -15,6 +16,19 @@ export interface IRequestField{
     tel:string,
     gender:string,
     useFlg:number
+}
+
+
+/* 소셜로그인 */
+//네이버
+export const loginNaver = async ()=>{
+    const client_id = "4K91ISX8JLsw4Hq8JTKe";
+    const state= "sunghyun"
+    const redirect_uri = "http://localhost:8000/api/user/login/oauth2/code/naver"
+    const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&state=${state}`;
+    
+    const response = await axios.get(url);
+    console.log(response);
 }
 
 

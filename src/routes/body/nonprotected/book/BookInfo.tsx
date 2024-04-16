@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getBookInfoByBookNoFetch } from "../../../../api";
+import { getBookInfoByBookNoFetch } from "../../../../api/api";
 import { useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue, useResetRecoilState } from "recoil";

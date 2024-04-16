@@ -1,15 +1,16 @@
 import { Route, Routes } from "react-router-dom";
 import Main from "./nonprotected/common/Main";
 import MyLibrary from "./protected/user/myLibrary/MyLibrary";
-import Login from "./nonprotected/user/Login";
-import Join from "./nonprotected/user/Join";
+import Login from "./nonprotected/user/login/Login";
+import Join from "./nonprotected/user/join/Join";
 import PublicRoute from "./nonprotected/PublicRoute";
 import PrivateRoute from "./protected/PrivateRoute";
 import MyBookCase from "./protected/user/myLibrary/heart/MyBookCase";
 import RentStatus from "./protected/user/myLibrary/RentStatus/RentStatusComponent";
 import RentHistory from "./protected/user/myLibrary/RentHistory/RentHistoryComponent";
 import BookDetail from "./nonprotected/book/BookDetail";
-import TokenRefresher from "./protected/TokenRefresher";
+import TokenRefresher from "./nonprotected/user/login/TokenRefresher";
+import OauthLoginSuccess from "./nonprotected/user/login/OauthLoginSuccess";
 
 function Body(){
     return (
@@ -21,7 +22,8 @@ function Body(){
                     <Route path="/" element={<Main/> }/>
                     <Route path="/login" element={<Login />} />
                     <Route path="/join" element={<Join />} />
-                    <Route path="/book/:bookNo" element={<BookDetail />}></Route>
+                    <Route path="/book/:bookNo" element={<BookDetail />} />
+                    <Route path="/api/user/login/oauth" element={<OauthLoginSuccess />} />
                 </Route>
 
                 {/* 회원 전용 */}
