@@ -1,5 +1,6 @@
 import axios from "axios";
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
+import { LoginFormValue } from "../routes/body/nonprotected/user/login/Login";
 
 export const baseUrl="http://localhost:8000";
 
@@ -20,16 +21,12 @@ export interface IRequestField{
 
 
 /* 소셜로그인 */
-//네이버
-export const loginNaver = async ()=>{
-    const client_id = "4K91ISX8JLsw4Hq8JTKe";
-    const state= "sunghyun"
-    const redirect_uri = "http://localhost:8000/api/user/login/oauth2/code/naver"
-    const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${client_id}&redirect_uri=${redirect_uri}&state=${state}`;
-    
-    const response = await axios.get(url);
-    console.log(response);
+//일반로그인
+export const doLoginFetch = async (loginParams:LoginFormValue)=>{
+    return await PublicAPI.post(`/user/login`,loginParams)
+            .then(response=>response.data);
 }
+
 
 
 /* 찜 */
@@ -54,10 +51,24 @@ export const deleteHeartBookFetch = async (userNo:number,bookNo:number)=>{
 }
 
 /* 도서 */
+// 특정 도서 조회
 export const getBookInfoByBookNoFetch = async (bookNo:string)=>{
     return await PublicAPI.get(`/book/${bookNo}`)
             .then(response=>response.data);
 }
+
+//도서 리뷰
+export const getReviewsOfBookFetch = async (bookNo:string)=>{
+    return await PublicAPI.get(`/review/book/${bookNo}`)
+            .then(response=>response.data);
+}
+
+//도서 검색
+export const inquiryBooksFetch = async (category:string, inquiryWord:string)=>{
+    return await PublicAPI.get(`/book/inquiry/${category}/${inquiryWord}`)
+            .then(response=>response.data);
+}
+
 
 /*대여 히스토리 */
 export const getRentHistory = async (userNo:number)=>{
@@ -66,11 +77,6 @@ export const getRentHistory = async (userNo:number)=>{
             .then(response=>response?.data);
 }
 
-/* 리뷰 */
-export const getReviewsOfBookFetch = async (bookNo:string)=>{
-    return await PublicAPI.get(`/review/book/${bookNo}`)
-            .then(response=>response.data);
-}
 
 export  const postReviewOfBookFetch = async(bookNo:string,userNo:number,reviewContent:string)=>{
     return await PrivateAPI.post(

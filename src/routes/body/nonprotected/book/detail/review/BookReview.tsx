@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
-import { getReviewsOfBookFetch } from "../../../../../api/api";
+import { getReviewsOfBookFetch } from "../../../../../../api/api";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import BookRegReview from "./BookRegReview";
 
 export interface IBookReview{

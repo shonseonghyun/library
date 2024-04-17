@@ -4,11 +4,10 @@ import styled from "styled-components";
 import { AuthUserInfoAtom  } from "../../../../../atoms/AuthUserInfo";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { loginNaver } from "../../../../../api/api";
-import { PublicAPI } from "../../../../../api/instance/axiosInstance";
+import {  doLoginFetch } from "../../../../../api/api";
 
 
-interface FormValue{
+export interface LoginFormValue{
     userId     :   string,
     userPwd    :   string,
     autoLogin  :   boolean
@@ -20,7 +19,7 @@ export interface ResponseIF{
     data    :   ResponseDataIF
 }
 
-interface ResponseDataIF{
+export interface ResponseDataIF{
     accessToken: string , 
     gender : string ,
     provider:string,
@@ -48,38 +47,25 @@ const Wrapper = styled.div`
 
 
 function Login(){
-    const {register,handleSubmit,getValues,formState:{errors}} = useForm<FormValue>();
+    const {register,handleSubmit,getValues,formState:{errors}} = useForm<LoginFormValue>();
     const [isLoading,setIsLoading] = useState(false);
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location);
     const from = location?.state?.redirectedFrom?.pathname||'/';
 
-    const onSubmit = async (value:FormValue) =>{
+    const onSubmit = async (value:LoginFormValue) =>{
         setIsLoading(true);
-        console.log(getValues("autoLogin"));
-        const loginParams : FormValue = {
+        const loginParams : LoginFormValue = {
             userId: getValues("userId"),
             userPwd: getValues("userPwd"),
             autoLogin:getValues("autoLogin") ? true :false
         }
         
-     await fetch(
-         "http://localhost:8000/user/login" , 
-         {
-             method: "POST",
-             headers: {
-                 "Content-Type": "application/json",
-             },
-             body: JSON.stringify(loginParams)
-         }
-     )
-     .then((response)=>response.json())
-     .then((data)=>{
+        doLoginFetch(loginParams)
+        .then((data)=>{
          if(data.code=="S00"){
             alert("로그인 성공");            
-            console.log(data);
             console.log("아래는 로그인 후 응답받은 new 토큰");
             console.log(data.data.accessToken);
             setAuthUserInfo({
@@ -88,10 +74,7 @@ function Login(){
                 userId:data.data.userId,
                 userNo:data.data.userNo
             });
-            console.log("아래는 로그인 후 응답받은  토큰을 local에 저장한 토큰 ");
-            console.log(authUserInfo.accessToken);
-
-             navigate(from);
+            navigate(from);
          }else{
              alert(data.msg);
          }
@@ -103,7 +86,6 @@ function Login(){
      ;
 
     }
-
 
     //https://sambalim.tistory.com/152
     //https://muna76.tistory.com/243

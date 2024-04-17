@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {  AuthUserInfoAtom, isLoginSelector } from "../../atoms/AuthUserInfo";
 import MenuForUser from "./List/MenuForUser";
 import MenuForGuest from "./List/MenuForGuest";
+import { useState } from "react";
 
 const SearchBtn = styled.button`
     border: 0;
@@ -32,7 +33,7 @@ const SearchFormWrapper = styled.div`
 `;
 
 
-const SearchForm = styled.form`
+const SearchWrapper = styled.div`
 `;
 
 const UtilMenuWrapper = styled.div`
@@ -41,6 +42,26 @@ const UtilMenuWrapper = styled.div`
 
 function Header(){
     const isLogin = useRecoilValue(isLoginSelector);
+    const [cateogry,setCategory] = useState("bookAuthor");
+    const [inquriyWord,setInquriyWord] = useState("");
+    const navigate = useNavigate();
+
+    const inquiryBooks = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+        e.preventDefault();
+        if(inquriyWord.trim().length==0){
+            alert("검색명을 입력해주세요.");
+            return;
+        }
+        navigate(`/book/inquiry/${cateogry}/${inquriyWord}`)
+    }
+
+    const selectCategory = (e:React.ChangeEvent<HTMLSelectElement>)=>{
+        setCategory(e.currentTarget.value);
+    }
+
+    const inputInquiryWord = (e:React.FocusEvent<HTMLInputElement>)=>{
+        setInquriyWord(e.currentTarget.value);
+    }
 
     return (
         <Wrapper>
@@ -51,16 +72,16 @@ function Header(){
             </ImgWrapper>
 
             <SearchFormWrapper>
-                <SearchForm>
-                    <select name="selectOptions" id="selectOptions">
-                        <option value="저자">저자</option>
-                        <option value="도서제목">도서 제목</option>
+                <SearchWrapper>
+                    <select onChange={selectCategory} name="selectOptions" id="selectOptions">
+                        <option value="bookAuthor">저자</option>
+                        <option value="bookName">도서 제목</option>
                     </select>
-                    <input type="text" name="searchParam" id="searchParam" placeholder="도서검색" />
-                    <SearchBtn type="button">
+                    <input type="text" name="inquriyWord" id="inquriyWord" onBlur={inputInquiryWord} placeholder="도서검색" />
+                    <SearchBtn type="button" onClick={inquiryBooks}>
                         <img src={`${process.env.PUBLIC_URL}/img/button/searchBtn.png`} />
                     </SearchBtn>
-                </SearchForm>
+                </SearchWrapper>
             </SearchFormWrapper>
 
             <UtilMenuWrapper>

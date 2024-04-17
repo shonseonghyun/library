@@ -1,8 +1,8 @@
 import { useRecoilValue } from "recoil";
-import { AuthUserInfoAtom, isLoginSelector } from "../../../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../atoms/AuthUserInfo";
 import { IBookReview } from "./BookReview";
 import { useState } from "react";
-import { postReviewOfBookFetch } from "../../../../../api/api";
+import { postReviewOfBookFetch } from "../../../../../../api/api";
 
 function BookRegReview({bookNo}:IBookReview){
     const isLogin = useRecoilValue(isLoginSelector);

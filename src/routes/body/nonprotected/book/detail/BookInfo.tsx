@@ -1,10 +1,10 @@
 import { useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getBookInfoByBookNoFetch } from "../../../../api/api";
+import { getBookInfoByBookNoFetch } from "../../../../../api/api";
 import { useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { AuthUserInfoAtom } from "../../../../atoms/AuthUserInfo";
+import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
 
 const HeartBtn = styled.button`
     border: 0;

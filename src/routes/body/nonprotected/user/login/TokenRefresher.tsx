@@ -12,7 +12,11 @@ function TokenRefresher(){
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
-    const currentLocation = useLocation();
+    const location = useLocation();
+    
+    const getAccessToken = ()=>{
+        return authUserInfo.accessToken; 
+    }
     
     
     useEffect(()=>{
@@ -26,13 +30,12 @@ function TokenRefresher(){
         //요청 인터셉터
         PrivateAPI.interceptors.request.use(
             (config) => {
-                console.log(localStorage);
                 console.log("요청 인터셉터 헤더 세팅");
-                let accessToken = authUserInfo.accessToken; //여기서 안되네? 로그인 후 요청 인터셉터 들어올 때, 그 전 accessToken 세팅이 된다..? 
-                console.log("세팅한 accessToken");
-                console.log(accessToken);
+                let newaccessToken = getAccessToken();
+                console.log(newaccessToken);
+                let accessToken = authUserInfo.accessToken ; //여기서 안되네? 로그인 후 요청 인터셉터 들어올 때, 그 전 accessToken 세팅이 된다..? 
                 config.headers['Content-Type'] = 'application/json';
-                config.headers['Authorization'] = `Bearer ${authUserInfo.accessToken}`;            
+                config.headers['Authorization'] = `Bearer ${newaccessToken}`;            
                 return config;
             },
             (error) => {
@@ -95,7 +98,6 @@ function TokenRefresher(){
                             userId:authUserInfo.userId,
                             userNo:authUserInfo.userNo
                         });
-
                         //재요청 시 header 세팅
                         originalConfig.headers["Authorization"] = "Bearer " + reissueAccessToken;
                         //재요청

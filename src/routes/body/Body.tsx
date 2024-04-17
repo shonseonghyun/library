@@ -8,9 +8,12 @@ import PrivateRoute from "./protected/PrivateRoute";
 import MyBookCase from "./protected/user/myLibrary/heart/MyBookCase";
 import RentStatus from "./protected/user/myLibrary/RentStatus/RentStatusComponent";
 import RentHistory from "./protected/user/myLibrary/RentHistory/RentHistoryComponent";
-import BookDetail from "./nonprotected/book/BookDetail";
+import BookDetail from "./nonprotected/book/detail/BookDetail";
 import TokenRefresher from "./nonprotected/user/login/TokenRefresher";
 import OauthLoginSuccess from "./nonprotected/user/login/OauthLoginSuccess";
+import Books from "./nonprotected/book/simple/Books";
+import { ReactQueryDevtools } from 'react-query/devtools';
+
 
 function Body(){
     return (
@@ -22,6 +25,7 @@ function Body(){
                     <Route path="/" element={<Main/> }/>
                     <Route path="/login" element={<Login />} />
                     <Route path="/join" element={<Join />} />
+                    <Route path="/book/inquiry/:cateogry/:inquiryWord" element={<Books />} />
                     <Route path="/book/:bookNo" element={<BookDetail />} />
                     <Route path="/api/user/login/oauth" element={<OauthLoginSuccess />} />
                 </Route>
@@ -35,6 +39,7 @@ function Body(){
                     </ Route>
                 </Route>
             </Routes>
+            <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />      
         </div>
     )
 }

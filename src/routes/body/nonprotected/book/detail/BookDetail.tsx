@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { AuthUserInfoAtom, isLoginSelector } from "../../../../atoms/AuthUserInfo";
 import BookReview from "./review/BookReview";
-import { useQuery, useQueryClient } from "react-query";
-import { getBookInfoByBookNoFetch } from "../../../../api/api";
 import BookInfo from "./BookInfo";
 
 const HeartBtn = styled.button`
@@ -35,25 +30,6 @@ const Img = styled.img`
     width:40px;
     height:40px;
 `;
-
-interface IBookInfo{
-    bookAuthor: string, 
-    bookCode:number,
-    bookContent:string,
-    bookImage:string,
-    bookLocation:string,
-    bookName:string
-    bookPublisher:string,
-    bookState:string,
-    createdDt:string,
-    createdTm:string,
-    isbn:string,
-    modifiedDt:string,
-    modifiedTm:string,
-    pubDate:string
-}
-
-
 
 function Book(){
     const {bookNo} = useParams()  as { bookNo: string };
