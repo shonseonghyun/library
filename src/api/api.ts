@@ -64,8 +64,8 @@ export const getReviewsOfBookFetch = async (bookNo:string)=>{
 }
 
 //도서 검색
-export const inquiryBooksFetch = async (category:string, inquiryWord:string)=>{
-    return await PublicAPI.get(`/book/inquiry/${category}/${inquiryWord}`)
+export const inquiryBooksFetch = async (category:string, inquiryWord:string,currentPage:number,size:number)=>{
+    return await PublicAPI.get(`/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}`)
             .then(response=>response.data);
 }
 
