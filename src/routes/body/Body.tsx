@@ -13,6 +13,7 @@ import TokenRefresher from "./nonprotected/user/login/TokenRefresher";
 import OauthLoginSuccess from "./nonprotected/user/login/OauthLoginSuccess";
 import Books from "./nonprotected/book/simple/Books";
 import { ReactQueryDevtools } from 'react-query/devtools';
+import RegBook from "./protected/user/regBook/RegBook";
 
 
 function Body(){
@@ -37,6 +38,7 @@ function Body(){
                         <Route path="rentHistory" element={<RentHistory />}/>
                         <Route path="myBookcase" element={<MyBookCase />}/>
                     </ Route>
+                    <Route path="/book" element={<RegBook /> } />
                 </Route>
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />      

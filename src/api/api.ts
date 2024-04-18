@@ -1,4 +1,3 @@
-import axios from "axios";
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
 import { LoginFormValue } from "../routes/body/nonprotected/user/login/Login";
 
@@ -64,8 +63,12 @@ export const getReviewsOfBookFetch = async (bookNo:string)=>{
 }
 
 //도서 검색
-export const inquiryBooksFetch = async (category:string, inquiryWord:string,currentPage:number,size:number)=>{
-    return await PublicAPI.get(`/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}`)
+export const inquiryBooksFetch = async (category:string, inquiryWord:string,currentPage:number,size:number,totalCount:number)=>{
+    const inquriyBooksUrl = totalCount>-1 
+    ? `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}&cachedCount=${totalCount}` 
+    : `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}`;
+    console.log(inquriyBooksUrl + "요청");
+    return await PublicAPI.get(inquriyBooksUrl)
             .then(response=>response.data);
 }
 

@@ -24,8 +24,8 @@ let getParameter = (key:string) =>{
 
 function Books(){
     const {cateogry,inquiryWord} = useParams() as InquriyBooksParams ;
-    const [books,setBooks] = useState<IInquriyBooksReponse[]>([]);
-    const [totalCount,setTotalCount] = useState(0);
+    // const [books,setBooks] = useState<IInquriyBooksReponse[]>([]);
+    const [totalCount,setTotalCount] = useState(-1);
 
     //현재 페이지
     const currentPage = Number.parseInt(getParameter("page")||"1"); 
@@ -34,14 +34,15 @@ function Books(){
 
     const {data,isLoading} = useQuery(
         ["inquiryBooksFetch",cateogry+"/"+inquiryWord+"/"+currentPage+"/"+sizePerPage], //쿼리키 , 쿼리키로 구분해서 data fetching
-        ()=>inquiryBooksFetch(cateogry,inquiryWord,currentPage,sizePerPage),
+        ()=>inquiryBooksFetch(cateogry,inquiryWord,currentPage,sizePerPage,totalCount),
         {
             onSuccess(data) {
-                setBooks(data.data.bookList);
+                console.log("onSuccesss");
+                // setBooks(data.data.bookList);
                 setTotalCount(data.data.totalCount);
             },
             // cacheTime:5000 //default 5분
-            staleTime: 1000 , //default 0초
+            staleTime: 6000 *10 , //default 0초
             // refetchInterval:2000,
             // enabled:false,
             // select : data=>{
@@ -55,8 +56,7 @@ function Books(){
 
     useEffect(()=>{
         console.log("useEffect");
-        window.scrollTo({ top: 0, behavior: 'smooth' });    
-    },[books])
+    },[])
 
     return (
         <>
@@ -67,7 +67,7 @@ function Books(){
                     ? 
                         <p>isLoading</p>
                     :
-                    books.map(book =>{
+                    data?.data?.bookList.map((book:IInquriyBooksReponse) =>{
                         return (
                             <div key={book.bookNo}>
                                 <Link to={`/book/${book.bookNo}`}>

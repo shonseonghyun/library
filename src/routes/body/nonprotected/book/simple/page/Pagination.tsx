@@ -115,7 +115,7 @@ function Pagination({totalCount,sizePerPage,currentPage}:IPagination){
                     currentPage==1
                     ? "뒤"
                     :
-                <Link to={`${location.pathname}?page=${backPage}&size=${sizePerPage}`}>
+                <Link style={{ textDecoration: "none"}} to={`${location.pathname}?page=${backPage}&size=${sizePerPage}`}>
                     뒤
                 </Link>
                 }
@@ -135,7 +135,7 @@ function Pagination({totalCount,sizePerPage,currentPage}:IPagination){
                     ? 
                         "앞"
                     :
-                    <Link to={`${location.pathname}?page=${frontPage}&size=${sizePerPage}`}>
+                    <Link style={{ textDecoration: "none"}} to={`${location.pathname}?page=${frontPage}&size=${sizePerPage}`}>
                         앞
                     </Link>
             }

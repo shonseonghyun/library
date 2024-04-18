@@ -31,6 +31,9 @@ function MenuForUser(){
                 <li>
                     <Link to="myLibrary/rentStatus">내 서재</Link>
                 </li>
+                <li>
+                    <Link to="/book">도서 등록</Link>
+                </li>
             </ul>
         </div>
     )
