@@ -5,6 +5,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import { IInquriyBooksImageReponse } from "../simple/Books";
+import { getFilePath } from "../../../../../function/functions";
 
 const HeartBtn = styled.button`
     border: 0;
@@ -29,27 +31,16 @@ const RentBtn = styled.button`
       }
 `;
 
-const Img = styled.img`
+const BtnImg = styled.img`
     width:40px;
     height:40px;
 `;
 
-interface IBookDataInfo{
-    bookAuthor: string, 
-    bookCode:number,
-    bookContent:string,
-    bookImage:string,
-    bookLocation:string,
-    bookName:string
-    bookPublisher:string,
-    bookState:string,
-    createdDt:string,
-    createdTm:string,
-    isbn:string,
-    modifiedDt:string,
-    modifiedTm:string,
-    pubDate:string
-}
+const BookImg = styled.img`
+    width:100px;
+    height:100px;
+`;
+
 
 interface IBookInfo{
     bookNo:string
@@ -61,22 +52,11 @@ function BookInfo({bookNo}:IBookInfo){
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [book,setBook] = useState<IBookDataInfo>();
     const currentLocation = useLocation();
-    const {data} = useQuery(
+    const {data,isLoading} = useQuery(
         ["getBookInfoByBookNoFetch",bookNo],
         ()=>getBookInfoByBookNoFetch(bookNo),
         {
-            onSuccess(data) {
-                console.log(data);
-                if(data.code!="S00"){
-                    alert(data.msg);
-                    navigate("/")
-
-                }else{
-                    setBook(data.data);
-                }
-            },
             refetchOnWindowFocus: false,
         }
     )
@@ -143,35 +123,44 @@ function BookInfo({bookNo}:IBookInfo){
     return (
         <>
         <div>
-                <input type="hidden" name="bookNo" value={bookNo} />
-                <img src={book?.bookImage} />
-                <p>{book?.bookName}</p>
-                <p>{book?.bookAuthor}</p>
-                <p>{book?.pubDate}</p>
-                <p>{book?.bookPublisher}</p>
-                <p>{book?.bookLocation}</p>
-                <div>
-                    {
-                        book?.bookState=="RENT_AVAILABLE" 
-                        ?
-                        <RentBtn onClick={RentBtnClick}>
-                            대여
-                        </RentBtn>
-                        :
-                        <RentBtn disabled>
-                            대여 불가
-                        </RentBtn>
-                    }
+            {
+                isLoading
+                ?
+                <p>isLoading</p>
+                :
+                <>
+                    <input type="hidden" name="bookNo" value={bookNo} />
+                    <BookImg src={`${process.env.PUBLIC_URL}/`+ getFilePath(data?.data.bookImage.filePath ,data?.data.bookImage.newFileName )} />
+                    <p>{data?.data.bookName}</p>
+                    <p>{data?.data.bookAuthor}</p>
+                    <p>{data?.data.pubDate}</p>
+                    <p>{data?.data.bookPublisher}</p>
+                    <p>{data?.data.bookLocation}</p>
+                    <div>
+                        {
+                            data?.bookState=="RENT_AVAILABLE" 
+                            ?
+                            <RentBtn onClick={RentBtnClick}>
+                                대여
+                            </RentBtn>
+                            :
+                            <RentBtn disabled>
+                                대여 불가
+                            </RentBtn>
+                        }
 
-                    <HeartBtn onClick={HeartBtnClick}>
-                        <Img src={`${process.env.PUBLIC_URL}/img/button/heartButton.png`} />
-                    </HeartBtn>
-                </div>
+                        <HeartBtn onClick={HeartBtnClick}>
+                            <BtnImg src={`${process.env.PUBLIC_URL}/img/button/heartButton.png`} />
+                        </HeartBtn>
+                    </div>
+                </>
+            }
+                
             </div>
             <div>
                 <h1>책소개</h1>
                 <hr />
-                {book?.bookContent}
+                {data?.bookContent}
             </div>
         </>
     )

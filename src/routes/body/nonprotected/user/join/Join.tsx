@@ -100,7 +100,7 @@ function Join(){
         const requestParam = convertRequestParam(data);
         const response = joinUserFetch(requestParam as IRequestField)
         response.then((response)=>{
-            if(response.code="S00"){
+            if(response.code=="S00"){
                 alert("회원가입 완료되었습니다. 로그인 바랍니다.");
                 navigate("/login");
             }

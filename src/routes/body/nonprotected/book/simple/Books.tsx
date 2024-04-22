@@ -3,19 +3,27 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { inquiryBooksFetch } from "../../../../../api/api";
 import { useEffect, useState } from "react";
 import Pagination from "./page/Pagination";
+import { getFilePath } from "../../../../../function/functions";
 
 type InquriyBooksParams={
     cateogry: string,
     inquiryWord:string
 }
 
-interface IInquriyBooksReponse{
+export interface IInquriyBooksReponse{
     bookNo:number,
     bookName:string,
     bookAuthor: string,
     bookState:string,
     pubDt:string,
-    bookImage: string,
+    bookImage: IInquriyBooksImageReponse,
+}
+
+export interface IInquriyBooksImageReponse{
+    originalFileName:string,
+    fileSize:number,
+    filePath:string,
+    newFileName:string
 }
 
 let getParameter = (key:string) =>{
@@ -37,8 +45,6 @@ function Books(){
         ()=>inquiryBooksFetch(cateogry,inquiryWord,currentPage,sizePerPage,totalCount),
         {
             onSuccess(data) {
-                console.log("onSuccesss");
-                // setBooks(data.data.bookList);
                 setTotalCount(data.data.totalCount);
             },
             // cacheTime:5000 //default 5분
@@ -76,7 +82,7 @@ function Books(){
                                 {book.bookAuthor}
                                 {book.bookState}
                                 {book.pubDt}
-                                {book.bookImage}
+                                <img src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} />
                             </div>
                         )
                     })

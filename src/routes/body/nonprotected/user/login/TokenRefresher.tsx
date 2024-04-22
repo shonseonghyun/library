@@ -23,7 +23,7 @@ function TokenRefresher(){
         const refreshAPI = axios.create({
             baseURL:`${baseUrl}`,
             headers:{
-                "Content-Type":"application/json",
+                // "Content-Type":"application/json",
             },
         })
 
@@ -32,9 +32,8 @@ function TokenRefresher(){
             (config) => {
                 console.log("요청 인터셉터 헤더 세팅");
                 let newaccessToken = getAccessToken();
-                console.log(newaccessToken);
                 let accessToken = authUserInfo.accessToken ; //여기서 안되네? 로그인 후 요청 인터셉터 들어올 때, 그 전 accessToken 세팅이 된다..? 
-                config.headers['Content-Type'] = 'application/json';
+                // config.headers['Content-Type'] = 'application/json';
                 config.headers['Authorization'] = `Bearer ${newaccessToken}`;            
                 return config;
             },
@@ -52,6 +51,7 @@ function TokenRefresher(){
             //200 외 응답인 경우
             async (error)=>{
                 const originalConfig = error.config;
+                console.log(originalConfig.headers["Content-Type"]);
                 const code = error.response.data.code;
                 const msg = error.response.data.msg;
                 console.log(error);
@@ -99,6 +99,7 @@ function TokenRefresher(){
                             userNo:authUserInfo.userNo
                         });
                         //재요청 시 header 세팅
+                        console.log("contenttype 재세팅");
                         originalConfig.headers["Authorization"] = "Bearer " + reissueAccessToken;
                         //재요청
                         const originalResponse = await refreshAPI(originalConfig); //재요청 시 await 추가

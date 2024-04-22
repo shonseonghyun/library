@@ -1,5 +1,7 @@
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
 import { LoginFormValue } from "../routes/body/nonprotected/user/login/Login";
+import { IRegBookParams } from "../routes/body/protected/user/regBook/RegBook";
+import axios from "axios";
 
 export const baseUrl="http://localhost:8000";
 
@@ -98,8 +100,21 @@ export const checkExistUserIdFetch= async (userId:string)=>{
 
 export const joinUserFetch= async (requsetParam: IRequestField)=>{
     return await PublicAPI.post(
-            `/user/join` //url
-            ,{requsetParam} //body
+            `/user/join` //url,
+            ,requsetParam //body
+        )
+        .then(response=>response.data);
+}
+
+export const regBookFetch= async (requsetParams: FormData)=>{
+    return await PrivateAPI.post(
+            `/book/reg` 
+            ,requsetParams //body
+            ,{
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                }
+            }
         )
         .then(response=>response.data);
 }
