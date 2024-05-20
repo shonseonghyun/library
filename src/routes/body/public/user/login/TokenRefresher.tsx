@@ -1,18 +1,20 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
 import { PrivateAPI } from "../../../../../api/instance/axiosInstance";
 import { baseUrl } from "../../../../../api/api";
+import LoginModal from "../../../../headers/component/util-menu/guest/LoginModal";
 
 
 
 function TokenRefresher(){
+    console.log("TokenRefresher 랜더링");
+    const [isLoginSuc,setIsLoginSuc] =useState(true);
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
-    const location = useLocation();
     
     const getAccessToken = ()=>{
         return authUserInfo.accessToken; 
@@ -20,6 +22,8 @@ function TokenRefresher(){
     
     
     useEffect(()=>{
+        console.log("TokenRefresher 첫마운트에만 실행");
+
         const refreshAPI = axios.create({
             baseURL:`${baseUrl}`,
             headers:{
@@ -51,13 +55,14 @@ function TokenRefresher(){
             //200 외 응답인 경우
             async (error)=>{
                 const originalConfig = error.config;
-                console.log(originalConfig.headers["Content-Type"]);
                 const code = error.response.data.code;
                 const msg = error.response.data.msg;
                 console.log(error);
 
                 if(code =="T01"){
+                    console.log("T01")
                     if(authUserInfo.refreshToken){
+                        console.log("refreshToekn존재");
                         /* 기존코드 */
                         // await axios.post(`${baseUrl}/user/auth/refreshToken/reissue`,{
                         //     refreshToken: authUserInfo.refreshToken
@@ -109,8 +114,7 @@ function TokenRefresher(){
                         console.log("자동 로그인하지 않음");
                         alert(msg);
                         resetAuthUserInfo();
-                        navigate("/login");
-                        // navigate("/login",{state:{redirectedFrom: currentLocation}});
+                        setIsLoginSuc(false);
                     }
                 }
             }
@@ -122,7 +126,14 @@ function TokenRefresher(){
     },[]);
 
     return (
-        <></>
+        <>
+        {
+            !isLoginSuc ? <LoginModal />
+            : <h1>
+                TokenRefrersher
+            </h1>
+        }
+        </>
     );
 }
 

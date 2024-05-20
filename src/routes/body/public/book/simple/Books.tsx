@@ -1,9 +1,16 @@
 import { useQuery } from "react-query";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { inquiryBooksFetch } from "../../../../../api/api";
 import { useEffect, useState } from "react";
 import Pagination from "./page/Pagination";
 import { getFilePath } from "../../../../../function/functions";
+import styled from "styled-components";
+
+const Img = styled.img`
+width:100px;
+height:100px;
+`
+;
 
 type InquriyBooksParams={
     cateogry: string,
@@ -82,7 +89,7 @@ function Books(){
                                 {book.bookAuthor}
                                 {book.bookState}
                                 {book.pubDt}
-                                <img src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} />
+                                <Img src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} />
                             </div>
                         )
                     })

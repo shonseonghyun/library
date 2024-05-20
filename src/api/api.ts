@@ -1,7 +1,5 @@
+import { LoginFormValue } from "../routes/headers/component/util-menu/guest/LoginModal";
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
-import { LoginFormValue } from "../routes/body/nonprotected/user/login/Login";
-import { IRegBookParams } from "../routes/body/protected/user/regBook/RegBook";
-import axios from "axios";
 
 export const baseUrl="http://localhost:8000";
 
@@ -21,8 +19,7 @@ export interface IRequestField{
 }
 
 
-/* 소셜로그인 */
-//일반로그인
+/* 일반 로그인 */
 export const doLoginFetch = async (loginParams:LoginFormValue)=>{
     return await PublicAPI.post(`/user/login`,loginParams)
             .then(response=>response.data);

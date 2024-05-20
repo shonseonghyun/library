@@ -1,4 +1,5 @@
 function Main(){
+    console.log("main 랜더링");
     return (
         <div>
             <h1>

@@ -3,9 +3,13 @@ import { useRecoilValue } from "recoil";
 import { isLoginSelector } from "../../../atoms/AuthUserInfo";
 
 function PrivateRoute(){
+    console.log("privateRoute 랜더링");
     const isLogin = useRecoilValue(isLoginSelector);
     const currentLocation = useLocation();
-    return isLogin? <Outlet /> : <Navigate to={"/login"} state={ {redirectedFrom: currentLocation}}/>;
+    // isLogin? 
+    // <Outlet /> 
+    // : <Navigate to={"/login"} state={ {redirectedFrom: currentLocation}}/>;
+    return <Outlet />
 }
 
 export default PrivateRoute;
