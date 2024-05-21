@@ -66,36 +66,18 @@ const loginModalVariants = {
 }
 
 function MenuForGuest(){
-    const [isclickedLogin,setIsClickedLogin] = useState(false);
+    const [showing,setShowing] = useState(false);
+
+    const clickedLogin = ()=>{
+        setShowing(true);
+    }
 
     return (
         <>
-            <AnimatePresence>
-                {
-                    isclickedLogin 
-                    ?
-                    <>
-                        <OverlayForLogin
-                            variants={overlayVariants}
-                            initial="normal"
-                            animate="animate"
-                            onClick={()=>setIsClickedLogin(false)}
-                        />
-                        <LoginModalWrapper
-                            variants={loginModalVariants}
-                            initial="normal"
-                            animate="animate" 
-                        >
-                            <LoginModal />
-                        </LoginModalWrapper>
-                    </>
-                    :
-                    null
-                }
-            </AnimatePresence>
-            
+            <LoginModal showing={showing} setShowing={setShowing}/>
+
             <Item>
-                <p onClick={()=>setIsClickedLogin(true)}>
+                <p onClick={clickedLogin}>
                     로그인
                 </p>
             </Item>

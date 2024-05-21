@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { doLoginFetch } from "../../../../../api/api";
 import { useRecoilState } from "recoil";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import { AnimatePresence, motion } from "framer-motion";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface LoginFormValue{
     userId     :   string,
@@ -11,10 +13,24 @@ export interface LoginFormValue{
     autoLogin  :   boolean
 }
 
+const MotionWrapper = styled(motion.div)`
+    position: fixed;
+    z-index: 99;
+    top: 40%;
+    left: 50%;
+    width : 90% ;
+    height : 20vh ;
+
+    max-width: 500px;
+    min-width: 300px;
+    min-height: 200px;
+    transform: translate(-50%, -50%);
+    background-color: white;
+`;
+
 const Wrapper = styled.div`
     width: 100%;
     height: 100%;
-    border: 4px solid black;
 `;
 
 const PopHeader = styled.div`
@@ -90,8 +106,39 @@ const LoginOptions = styled.div`
     margin-left: 10px;
 `;
 
+const OverlayForLogin= styled(motion.div)` 
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgba(0,0,0,0.5);
+    cursor: pointer;
+`;
 
-const LoginModal = () => {
+const overlayVariants = {
+    normal:{
+        opacity:0
+    },
+    animate:{
+        opacity:1,
+        transition:{
+            duration:0.5
+        }
+    }
+}
+
+interface ILoginModalProps{
+    showing:boolean,
+    setShowing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+
+const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
+    const location = useLocation();
+    const navigate  = useNavigate();
+    const from = location?.state?.redirectedFrom?.pathName || '/';
+
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
 
     const {register,handleSubmit} = useForm<LoginFormValue>();
@@ -100,13 +147,16 @@ const LoginModal = () => {
         .then((data)=>{
             if(data.code=="S00"){
                alert("로그인 성공");
-               console.log("아래는 로그인 후 응답받은 new 토큰");
+               setShowing(false);
+               console.log("로그인 후 응답받은 new 토큰");
+               console.log(data.data.accessToken);
                setAuthUserInfo({
                    accessToken:data.data.accessToken,
                    refreshToken:data.data.refreshToken,
                    userId:data.data.userId,
                    userNo:data.data.userNo
                });
+               navigate(from);
             }else{ 
                 alert(data.msg);
             }
@@ -137,6 +187,20 @@ const LoginModal = () => {
     },[])
 
     return (
+        <AnimatePresence>
+        {
+            showing ?
+        <>
+        {/* 오버레이 */}
+        <OverlayForLogin
+            variants={overlayVariants}
+            initial="normal"
+            animate="animate"
+            onClick={()=>setShowing(false)}
+        />
+
+        {/* 로그인 */}
+        <MotionWrapper>
         <Wrapper>
             <PopHeader>
                 회원 로그인
@@ -196,6 +260,12 @@ const LoginModal = () => {
                 </SocialLogins>
             </LoginFormWrapper>
         </Wrapper>
+        </MotionWrapper>
+        </>
+        :
+        null
+        }
+        </AnimatePresence>
     );
 };
 
