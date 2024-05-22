@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
+const Wrapper = styled.div`
+    width: 80%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+`;
+
 const PageUl = styled.ul`
-  float: left;
   list-style: none;
   text-align: center;
   border-radius: 3px;
@@ -44,13 +49,13 @@ const PageSpan = styled.span`
 interface IPagination{
     totalCount:number,
     sizePerPage:number,
-    currentPage:number
+    currentPage:number,
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-function Pagination({totalCount,sizePerPage,currentPage}:IPagination){
+function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPagination){
     const [backPage,setBackPage] = useState(0);
     const [frontPage,setFrontPage] = useState(0);
-    const location = useLocation();
     const MaxSizeInPage = 5 ;
     const a = Math.ceil(currentPage/MaxSizeInPage); //올림
     const pageNumbers = [];
@@ -96,7 +101,7 @@ function Pagination({totalCount,sizePerPage,currentPage}:IPagination){
                 return totalPage;
             }
         }
-        return movePage
+        return movePage;
     }
 
     useEffect(()=>{
@@ -107,26 +112,27 @@ function Pagination({totalCount,sizePerPage,currentPage}:IPagination){
     })
 
     return (
-    <div>
-      <nav>
+    <Wrapper>
         <PageUl className="pagination">
             <PageLi>
                 {
                     currentPage==1
-                    ? "뒤"
+                    ? <p>
+                        뒤
+                    </p>
                     :
-                <Link style={{ textDecoration: "none"}} to={`${location.pathname}?page=${backPage}&size=${sizePerPage}`}>
+                <p style={{ textDecoration: "none"}} onClick={()=>setCurrentPage(backPage)}>
                     뒤
-                </Link>
+                </p>
                 }
             </PageLi>
           {pageNumbers.map((number) => (
             <PageLi key={number} className="page-item">
-                <Link style={{ textDecoration: "none"}} to={`${location.pathname}?page=${number}&size=${sizePerPage}`}>
+                <p style={{ textDecoration: "none"}}  onClick={()=>setCurrentPage(number)}>
                     <PageSpan className="page-link">
                         {number}
                     </PageSpan>
-                </Link>
+                </p>
             </PageLi>
           ))}
             <PageLi>
@@ -135,15 +141,13 @@ function Pagination({totalCount,sizePerPage,currentPage}:IPagination){
                     ? 
                         "앞"
                     :
-                    <Link style={{ textDecoration: "none"}} to={`${location.pathname}?page=${frontPage}&size=${sizePerPage}`}>
+                    <p style={{ textDecoration: "none"}} className={frontPage+""}  onClick={()=>setCurrentPage(frontPage)}>
                         앞
-                    </Link>
+                    </p>
             }
-                
             </PageLi>
         </PageUl>
-      </nav>
-    </div>
+    </Wrapper>
     );
 }
 

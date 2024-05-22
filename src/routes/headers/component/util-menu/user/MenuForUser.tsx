@@ -23,7 +23,6 @@ function MenuForUser(){
     const clickedLogout = ()=>{
         alert("로그아웃 진행");
         resetAuthUserInfo();
-        navigate("/");
     }
 
     return (

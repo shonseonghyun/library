@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useMatch, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import UtilMenu from "./component/util-menu/UtilMenu";
+import { useForm } from "react-hook-form";
 
 const SearchBtn = styled.button`
     border: 0;
@@ -101,34 +102,26 @@ const Svg = styled.svg`
     height: 20px;
 `;
 
+interface IFormProps{
+    inquiryWord:string,
+    selectOption: string
+}
 
 
 function Header(){
-    const [cateogry,setCategory] = useState("bookAuthor");
-    const [inquriyWord,setInquriyWord] = useState("");
+    console.log("Header 랜더링");
+    const match = useMatch("/book/inquiry/:cateogry/:inquiryWord") ;
+    const {register,handleSubmit,getValues} = useForm<IFormProps>();
     const navigate = useNavigate();
+    const location = useLocation();
+    const word = location.pathname.substring(location.pathname.lastIndexOf("/")+1);
 
-    const inquiryBooks = (e : 
-        React.FormEvent<HTMLFormElement>
-        // React.MouseEvent<HTMLButtonElement>
-    )=>{
-        e.preventDefault();
-
-        if(inquriyWord.trim().length==0){
+    const onSubmit = (data :IFormProps) =>{
+        if(getValues("inquiryWord").trim().length==0){
             alert("검색명을 입력해주세요.");
             return;
         }
-        const url = `/book/inquiry/${cateogry}/${inquriyWord}`;
-        console.log(url) ;
-        navigate(`/book/inquiry/${cateogry}/${inquriyWord}`)
-    }
-
-    const selectCategory = (e:React.ChangeEvent<HTMLSelectElement>)=>{
-        setCategory(e.currentTarget.value);
-    }
-
-    const inputInquiryWord = (e:React.FocusEvent<HTMLInputElement>)=>{
-        setInquriyWord(e.currentTarget.value);
+        navigate(`/book/inquiry/${data.selectOption}/${data.inquiryWord}`);
     }
 
     return (
@@ -151,13 +144,13 @@ function Header(){
                 </ImgWrapper>
 
                 <SearchFormWrapper>
-                    <SearchForm onSubmit={inquiryBooks}>
-                        <Select onChange={selectCategory} name="selectOptions" id="selectOptions">
+                    <SearchForm onSubmit={handleSubmit(onSubmit)}>
+                        <Select {...register("selectOption")}>
                             <option value="bookAuthor">저자</option>
                             <option value="bookName">도서 제목</option>
                         </Select>
-                        <Input type="text" name="inquriyWord" id="inquriyWord" onChange={inputInquiryWord} placeholder="도서검색" />
-                        <SearchBtn type="button">
+                        <Input type="text" placeholder="도서검색" {...register("inquiryWord")} defaultValue={match ? (word ? word : ""): ""}/>
+                        <SearchBtn type="submit">
                             <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></Svg>
                         </SearchBtn>
                     </SearchForm>

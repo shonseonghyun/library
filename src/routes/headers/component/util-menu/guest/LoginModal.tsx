@@ -112,6 +112,7 @@ const OverlayForLogin= styled(motion.div)`
     height: 100%;
     left: 0;
     top: 0;
+    z-index: 99;
     background-color: rgba(0,0,0,0.5);
     cursor: pointer;
 `;
@@ -141,7 +142,7 @@ const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
 
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
 
-    const {register,handleSubmit} = useForm<LoginFormValue>();
+    const {register,handleSubmit,setValue} = useForm<LoginFormValue>();
     const onSubmit = (loginParams:LoginFormValue)=>{
         doLoginFetch(loginParams)
         .then((data)=>{
@@ -156,7 +157,6 @@ const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
                    userId:data.data.userId,
                    userNo:data.data.userNo
                });
-               navigate(from);
             }else{ 
                 alert(data.msg);
             }
@@ -165,8 +165,15 @@ const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
             alert("Fialed to fetch User: "+ err);
         })
         ;
-       
     };
+
+       
+    const clickedOverlay = useCallback(() =>{
+        setShowing(false);
+        setValue("userId","");
+        setValue("userPwd","");
+    },[])
+
 
     const onInvalid = (data:any)=>{
         if(data.userId){
@@ -196,7 +203,7 @@ const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
             variants={overlayVariants}
             initial="normal"
             animate="animate"
-            onClick={()=>setShowing(false)}
+            onClick={clickedOverlay}
         />
 
         {/* 로그인 */}
