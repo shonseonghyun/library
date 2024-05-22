@@ -2,10 +2,17 @@ import {  useEffect, useState } from "react";
 import {  useForm } from "react-hook-form";
 import styled from "styled-components";
 import { ISendEmailHandlerProps, sendEmailAuthNumber } from "../emailAuth/sendEmailAuthNumber";
-import Timer from "../emailAuth/Timer";
+import Timer from "../../../../../component/timer/Timer";
 import { getAuthNumber } from "../emailAuth/GetAuthNumber";
 import {  IRequestField, checkExistUserIdFetch, joinUserFetch } from "../../../../../api/api";
 import { useNavigate } from "react-router-dom";
+
+const Wrapper = styled.div`
+    width  : 80% ;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+`; 
 
 const Input = styled.input`
     border: 0.5px solid rgb(219, 219, 219);
@@ -111,8 +118,6 @@ function Join(){
     }
 
     const onInValid= (data:any)=>{
-        console.log("InValid")
-        console.log(data);
     }
 
     const handleCheckValidId= ()=>{
@@ -185,6 +190,8 @@ function Join(){
     }
 
     return (
+        <Wrapper>
+
         <Form onSubmit={handleSubmit(onValid,onInValid)}>
             <Input type="text" {...register("userName",{
                 required:{value:true,message:'이름을 입력하세요'}
@@ -194,7 +201,7 @@ function Join(){
             <Input type="text" {...register("userId",{
                 required:{value:true,message:'아이디를 입력하세요'}
                 })} placeholder="아이디" />
-            <button type="button" onClick={handleCheckValidId}>중복 확인</button>
+            <Btn type="button" onClick={handleCheckValidId}>중복 확인</Btn>
             <ErrMsg>{errors.userId?.message}</ErrMsg>
 
             <Input type="password" {...register("userPwd",{
@@ -219,7 +226,7 @@ function Join(){
                     message:"이메일 형식이 유효하지 않습니다."
                 },
                 })} placeholder="이메일" />
-                <button disabled={isEmailAuth} type="button" onClick={sendEmailAuthNumberHandler}>인증 요청</button>
+                <Btn disabled={isEmailAuth} type="button" onClick={sendEmailAuthNumberHandler}>인증 요청</Btn>
                 {(!isExpired && !isEmailAuth) ? <Timer setIsExpired={setIsExpired} timeLeft={timeLeft} setTimeLeft={setTimeLeft}/> : null}
             <ErrMsg>{errors.email?.message}</ErrMsg>
 
@@ -251,6 +258,7 @@ function Join(){
 
             <Btn onClick={ValidAll}>회원가입</Btn>
         </Form>
+        </Wrapper>
     );
 }
 

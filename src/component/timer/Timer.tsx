@@ -24,7 +24,7 @@ function Timer({timeLeft,setTimeLeft,setIsExpired}:ITimeLeftState){
 
         return ()=>{
             clearInterval(timer);
-            setTimeLeft(10); // 시간 원복
+            setTimeLeft(timeLeft); // 시간 원복
     } //해당 effect청소 전 마지막 수행
     },[]);
     

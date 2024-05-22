@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
     width: 80%;
-    margin: 0 auto;
+    margin: 50px auto;
     padding-bottom: 10px;
 `;
 
@@ -72,9 +74,9 @@ function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPaginat
                 pageNumbers.push(i)
             }
         }
-    } 
+    }
 
-    const moveBackPage = ()=>{
+    const moveBackPage = useCallback(()=>{
         let movePage = 0;
         if(currentPage<6 && currentPage>0){
             movePage= 1
@@ -83,14 +85,12 @@ function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPaginat
             movePage=  MaxSizeInPage*(a-1);
         }
         return movePage
-    }
+    },[currentPage]);
 
-    const moveFrontPage = ()=>{
+    const moveFrontPage = useCallback(()=>{
         let movePage = 0;
-        if(currentPage<6 && currentPage>0){
-            movePage= 6
-        }
-        else if(currentPage<=MaxSizeInPage*a && currentPage>MaxSizeInPage*(a-1)){
+
+        if(currentPage<=MaxSizeInPage*a && currentPage>MaxSizeInPage*(a-1)){
             movePage=  MaxSizeInPage*a + 1;
             //총페이지수>movePage -> 이동
             //총페이지수 < movePage-> 가장 마지막 총페이지수로 이동
@@ -101,8 +101,11 @@ function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPaginat
                 return totalPage;
             }
         }
+        else if(currentPage<6 && currentPage>0){
+            movePage= 6
+        }
         return movePage;
-    }
+    },[currentPage]);
 
     useEffect(()=>{
         const backPage = moveBackPage();
@@ -115,35 +118,38 @@ function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPaginat
     <Wrapper>
         <PageUl className="pagination">
             <PageLi>
-                {
-                    currentPage==1
-                    ? <p>
-                        뒤
-                    </p>
-                    :
-                <p style={{ textDecoration: "none"}} onClick={()=>setCurrentPage(backPage)}>
-                    뒤
-                </p>
-                }
+            {
+                currentPage==1
+                ? 
+                <span>
+                    <FontAwesomeIcon icon={faArrowLeft} />
+                </span>
+                :
+            <span onClick={()=>setCurrentPage(backPage)}>
+                    <FontAwesomeIcon icon={faArrowLeft} />
+            </span>
+            }
             </PageLi>
+
           {pageNumbers.map((number) => (
             <PageLi key={number} className="page-item">
-                <p style={{ textDecoration: "none"}}  onClick={()=>setCurrentPage(number)}>
-                    <PageSpan className="page-link">
-                        {number}
-                    </PageSpan>
-                </p>
+                <PageSpan onClick={()=>setCurrentPage(number)} className="page-link">
+                    {number}
+                </PageSpan>
             </PageLi>
           ))}
+
             <PageLi>
             {
-                    totalPage==currentPage
-                    ? 
-                        "앞"
-                    :
-                    <p style={{ textDecoration: "none"}} className={frontPage+""}  onClick={()=>setCurrentPage(frontPage)}>
-                        앞
-                    </p>
+                totalPage==currentPage
+                   ? 
+                <span>
+                    <FontAwesomeIcon icon={faArrowRight} />
+                </span>
+                :
+                <span onClick={()=>setCurrentPage(frontPage)}>
+                    <FontAwesomeIcon icon={faArrowRight} />
+                </span>
             }
             </PageLi>
         </PageUl>

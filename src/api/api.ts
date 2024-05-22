@@ -25,6 +25,7 @@ export const doLoginFetch = async (loginParams:LoginFormValue)=>{
             .then(response=>response.data);
 }
 
+/* */
 
 
 /* 찜 */
@@ -66,15 +67,18 @@ export const inquiryBooksFetch = async (category:string, inquiryWord:string,curr
     const inquriyBooksUrl = totalCount>-1 
     ? `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}&cachedCount=${totalCount}` 
     : `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}`;
-    console.log(inquriyBooksUrl + "요청");
     return await PublicAPI.get(inquriyBooksUrl)
             .then(response=>response.data);
 }
 
+/*현재 대여 상황 */
+export const getRentStatus = async (userNo:number)=>{
+    return await PrivateAPI.get(`/user/rentStatus/${userNo}`)
+            .then(response=>response?.data);
+}
 
 /*대여 히스토리 */
 export const getRentHistory = async (userNo:number)=>{
-    console.log("getRentHistory api 들어옴"); //2
     return await PrivateAPI.get(`/user/rentStatus/${userNo}`)
             .then(response=>response?.data);
 }
@@ -114,4 +118,12 @@ export const regBookFetch= async (requsetParams: FormData)=>{
             }
         )
         .then(response=>response.data);
+}
+
+export const regHeartBook = async (userNo: number, bookNo : number)=>{
+    return await PrivateAPI.post(
+        `/heart/${userNo}/book/${bookNo}`
+    )
+    .then(response=>response.data);
+
 }
