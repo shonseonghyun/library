@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
+import { useQuery } from "react-query";
+import { getRentStatus } from "../../../../../../api/api";
 
 
 
@@ -57,30 +59,39 @@ function RentStatus(){
     useEffect(()=>{
         console.log("랜더링");
         console.log(updateFlg);
-        getRentStatusApi();
+        // getRentStatusApi();
     },[updateFlg])
     ;
 
     //대여 현황 도서목록 가져오기 api
-    const getRentStatusApi = async () =>{
-        const response = await fetch(
-            `http://localhost:8000/user/rentStatus/${authUserInfo.userNo}`,
-            {
-                method:"GET",
-                headers:{
-                    Authorization: `Bearer ${authUserInfo.accessToken}`, 
-                    "Content-Type": "application/json",
-                }
-            }
-        )
-        // .catch(error => {alert("잠시 후 다시 시도해주세요")});
-        const datas = await response.json();
-        if(datas.code=="T01"){
-            resetAuthUserInfo();
-            navigate("/login",{state:{redirectedFrom: currentLocation}})
+    // const getRentStatusApi = async () =>{
+    //     const response = await fetch(
+    //         `http://localhost:8000/user/rentStatus/${authUserInfo.userNo}`,
+    //         {
+    //             method:"GET",
+    //             headers:{
+    //                 Authorization: `Bearer ${authUserInfo.accessToken}`, 
+    //                 "Content-Type": "application/json",
+    //             }
+    //         }
+    //     )
+    //     // .catch(error => {alert("잠시 후 다시 시도해주세요")});
+    //     const datas = await response.json();
+    //     if(datas.code=="T01"){
+    //         resetAuthUserInfo();
+    //         navigate("/login",{state:{redirectedFrom: currentLocation}})
+    //     }
+    //     setDatas(datas.data);
+    // }
+
+    const {isLoading} = useQuery(["getRentStatus",`getRentStatus-${authUserInfo.userId}`],
+        ()=>getRentStatus(authUserInfo.userNo),
+        {
+            onSuccess(data) {
+                setDatas(data.data);
+            },
         }
-        setDatas(datas.data);
-    }
+    )
 
 
     //전체 선택 핸들러

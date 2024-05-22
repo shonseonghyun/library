@@ -6,10 +6,14 @@ function PrivateRoute(){
     console.log("privateRoute 랜더링");
     const isLogin = useRecoilValue(isLoginSelector);
     const currentLocation = useLocation();
-    // isLogin? 
-    // <Outlet /> 
-    // : <Navigate to={"/login"} state={ {redirectedFrom: currentLocation}}/>;
-    return <Outlet />
+
+    return (
+        isLogin
+        ? 
+        <Outlet /> 
+        : 
+        <Navigate to={"/"} state={ {redirectedFrom: currentLocation}}/>
+    );
 }
 
 export default PrivateRoute;

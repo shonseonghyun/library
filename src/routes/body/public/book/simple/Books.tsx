@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 import React, { useCallback, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { inquiryBooksFetch, regHeartBook } from "../../../../../api/api";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../atoms/AuthUserInfo";
 import { getFilePath } from "../../../../../function/functions";
 import LoginModal from "../../../../headers/component/util-menu/guest/LoginModal";
-import Pagination from "./page/Pagination";
+import Pagination from "../../../../../component/page/Pagination";
 
 enum GridType  {
     ListType="listType",
@@ -124,7 +124,6 @@ const BookContentsWrapper = styled.div`
 `;
 
 const BookTitle = styled.div`
-    font-size: 20px;
     height: 55px;
 `;
 
@@ -161,10 +160,6 @@ const Button = styled.button`
     height: 40px;
     padding: 0px 10px;
     color: #fff!important;
-
-    &:hover{
-        background-color: black;
-    }
 `;
 
 const Img = styled.img`
@@ -300,7 +295,6 @@ function Books(){
     },[]);
 
     const clickedHeart = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
-        console.log("clickedHear");
         if(isLogin){
             mutation.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
         }else{
@@ -431,14 +425,16 @@ function Books(){
                                             </IndexWrapper>
                                             <BookImgWrapper>
                                                 <Img 
-                                                src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} 
+                                                    src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} 
                                                 />
                                             </BookImgWrapper>
 
                                             <BookContentsWrapper>
-                                                <BookTitle>
-                                                    {book.bookName}
-                                                </BookTitle>
+                                                    <BookTitle>
+                                                        <Link style={{ fontSize:"20px"}}to={`/book/${book.bookNo}`}> 
+                                                                {book.bookName}
+                                                        </Link>
+                                                    </BookTitle>
                                                 <Info>
                                                     <span>{book.bookAuthor}</span>
                                                     <span>출판사</span>
@@ -495,7 +491,6 @@ function Books(){
             </InquriyResultWrapper>
 
             <LoginModal showing={showing} setShowing={setShowing} />
-
             <Pagination totalCount={totalCount} sizePerPage={sizePerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
         </Wrapper>
     );

@@ -5,7 +5,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
-import { IInquriyBooksImageReponse } from "../simple/Books";
 import { getFilePath } from "../../../../../function/functions";
 
 const HeartBtn = styled.button`
