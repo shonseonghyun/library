@@ -1,9 +1,9 @@
 import {  useEffect, useState } from "react";
 import {  useForm } from "react-hook-form";
 import styled from "styled-components";
-import { ISendEmailHandlerProps, sendEmailAuthNumber } from "../emailAuth/sendEmailAuthNumber";
+import { ISendEmailHandlerProps, sendEmailAuthNumber } from "../../../../../component/emailAuth/sendEmailAuthNumber";
 import Timer from "../../../../../component/timer/Timer";
-import { getAuthNumber } from "../emailAuth/GetAuthNumber";
+import { getAuthNumber } from "../../../../../component/emailAuth/GetAuthNumber";
 import {  IRequestField, checkExistUserIdFetch, joinUserFetch } from "../../../../../api/api";
 import { useNavigate } from "react-router-dom";
 

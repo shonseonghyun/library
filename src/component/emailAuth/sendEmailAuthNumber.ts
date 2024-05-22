@@ -1,7 +1,7 @@
 import { SetStateAction, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { getAuthNumber } from "./GetAuthNumber";
-import config from "../../../../../config";
+import config from "../../config";
 import { error } from "console";
 
 
