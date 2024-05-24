@@ -52,8 +52,7 @@ function TokenRefresher(){
 
                 if(code =="T01"){
                     console.log(localStorage.getItem("refreshToken"));
-                    console.log(!(localStorage.getItem("refreshToken")));
-                    if(localStorage.getItem("refreshToken")){
+                    if(! (localStorage.getItem("refreshToken")=== "undefined")){
                         console.log("진입");
 
                         /* 기존코드 */
