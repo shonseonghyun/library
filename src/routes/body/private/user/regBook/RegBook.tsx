@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { regBookFetch } from "../../../../../api/api";
@@ -7,6 +8,7 @@ import { regBookFetch } from "../../../../../api/api";
 const Wrapper = styled.div`
     margin: 0 auto;
     justify-content: center;
+    margin-bottom: 30px;
 `;
 
 const SubSearchWrapper =styled.div`
@@ -18,6 +20,14 @@ const SearchWrapper =styled.div`
     font-size: 28px;
     padding: 15px 0px;
     margin:0 auto;
+`;
+
+const Button = styled.button`   
+    background-color:rgba(52, 152, 219,1.0);  
+    margin-right: 5px;
+    height: 40px;
+    padding: 0px 10px;
+    color: #fff!important;
 `;
 
 const InputWrapper = styled.div`
@@ -55,21 +65,29 @@ export interface IRegBookParams{
     isbn:string,
     bookLocation:string,
     pubDt:string,
-    bookImages: FileList
+    bookImages: FileList,
 }
 
 function RegBook(){
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const dateStr = `${year}${month}${day}`;
+    console.log(dateStr);
+
     const {
         register,
         formState: { errors },
         handleSubmit,
-        watch
+        watch,
     } = useForm<IRegBookParams>();
     
     const [preview,setPreview] = useState('');
     const files = watch("bookImages");
 
     const onSubmit=(data:IRegBookParams)=>{
+        console.log(data);
         const formData= new FormData();
         formData.append('bookRegReqDto', new Blob([JSON.stringify(data)], {type:'application/json'})); // 텍스트 데이터들 추가
         formData.append("file",Array.from(data.bookImages)[0]);
@@ -77,13 +95,10 @@ function RegBook(){
     }
 
     const onError=(data:any)=>{
-        console.log("onError");
-        console.log(data);
     }
 
     const onClick=(e:React.MouseEvent<HTMLButtonElement>)=>{
         // e.preventDefault(); // submit을 막음 / 용도 : input값에 대한 검증 외 추가검증 필요시(ex. 서버로 아이디 중복체크했는지?)
-        console.log("onClick");
     }
 
 
@@ -169,10 +184,16 @@ function RegBook(){
 
                 <InputWrapper>
                     <Label  >출판일자</Label>
-                    <Input type="text" {
+                    <Input type="date" 
+                        pattern="\d{4}-\d{2}-\d{2}" 
+                    {
                         ...register("pubDt",
                             {
-                                required:"출판일자는 필수입니다."
+                                required:"출판일자는 필수입니다.",
+                                pattern:{
+                                    value: /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
+                                    message:"날짜 형식에 맞춰 입력 바랍니다"
+                                }
                             }
                         )
                     } />
@@ -213,8 +234,11 @@ function RegBook(){
                     }
                 </InputWrapper>
 
-                <button onClick={onClick}>등록 요청</button>
+                <InputWrapper>
+                    <Button onClick={onClick}>등록</Button>
+                </InputWrapper>
             </form>
+
         </Wrapper>
     )
 }

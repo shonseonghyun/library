@@ -54,21 +54,29 @@ const Tbody = styled.tbody`
 
 
 function BookReview({bookNo}:IBookReview){
+    console.log("BookReview 랜더링");
+    const [clickedReview ,setClickedReview] = useState(false);
     const [showing,setShowing]  = useState(false);
     const [reviews,setReveiws] = useState<IReviewInfo[]>([]);
-    const {data} = useQuery(
+    const Reviews = useQuery(
         ['getReviewsOfBookFetch',bookNo],
         ()=>getReviewsOfBookFetch(bookNo),
         {
             onSuccess(data) {
                 setReveiws(data.data);
             },
+            enabled:clickedReview
+            // ,refetchOnWindowFocus: false
         }
     )
     ;
 
     const clickedBtn = ()=>{
         setShowing(!showing);
+        setClickedReview(true);
+        if(!clickedReview){
+            Reviews.refetch();
+        }
     }
 
     return (
@@ -112,7 +120,7 @@ function BookReview({bookNo}:IBookReview){
                 </Table>
 
             </HideWrapper>
-            {/* <BookRegReview bookNo={bookNo} /> */}
+            {/* <BookRegReview bookNo={bookNo} />  */}
         </Wrapper>
         
 
