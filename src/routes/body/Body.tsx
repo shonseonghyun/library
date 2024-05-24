@@ -36,7 +36,7 @@ function Body(){
                         <Route path="rentHistory" element={<RentHistory />}/>
                         <Route path="myBookcase" element={<MyBookCase />}/>
                     </ Route>
-                    <Route path="/book" element={<RegBook /> } />
+                    <Route path="/book/reg" element={<RegBook /> } />
                 </Route>
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />      

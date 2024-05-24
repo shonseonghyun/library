@@ -8,7 +8,6 @@ function OauthLoginSuccess(){
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
-    const location = useLocation();
     const [cookie,,removeCookie] = useCookies(["refreshToken", "userNo", "userId"]);
     
     

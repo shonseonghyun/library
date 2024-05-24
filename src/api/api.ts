@@ -43,6 +43,13 @@ export const getHeartBooksFetch = async (heartNo:number,userNo:number,accessToke
     };
 }
 
+export const regHeartBook = async (userNo: number, bookNo : number)=>{
+    return await PrivateAPI.post(
+        `/heart/${userNo}/book/${bookNo}`
+    )
+    .then(response=>response.data);
+}
+
 export const deleteHeartBookFetch = async (userNo:number,bookNo:number)=>{
     return await PrivateAPI.delete(`/heart/${userNo}/book/${bookNo}`)
            .then(response=>response.data);
@@ -69,6 +76,13 @@ export const inquiryBooksFetch = async (category:string, inquiryWord:string,curr
     : `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}`;
     return await PublicAPI.get(inquriyBooksUrl)
             .then(response=>response.data);
+}
+//도서 대여
+export const rentBook = async (userNo: number, bookNo : number)=>{
+    return await PrivateAPI.post(
+        `/rent/${userNo}/book/${bookNo}`
+    )
+    .then(response=>response.data);
 }
 
 /*현재 대여 상황 */
@@ -120,10 +134,3 @@ export const regBookFetch= async (requsetParams: FormData)=>{
         .then(response=>response.data);
 }
 
-export const regHeartBook = async (userNo: number, bookNo : number)=>{
-    return await PrivateAPI.post(
-        `/heart/${userNo}/book/${bookNo}`
-    )
-    .then(response=>response.data);
-
-}

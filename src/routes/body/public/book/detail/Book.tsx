@@ -1,49 +1,53 @@
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import BookReview from "./review/BookReview";
-import BookInfo from "./BookInfo";
+import BookReview from "./info/review/BookReview";
+import BookInfo from "./info/BookInfo";
 
-const HeartBtn = styled.button`
-    border: 0;
-    background-color: transparent;
-    cursor:pointer;
-    &:hover {
-        background: yellow;
-        color: black;
-        transition: 2s;
-      }
+const Wrapper = styled.div`
+    
 `;
 
-const RentBtn = styled.button`
-    border: 0;
-    background-color: black;
-    color:pink;
-    cursor:pointer;
-    &:hover {
-        background: yellow;
-        color: black;
-        transition: 2s;
-      }
+const SubSearchWrapper =styled.div`
+    background:linear-gradient(to right, rgba(72, 52, 212,1.0), white); 
 `;
 
-const Img = styled.img`
-    width:40px;
-    height:40px;
+const SearchWrapper =styled.div`
+    width: 80%;
+    font-size: 28px;
+    padding: 15px 0px;
+    margin:0 auto;
 `;
+
+const BookInfoWrapper =styled.div`
+    width: 80%;
+    margin: 0 auto;
+`;
+
+const BookReviewWrapper =styled.div`
+    width: 80%;
+    margin: 0 auto;
+`;
+
 
 function Book(){
     const {bookNo} = useParams()  as { bookNo: string };
 
     return (
-        <>
-            <h1>BookDetail</h1>
-            <div>
+        <Wrapper>
+            <SubSearchWrapper>
+                <SearchWrapper>
+                    상세 정보
+                </SearchWrapper>
+            </SubSearchWrapper>
+
+            <BookInfoWrapper>
                 <BookInfo bookNo={bookNo}/>
-            </div>
-            <div>
+            </BookInfoWrapper>
+
+            <BookReviewWrapper className="hio">
                 <BookReview bookNo={bookNo}/>
-            </div>
-        </>
+            </BookReviewWrapper>
+        </Wrapper>
     )
 }
 

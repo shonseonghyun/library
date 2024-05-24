@@ -4,8 +4,24 @@ import styled from "styled-components";
 import { regBookFetch } from "../../../../../api/api";
 
 
-const InputWrapper = styled.div`
+const Wrapper = styled.div`
+    margin: 0 auto;
+    justify-content: center;
+`;
 
+const SubSearchWrapper =styled.div`
+    background:linear-gradient(to right, rgba(72, 52, 212,1.0), white); 
+`;
+
+const SearchWrapper =styled.div`
+    width: 80%;
+    font-size: 28px;
+    padding: 15px 0px;
+    margin:0 auto;
+`;
+
+const InputWrapper = styled.div`
+    text-align: center;
 `;
 
 const Label = styled.label`
@@ -76,7 +92,6 @@ function RegBook(){
             const filesArr = Array.from(files);
             if(filesArr.length>0){
                 const imgFile = filesArr[0];
-                console.log(imgFile);
                 const previewUrl = URL.createObjectURL(imgFile);
                 setPreview(previewUrl);
             }
@@ -84,8 +99,12 @@ function RegBook(){
     },[files]);
 
     return (
-        <>
-            <h1>도서 등록</h1>
+        <Wrapper>
+            <SubSearchWrapper>
+                <SearchWrapper>
+                    도서 등록
+                </SearchWrapper>
+            </SubSearchWrapper>
 
             <form onSubmit={handleSubmit(onSubmit,onError)} >
                 <InputWrapper>
@@ -182,6 +201,9 @@ function RegBook(){
                         )
                     }
                     />
+                </InputWrapper>
+                {errors.bookImages && <p>{errors.bookImages.message}</p>}
+                <InputWrapper>
                     {preview ? 
                         <Img
                             src={preview}
@@ -190,11 +212,10 @@ function RegBook(){
                         <div/>
                     }
                 </InputWrapper>
-                {errors.bookImages && <p>{errors.bookImages.message}</p>}
 
                 <button onClick={onClick}>등록 요청</button>
             </form>
-        </>
+        </Wrapper>
     )
 }
 

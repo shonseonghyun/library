@@ -38,7 +38,7 @@ function MenuForUser(){
                 <NavbarLink to="myLibrary/rentStatus">내 서재</NavbarLink>
             </Item>
             <Item>
-                <NavbarLink to="/book">도서 등록</NavbarLink>
+                <NavbarLink to="/book/reg">도서 등록</NavbarLink>
             </Item>
         </>
     )

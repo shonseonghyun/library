@@ -4,10 +4,10 @@ import { useMutation, useQuery } from "react-query";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { inquiryBooksFetch, regHeartBook } from "../../../../../api/api";
+import { inquiryBooksFetch, regHeartBook, rentBook } from "../../../../../api/api";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../atoms/AuthUserInfo";
 import { getFilePath } from "../../../../../function/functions";
-import LoginModal from "../../../../headers/component/util-menu/guest/LoginModal";
+import LoginModal from "../../../../../component/login/LoginModal";
 import Pagination from "../../../../../component/page/Pagination";
 
 enum GridType  {
@@ -192,7 +192,7 @@ type InquriyBooksParams={
     inquiryWord:string
 }
 
-interface IMutationProps{
+export interface IHeartBookProps{
     bookNo:number,
     userNo:number
 }
@@ -255,7 +255,7 @@ function Books(){
     const [currentPage,setCurrentPage] = useState(1);
     const [sizePerPage,setSizePerPage] = useState(10);
 
-    const mutation = useMutation(({userNo, bookNo}:IMutationProps)=>regHeartBook(userNo,bookNo),{
+    const mutation = useMutation(({userNo, bookNo}:IHeartBookProps)=>regHeartBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
                 alert("찜 등록 완료하였습니다.");
@@ -327,6 +327,16 @@ function Books(){
         }
     },[books]);
 
+    const rent = useMutation(({userNo, bookNo}:IHeartBookProps)=>rentBook(userNo,bookNo),{
+        onSuccess(data) {
+            if(data.code === "S00"){
+                alert("대출 완료하였습니다.");
+            }else{
+                alert(data.msg);
+            }
+        },
+    })
+
     const clickedImgType = ()=>{
         setGridType(GridType.ImgType);
         setSizePerPage(20);
@@ -336,6 +346,14 @@ function Books(){
         setGridType(GridType.ListType);
         setSizePerPage(10);
     }
+
+    const clickedRent = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
+        if(isLogin){
+            rent.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
+        }else{
+            setShowing(true);
+        }
+    },[isLogin]);
 
     return (
         <Wrapper>
@@ -447,6 +465,7 @@ function Books(){
                                                 </Info>
                                                 <ButtonWrapper>
                                                     <Button 
+                                                        onClick={clickedRent}
                                                         value={book.bookNo}
                                                         style={{ 
                                                             backgroundColor: book.bookState==="RENT_UNAVAILABLE" ? "#a99e9e9c" : "rgba(52, 152, 219,1.0)",

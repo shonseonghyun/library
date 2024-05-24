@@ -1,16 +1,15 @@
-import { useRecoilValue } from "recoil";
-import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../atoms/AuthUserInfo";
-import { IBookReview } from "./BookReview";
 import { useState } from "react";
-import { postReviewOfBookFetch } from "../../../../../../api/api";
+import { useRecoilValue } from "recoil";
+import { postReviewOfBookFetch } from "../../../../../../../api/api";
+import { isLoginSelector } from "../../../../../../../atoms/AuthUserInfo";
+import { IBookReview } from "./BookReview";
 
 function BookRegReview({bookNo}:IBookReview){
     const isLogin = useRecoilValue(isLoginSelector);
-    const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const [reviewContent,setReviewContent] = useState<string>("");
     
     const postReview = ()=>{
-        const response = postReviewOfBookFetch(bookNo,authUserInfo.userNo,reviewContent);
+        const response = postReviewOfBookFetch(bookNo,parseInt(localStorage.getItem("userNo")!),reviewContent);
         response.then((data)=>{
             if(data.code != "S00"){
                 alert(data.msg);
@@ -25,8 +24,8 @@ function BookRegReview({bookNo}:IBookReview){
     }
 
     return (
-            isLogin 
-            ? 
+        isLogin 
+        ? 
             <div>
                 <input type="text" onBlur={writeReviewContent}/>
                 <button onClick={postReview}>등록</button>
