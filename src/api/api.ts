@@ -1,4 +1,4 @@
-import { LoginFormValue } from "../routes/headers/component/util-menu/guest/LoginModal";
+import { LoginFormValue } from "../component/login/LoginModal";
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
 
 export const baseUrl="http://localhost:8000";

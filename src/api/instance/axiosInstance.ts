@@ -15,3 +15,15 @@ export const PublicAPI = axios.create({
         "Content-Type": "application/json",
     }
 });
+
+PrivateAPI.interceptors.request.use(
+    (config) => {
+        let accessToken =localStorage.getItem("accessToken");
+        config.headers['Authorization'] = `Bearer ${accessToken}`;
+        return config;
+    },
+    (error) => {
+      console.log(error);
+      return Promise.reject(error);
+    }
+);

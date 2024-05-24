@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { doLoginFetch } from "../../../../../api/api";
+import { doLoginFetch } from "../../api/api";
 import { useRecoilState } from "recoil";
-import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuthUserInfoAtom } from "../../atoms/AuthUserInfo";
 
 export interface LoginFormValue{
     userId     :   string,
@@ -138,7 +138,7 @@ interface ILoginModalProps{
 const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
     const location = useLocation();
     const navigate  = useNavigate();
-    const from = location?.state?.redirectedFrom?.pathName || '/';
+    // const from = location?.state?.redirectedFrom?.pathName || '/';
 
     const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
 
@@ -157,6 +157,10 @@ const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
                    userId:data.data.userId,
                    userNo:data.data.userNo
                });
+               localStorage.setItem("userId",data.data.userId);
+               localStorage.setItem("userNo",data.data.userNo);
+               localStorage.setItem("accessToken",data.data.accessToken);
+               localStorage.setItem("refreshToken",data.data.refreshToken);
             }else{ 
                 alert(data.msg);
             }
