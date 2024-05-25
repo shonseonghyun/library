@@ -30,7 +30,7 @@ const BookReviewWrapper =styled.div`
 
 
 function Book(){
-    const {bookNo} = useParams()  as { bookNo: string };
+    const {bookNo} = useParams() as unknown  as { bookNo: number };
 
     return (
         <Wrapper>

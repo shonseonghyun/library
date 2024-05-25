@@ -3,9 +3,10 @@ import { useInfiniteQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
-import { getHeartBooksFetch } from "../../../../../../api/api";
+import { getHeartBooks } from "../../../../../../api/api";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import HeartItem from "./HeartItem";
+import { useGetHeartBooks } from "../../../../../../hooks/hooks";
 
 const GridWrapper = styled.div`
 display: grid;
@@ -15,10 +16,6 @@ align-content: center;
 justify-content: center;
 
 `;
-
-interface IHeartList{
-    heartList: IHeartInfo[]
-}
 
 export interface IHeartInfo{
     heartNo:number,
@@ -31,43 +28,16 @@ export interface IHeartInfo{
     bookImage:string
 }
 
-
 function MyBookCase(){
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
-    const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
-    const navigate = useNavigate();
-    const queryClient= useQueryClient();
+
     const {
-        isLoading,
-        fetchNextPage, //다음페이지를 불러옵니다.
-        hasNextPage, //가져올 다음페이지가 있는지 여부를 나타냅니다(boolean). getNextPageParam
-        data
-    } = useInfiniteQuery(
-        ["getAllHearts"],
-        ({pageParam})=>getHeartBooksFetch(pageParam ,authUserInfo.userNo,authUserInfo.accessToken,5),
-        {
-            onSuccess:(data)=>{},
-            onError:(error)=>{console.log("error"); console.log(error)},
-            getNextPageParam: (lastPage) => {
-                return (lastPage.data.data.heartList.length==0 || lastPage.isLast) ? undefined : lastPage.data.data.heartList[4].heartNo; //해당값은 pageParam파라미터로 사용된다.
-              },
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-        }
-    )
-
-
-    //언마운트시 모두 제거
-    useEffect(()=>{
-        console.log("mybookCase 들어옴");
-        return()=>{
-            queryClient.removeQueries('getAllHearts');
-        }
-    },[])
-
-
-
+            isLoading,
+            fetchNextPage, //다음페이지를 불러옵니다.
+            hasNextPage, //가져올 다음페이지가 있는지 여부를 나타냅니다(boolean). getNextPageParam
+            data
+        } = useGetHeartBooks({userNo:authUserInfo.userNo,pageSize:5});
+    
     return (
         <>
             <h1>내책장</h1>

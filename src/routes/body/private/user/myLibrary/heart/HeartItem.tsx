@@ -1,10 +1,9 @@
+import { useQueryClient } from "react-query";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { IHeartInfo } from "./MyBookCase";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import { useLocation, useNavigate } from "react-router-dom";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { IReponse, deleteHeartBookFetch } from "../../../../../../api/api";
+import { useDelHeartBook } from "../../../../../../hooks/hooks";
+import { IHeartInfo } from "./MyBookCase";
 
 interface IHeartItemProps{
     heart: IHeartInfo,
@@ -24,30 +23,12 @@ const Img = styled.img`
 
 function HeartItem({heart}:IHeartItemProps){
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
-    const navigate = useNavigate();
-    const currentLocation = useLocation();
-    const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const queryClient= useQueryClient();
-    const updateMutation = useMutation<IReponse>(() => deleteHeartBookFetch(authUserInfo.userNo,heart.bookCode),{
-        onSuccess: (data) => { 
-                console.log(data);
-                queryClient.invalidateQueries(); //이게 있으니 새로고침한듯 되네?
-                if(data.code=="S00"){
-                    alert("찜 해제하였습니다.");
-                }
-                else{
-                    alert(data.msg);
-                }
-           },
-           onError:(err)=>{
-            alert(err);
-           }
-        });
+    const {mutate:delHeartMutate} = useDelHeartBook(queryClient);
 
     const handleClickHeart = ()=>{
-        updateMutation.mutate();
+        delHeartMutate.mutate({userNo: authUserInfo.userNo, bookNo:heart.bookCode});
     }
-
 
     return (
         <GridItem>

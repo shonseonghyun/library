@@ -13,6 +13,7 @@ import Main from "./public/main/Main";
 import Join from "./public/user/join/Join";
 import OauthLoginSuccess from "./public/user/login/OauthLoginSuccess";
 import TokenRefresher from "./public/user/login/TokenRefresher";
+import MyReviews from './private/user/myLibrary/review/MyReviews';
 
 
 function Body(){
@@ -24,7 +25,7 @@ function Body(){
                 <Route element={<PublicRoute />}>
                     <Route path="/" element={<Main/> }/>
                     <Route path="/join" element={<Join />} />
-                    <Route path="/book/inquiry/:cateogry/:inquiryWord" element={<Books />} />
+                    <Route path="/book/inquiry/:category/:inquiryWord" element={<Books />} />
                     <Route path="/book/:bookNo" element={<Book />} />
                     <Route path="/api/user/login/oauth" element={<OauthLoginSuccess />} />
                 </Route>
@@ -35,6 +36,7 @@ function Body(){
                         <Route path="rentStatus" element={<RentStatus />}/>
                         <Route path="rentHistory" element={<RentHistory />}/>
                         <Route path="myBookcase" element={<MyBookCase />}/>
+                        <Route path="review" element={<MyReviews />}/>
                     </ Route>
                     <Route path="/book/reg" element={<RegBook /> } />
                 </Route>

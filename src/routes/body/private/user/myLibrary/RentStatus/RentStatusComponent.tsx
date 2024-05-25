@@ -1,11 +1,12 @@
 import React, {  useEffect, useState } from "react";
-import { useRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
-import { useQuery } from "react-query";
-import { getRentStatus } from "../../../../../../api/api";
+import { useMutation, useQuery } from "react-query";
+import { extendBook, getRentStatus } from "../../../../../../api/api";
+import { useExtendBook, useGetRentStatus } from "../../../../../../hooks/hooks";
 
 
 
@@ -48,50 +49,20 @@ export interface IBookInfo {
 }
 
 function RentStatus(){
-    const [datas,setDatas]= useState<IBookInfo[]>([]);
+    const [rentStatus,setRentStatus]= useState<IBookInfo[]>([]);
     const [checkItems,setCheckItems] = useState<number[]>([]);
-    const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
-    const navigate = useNavigate();
-    const currentLocation = useLocation();
-    const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
-    const [updateFlg,setUpdateFlg] = useState(false);
+    const authUserInfo = useRecoilValue(AuthUserInfoAtom);
    
-    useEffect(()=>{
-        console.log("랜더링");
-        console.log(updateFlg);
-        // getRentStatusApi();
-    },[updateFlg])
-    ;
+    const onSuccess =(data:any)=>{
+        setRentStatus(data.data);
+    }
+    const {isLoading} = useGetRentStatus({userNo:authUserInfo.userNo,onSuccess});
 
-    //대여 현황 도서목록 가져오기 api
-    // const getRentStatusApi = async () =>{
-    //     const response = await fetch(
-    //         `http://localhost:8000/user/rentStatus/${authUserInfo.userNo}`,
-    //         {
-    //             method:"GET",
-    //             headers:{
-    //                 Authorization: `Bearer ${authUserInfo.accessToken}`, 
-    //                 "Content-Type": "application/json",
-    //             }
-    //         }
-    //     )
-    //     // .catch(error => {alert("잠시 후 다시 시도해주세요")});
-    //     const datas = await response.json();
-    //     if(datas.code=="T01"){
-    //         resetAuthUserInfo();
-    //         navigate("/login",{state:{redirectedFrom: currentLocation}})
-    //     }
-    //     setDatas(datas.data);
-    // }
-
-    const {isLoading} = useQuery(["getRentStatus",`getRentStatus-${authUserInfo.userId}`],
-        ()=>getRentStatus(authUserInfo.userNo),
-        {
-            onSuccess(data) {
-                setDatas(data.data);
-            },
-        }
-    )
+    //연장 신청 개별 신청 api 핸들러
+    const {mutate:extendBookMutate} = useExtendBook();
+    const clickedExtendBook = (bookNo:number)=>{
+        extendBookMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo})
+    }
 
 
     //전체 선택 핸들러
@@ -99,7 +70,7 @@ function RentStatus(){
         const isChecked = e.currentTarget.checked;
         if(isChecked){
             const checkedItemsArray: number[] =[];
-            datas.forEach(el=>checkedItemsArray.push(el.bookNo));
+            rentStatus.forEach(el=>checkedItemsArray.push(el.bookNo));
             setCheckItems(checkedItemsArray);
         }else{
             setCheckItems([]);
@@ -122,12 +93,12 @@ function RentStatus(){
     const arrangeHandler = (e:React.ChangeEvent<HTMLSelectElement>)=>{
         const selectValue = e.currentTarget.value;
         if(selectValue=="rentDt"){
-            setDatas( [...datas].sort(function(a:IBookInfo,b:IBookInfo){
+            setRentStatus( [...rentStatus].sort(function(a:IBookInfo,b:IBookInfo){
                 return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
             }));  
         }
         else if(selectValue=="returnDt"){
-            setDatas( [...datas].sort(function(a:IBookInfo,b:IBookInfo){
+            setRentStatus( [...rentStatus].sort(function(a:IBookInfo,b:IBookInfo){
                 return Number.parseInt(b.haveToReturnDt).valueOf() - Number.parseInt(a.haveToReturnDt).valueOf();
             }));  
         }
@@ -138,28 +109,7 @@ function RentStatus(){
         console.log(checkItems);
     }
 
-    //연장 신청 개별 신청 api 핸들러
-    const extendRequestIndividualHandler = async (bookNo:number)=>{
-        const response = await fetch(
-            `http://localhost:8000/rent/${authUserInfo.userNo}/book/${bookNo}`,
-            {
-                method:"PUT",
-                headers:{
-                    Authorization: `Bearer ${authUserInfo.accessToken}`, 
-                    "Content-Type": "application/json",
-                }
-            }
-        );
-
-        const data = await response.json();
-        if(data.code == "S00"){
-            alert("연장 신청 성공하였습니다.");
-        }else{
-            alert(data.msg);
-        }
-        setUpdateFlg(true);
-    }
-
+    
     return (
         <>
         <h1>
@@ -186,7 +136,7 @@ function RentStatus(){
                                     type="checkbox" 
                                     name="select-all"
                                     onChange={handleAllCheckItems}
-                                    checked={datas?.length == checkItems.length}
+                                    checked={rentStatus?.length == checkItems.length}
                                 />
                             </Th>
                             <Th>번호</Th>
@@ -199,7 +149,7 @@ function RentStatus(){
                     </Thead>
                     <Tbody>
                         {
-                            datas?.map(data=>{
+                            rentStatus?.map(data=>{
                                 return (
                                 <tr key={data.bookNo}>
                                     <td>
@@ -228,7 +178,7 @@ function RentStatus(){
                                         "개발안함"
                                     </td>
                                     <td>
-                                        <button onClick={()=>extendRequestIndividualHandler(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
+                                        <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
                                     </td>
                                 </tr>)
                             })

@@ -4,11 +4,12 @@ import { useMutation, useQuery } from "react-query";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { inquiryBooksFetch, regHeartBook, rentBook } from "../../../../../api/api";
+import { regHeartBook, rentBook } from "../../../../../api/api";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../atoms/AuthUserInfo";
 import { getFilePath } from "../../../../../function/functions";
 import LoginModal from "../../../../../component/login/LoginModal";
 import Pagination from "../../../../../component/page/Pagination";
+import { useInquiryBooks, useRegHeartBook } from "../../../../../hooks/hooks";
 
 enum GridType  {
     ListType="listType",
@@ -188,7 +189,7 @@ const TextForHidden = styled.div`
 `;
 
 type InquriyBooksParams={
-    cateogry: string,
+    category: string,
     inquiryWord:string
 }
 
@@ -250,53 +251,26 @@ function Books(){
     const isLogin = useRecoilValue(isLoginSelector);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const [gridType,setGridType] = useState<GridType>(GridType.ListType);
-    const {cateogry,inquiryWord} = useParams() as InquriyBooksParams ;
+    const {category,inquiryWord} = useParams() as InquriyBooksParams ;
     const [totalCount,setTotalCount] = useState(-1);
     const [currentPage,setCurrentPage] = useState(1);
     const [sizePerPage,setSizePerPage] = useState(10);
 
-    const mutation = useMutation(({userNo, bookNo}:IHeartBookProps)=>regHeartBook(userNo,bookNo),{
-        onSuccess(data) {
-            if(data.code === "S00"){
-                alert("찜 등록 완료하였습니다.");
-            }else{
-                alert(data.msg);
-            }
-        },
-    })
-
-    const {isLoading,refetch} = useQuery(
-        ["inquiryBooksFetch",`${cateogry}/${inquiryWord}?page=${currentPage}&size=${sizePerPage}`], //쿼리키 , 쿼리키로 구분해서 data fetching
-        ()=>inquiryBooksFetch(cateogry,inquiryWord,currentPage,sizePerPage,totalCount),
-        {
-            onSuccess(data) {
-                console.log("성공");
-                setBooks(data.data.bookList);
-                setTotalCount(data.data.totalCount);
-            },
-            // cacheTime: 10000, //default 5분
-            // staleTime: 2000, //default 0초
-            // refetchOnMount:false, 
-            // refetchOnWindowFocus: false,
-            // enabled:false
-            // refetchInterval:2000,
-            // enabled:false,
-            // select : data=>{
-            //     console.log("select")
-            //     const books = data.data;
-            //     return data.data;
-            //     // return data;
-            // }
-        }
-    );
-
+    
+    const onSuccess = (data:any)=>{
+        setBooks(data.data.bookList);
+        setTotalCount(data.data.totalCount);
+    }
+    const {isLoading} = useInquiryBooks({category,inquiryWord,currentPage,sizePerPage,totalCount,onSuccess});
+    const {mutate:regHeartMutate} = useRegHeartBook();
+    
     const changeNum = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
         setSizePerPage(parseInt(e.currentTarget.value));
     },[]);
 
     const clickedHeart = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
-            mutation.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
+            regHeartMutate.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
         }else{
             setShowing(true);
         }

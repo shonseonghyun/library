@@ -9,6 +9,7 @@ import Content from "./Content";
 import { IHeartBookProps } from "../../simple/Books";
 import { useCallback, useState } from "react";
 import LoginModal from "../../../../../../component/login/LoginModal";
+import { useGetBook, useRegHeartBook, useRentBook } from "../../../../../../hooks/hooks";
 
 const Wrapper = styled.div`
     margin-top: 10px;
@@ -72,7 +73,7 @@ const BookImg = styled.img`
 
 
 interface IBookInfo{
-    bookNo:string
+    bookNo:number
 }
 
 
@@ -80,44 +81,15 @@ function BookInfo({bookNo}:IBookInfo){
     const [showing,setShowing] = useState(false); 
     const isLogin = useRecoilValue(isLoginSelector);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
-    const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    const currentLocation = useLocation();
-    const {data,isLoading} = useQuery(
-        ["getBookInfoByBookNoFetch",bookNo],
-        ()=>getBookInfoByBookNoFetch(bookNo),
-        {
-            refetchOnWindowFocus: false,
-            onSuccess(data) {
-                console.log(data);
-            },
-        }
-    )
 
-    const heartBook = useMutation(({userNo, bookNo}:IHeartBookProps)=>regHeartBook(userNo,bookNo),{
-        onSuccess(data) {
-            if(data.code === "S00"){
-                alert("찜 등록 완료하였습니다.");
-            }else{
-                alert(data.msg);
-            }
-        },
-    });
-
-    const rent = useMutation(({userNo, bookNo}:IHeartBookProps)=>rentBook(userNo,bookNo),{
-        onSuccess(data) {
-            if(data.code === "S00"){
-                alert("대출 완료하였습니다.");
-            }else{
-                alert(data.msg);
-            }
-        },
-    })
-
+    const {data,isLoading} = useGetBook(bookNo);
+    const {mutate:regHeartMutate} = useRegHeartBook();
+    const {mutate:rentBookMutate} = useRentBook();
+    
     const clickedHeart = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
-            heartBook.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
+            const bookNo = parseInt(e.currentTarget.value);
+            regHeartMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo})
         }else{
             setShowing(true);
         }
@@ -125,7 +97,8 @@ function BookInfo({bookNo}:IBookInfo){
 
     const clickedRent = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
-            rent.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
+            const bookNo = parseInt(e.currentTarget.value);
+            rentBookMutate.mutate({bookNo:bookNo,userNo:authUserInfo.userNo});
         }else{
             setShowing(true);
         }

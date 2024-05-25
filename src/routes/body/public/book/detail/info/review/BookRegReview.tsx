@@ -1,22 +1,18 @@
-import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { postReviewOfBookFetch } from "../../../../../../../api/api";
-import { isLoginSelector } from "../../../../../../../atoms/AuthUserInfo";
 import { IBookReview } from "./BookReview";
+import { useState } from "react";
+import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../../atoms/AuthUserInfo";
+import { useRegReview } from "../../../../../../../hooks/hooks";
 
 function BookRegReview({bookNo}:IBookReview){
     const isLogin = useRecoilValue(isLoginSelector);
+    const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const [reviewContent,setReviewContent] = useState<string>("");
     
-    const postReview = ()=>{
-        const response = postReviewOfBookFetch(bookNo,parseInt(localStorage.getItem("userNo")!),reviewContent);
-        response.then((data)=>{
-            if(data.code != "S00"){
-                alert(data.msg);
-            }else{
-                alert("리뷰 등록 완료하였습니다.");
-            }
-        })
+    const {mutate:regReviewMutate} = useRegReview();
+
+    const clickedReviewReg = ()=>{
+        regReviewMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo,reviewContent:reviewContent})
     }
 
     const writeReviewContent=(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -24,11 +20,11 @@ function BookRegReview({bookNo}:IBookReview){
     }
 
     return (
-        isLogin 
-        ? 
+            isLogin 
+            ? 
             <div>
                 <input type="text" onBlur={writeReviewContent}/>
-                <button onClick={postReview}>등록</button>
+                <button onClick={clickedReviewReg}>등록</button>
             </div>
             :
             null

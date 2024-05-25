@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { regBookFetch } from "../../../../../api/api";
+import { IRegBookParams, useRegBook } from "../../../../../hooks/hooks";
 
 
 const Wrapper = styled.div`
@@ -57,50 +57,29 @@ const Input = styled.input`
     background: none;
 `
 
-export interface IRegBookParams{
-    bookName:string,
-    bookAuthor:string,
-    bookContent:string,
-    bookPublisher:string,
-    isbn:string,
-    bookLocation:string,
-    pubDt:string,
-    bookImages: FileList,
-}
-
 function RegBook(){
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    const dateStr = `${year}${month}${day}`;
-    console.log(dateStr);
-
     const {
         register,
         formState: { errors },
         handleSubmit,
         watch,
+        reset
     } = useForm<IRegBookParams>();
     
     const [preview,setPreview] = useState('');
     const files = watch("bookImages");
 
+    const {mutate:regBookMutate} = useRegBook(reset);
+
     const onSubmit=(data:IRegBookParams)=>{
-        console.log(data);
         const formData= new FormData();
         formData.append('bookRegReqDto', new Blob([JSON.stringify(data)], {type:'application/json'})); // 텍스트 데이터들 추가
         formData.append("file",Array.from(data.bookImages)[0]);
-        regBookFetch(formData);
+        regBookMutate.mutate(formData);
     }
 
     const onError=(data:any)=>{
     }
-
-    const onClick=(e:React.MouseEvent<HTMLButtonElement>)=>{
-        // e.preventDefault(); // submit을 막음 / 용도 : input값에 대한 검증 외 추가검증 필요시(ex. 서버로 아이디 중복체크했는지?)
-    }
-
 
     useEffect(()=>{
         if(files){
@@ -235,9 +214,11 @@ function RegBook(){
                 </InputWrapper>
 
                 <InputWrapper>
-                    <Button onClick={onClick}>등록</Button>
+                    <Button>등록</Button>
+                    <Button type="button" onClick={()=>reset()}>초기화</Button>
                 </InputWrapper>
             </form>
+
 
         </Wrapper>
     )

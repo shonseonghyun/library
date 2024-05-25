@@ -29,7 +29,7 @@ export const doLoginFetch = async (loginParams:LoginFormValue)=>{
 
 
 /* 찜 */
-export const getHeartBooksFetch = async (heartNo:number,userNo:number,accessToken:string,pageSize:number)=>{
+export const getHeartBooks = async (heartNo:number,userNo:number,pageSize:number)=>{
     const apiUrl = heartNo 
         ? `/hearts/${userNo}?heartNo=${heartNo}&pageSize=${pageSize}`
         : `/hearts/${userNo}?pageSize=${pageSize}`
@@ -50,7 +50,7 @@ export const regHeartBook = async (userNo: number, bookNo : number)=>{
     .then(response=>response.data);
 }
 
-export const deleteHeartBookFetch = async (userNo:number,bookNo:number)=>{
+export const delHeartBook = async (userNo:number,bookNo:number)=>{
     return await PrivateAPI.delete(`/heart/${userNo}/book/${bookNo}`)
            .then(response=>response.data);
      
@@ -58,19 +58,19 @@ export const deleteHeartBookFetch = async (userNo:number,bookNo:number)=>{
 
 /* 도서 */
 // 특정 도서 조회
-export const getBookInfoByBookNoFetch = async (bookNo:string)=>{
+export const getBookInfoByBookNoFetch = async (bookNo:number)=>{
     return await PublicAPI.get(`/book/${bookNo}`)
             .then(response=>response.data);
 }
 
 //도서 리뷰
-export const getReviewsOfBookFetch = async (bookNo:string)=>{
+export const getReviewsOfBookFetch = async (bookNo:number)=>{
     return await PublicAPI.get(`/review/book/${bookNo}`)
             .then(response=>response.data);
 }
 
 //도서 검색
-export const inquiryBooksFetch = async (category:string, inquiryWord:string,currentPage:number,size:number,totalCount:number)=>{
+export const inquiryBooks = async (category:string, inquiryWord:string,currentPage:number,size:number,totalCount:number)=>{
     const inquriyBooksUrl = totalCount>-1 
     ? `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}&cachedCount=${totalCount}` 
     : `/book/inquiry/${category}/${inquiryWord}?page=${currentPage}&size=${size}`;
@@ -80,6 +80,14 @@ export const inquiryBooksFetch = async (category:string, inquiryWord:string,curr
 //도서 대여
 export const rentBook = async (userNo: number, bookNo : number)=>{
     return await PrivateAPI.post(
+        `/rent/${userNo}/book/${bookNo}`
+    )
+    .then(response=>response.data);
+}
+
+//도서 연장
+export const extendBook = async (userNo: number, bookNo : number)=>{
+    return await PrivateAPI.put(
         `/rent/${userNo}/book/${bookNo}`
     )
     .then(response=>response.data);
@@ -98,7 +106,7 @@ export const getRentHistory = async (userNo:number)=>{
 }
 
 
-export  const postReviewOfBookFetch = async(bookNo:string,userNo:number,reviewContent:string)=>{
+export  const postReviewOfBook = async(userNo:number,bookNo:number,reviewContent:string)=>{
     return await PrivateAPI.post(
             `/review/user/${userNo}/book/${bookNo}` //url
             ,{ reviewContent: reviewContent} //body
@@ -121,7 +129,7 @@ export const joinUserFetch= async (requsetParam: IRequestField)=>{
         .then(response=>response.data);
 }
 
-export const regBookFetch= async (requsetParams: FormData)=>{
+export const regBook= async (requsetParams: FormData)=>{
     return await PrivateAPI.post(
             `/book/reg` 
             ,requsetParams //body
@@ -133,4 +141,7 @@ export const regBookFetch= async (requsetParams: FormData)=>{
         )
         .then(response=>response.data);
 }
+
+
+
 

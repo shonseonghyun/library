@@ -5,7 +5,7 @@ import { getReviewsOfBookFetch } from "../../../../../../../api/api";
 import BookRegReview from "./BookRegReview";
 
 export interface IBookReview{
-    bookNo:string
+    bookNo:number
 }
 
 const Wrapper = styled.div`
@@ -120,7 +120,7 @@ function BookReview({bookNo}:IBookReview){
                 </Table>
 
             </HideWrapper>
-            {/* <BookRegReview bookNo={bookNo} />  */}
+            <BookRegReview bookNo={bookNo} /> 
         </Wrapper>
         
 
