@@ -1,8 +1,45 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { delHeartBook, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, inquiryBooks, postReviewOfBook, regBook, regHeartBook, rentBook } from "../api/api";
+import { delHeartBook, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, getUserPage, inquiryBooks, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 import { UseFormReset } from "react-hook-form";
 
 
+export interface IUserModifyProps{
+    userPwd:string,
+    gender:string
+}
+
+interface IGetApiProps{
+    userNo:number,
+    onSuccess(data:any):void
+}
+
+export const useGetMyPage = ({userNo,onSuccess}:IGetApiProps)=>{
+    const {isLoading} = useQuery(
+        ["myPage",`mypage-${userNo}`],
+        ()=>getUserPage(userNo),
+        {
+            onSuccess(data) {
+                onSuccess(data);
+            },
+        }
+    ) 
+    return {isLoading};
+}
+
+export const useModifyUser = (userNo:number) =>{
+    const mutate = useMutation((data:IUserModifyProps)=>modifyUser(userNo,data),
+        {
+            onSuccess(data){
+                if(data.code === "S00"){
+                    alert("사용자 수정 완료하였습니다.");
+                }else{
+                    alert(data.msg);
+                }
+            }
+        })
+    ;
+    return {mutate};
+}
 
 export const useGetBook= (bookNo:number) =>{
     const {data,isLoading}= useQuery(
@@ -149,6 +186,19 @@ export const useExtendBook= ()=>{
     return {mutate};
 }
 
+export const useReturnBook= ()=>{
+    console.log("useReturnBook 훅 실행");
+    const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>returnBook(userNo,bookNo),{
+        onSuccess(data) {
+            if(data.code === "S00"){
+                alert("반납 완료하였습니다.");
+            }else{
+                alert(data.msg);
+            }
+        },
+    })
+    return {mutate};
+}
 
 interface IRegReview{
     userNo:number,
@@ -170,12 +220,9 @@ export const useRegReview= ()=>{
     return {mutate};
 }
 
-interface IGetStatusProps{
-    userNo:number,
-    onSuccess(data:any):void
-}
 
-export const useGetRentStatus= ({userNo,onSuccess}:IGetStatusProps) =>{
+
+export const useGetRentStatus= ({userNo,onSuccess}:IGetApiProps) =>{
     const {isLoading} = useQuery(
         ["getRentStatus",`getRentStatus-${userNo}`],
         ()=>getRentStatus(userNo),
@@ -183,6 +230,7 @@ export const useGetRentStatus= ({userNo,onSuccess}:IGetStatusProps) =>{
             onSuccess(data) {
                 onSuccess(data);
             },
+            refetchOnWindowFocus:false
         }
     ) 
     return {isLoading};

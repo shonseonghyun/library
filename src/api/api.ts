@@ -1,4 +1,5 @@
 import { LoginFormValue } from "../component/login/LoginModal";
+import { IUserModifyProps } from "../hooks/hooks";
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
 
 export const baseUrl="http://localhost:8000";
@@ -15,13 +16,27 @@ export interface IRequestField{
     email:string,
     tel:string,
     gender:string,
-    useFlg:number
+    useFlg:number,
 }
 
 
+/* 유저 */
 /* 일반 로그인 */
 export const doLoginFetch = async (loginParams:LoginFormValue)=>{
     return await PublicAPI.post(`/user/login`,loginParams)
+            .then(response=>response.data);
+}
+
+//유저 정보 가져오기
+export const getUserPage = async (userNo:number)=>{
+    return await PrivateAPI.post(`/user/myPage`,{userNo:userNo})
+            .then(response=>response.data);
+}
+
+
+//유저 업데이트
+export const modifyUser = async (userNo:number, params:IUserModifyProps)=>{
+    return await PrivateAPI.put(`/user/update/${userNo}`,params)
             .then(response=>response.data);
 }
 
@@ -80,6 +95,13 @@ export const inquiryBooks = async (category:string, inquiryWord:string,currentPa
 //도서 대여
 export const rentBook = async (userNo: number, bookNo : number)=>{
     return await PrivateAPI.post(
+        `/rent/${userNo}/book/${bookNo}`
+    )
+    .then(response=>response.data);
+}
+
+export const returnBook = async (userNo: number, bookNo : number)=>{
+    return await PrivateAPI.delete(
         `/rent/${userNo}/book/${bookNo}`
     )
     .then(response=>response.data);

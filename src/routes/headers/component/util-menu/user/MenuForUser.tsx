@@ -28,17 +28,18 @@ function MenuForUser(){
     return (
         <>
             <Item>
-                <p>{authUserInfo.userId + "님"}</p>
-            </Item>
-            <Item>
-                <p onClick={clickedLogout}>로그아웃</p>
-                {/* <NavbarLink to="logout">로그아웃</NavbarLink> */}
+                <NavbarLink to="/user/myPage">
+                    {authUserInfo.userId + "님"}
+                </NavbarLink>
             </Item>
             <Item>
                 <NavbarLink to="myLibrary/rentStatus">내 서재</NavbarLink>
             </Item>
             <Item>
                 <NavbarLink to="/book/reg">도서 등록</NavbarLink>
+            </Item>
+            <Item>
+                <p onClick={clickedLogout}>로그아웃</p>
             </Item>
         </>
     )

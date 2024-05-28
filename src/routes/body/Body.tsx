@@ -14,6 +14,7 @@ import Join from "./public/user/join/Join";
 import OauthLoginSuccess from "./public/user/login/OauthLoginSuccess";
 import TokenRefresher from "./public/user/login/TokenRefresher";
 import MyReviews from './private/user/myLibrary/review/MyReviews';
+import MyPage from './private/user/myPage/MyPage';
 
 
 function Body(){
@@ -39,6 +40,7 @@ function Body(){
                         <Route path="review" element={<MyReviews />}/>
                     </ Route>
                     <Route path="/book/reg" element={<RegBook /> } />
+                    <Route path="/user/myPage" element={<MyPage /> } />
                 </Route>
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />      
