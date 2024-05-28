@@ -18,11 +18,16 @@ function OauthLoginSuccess(){
         const userId = cookie.userId;
 
         setAuthUserInfo({
-            accessToken: accessToken || "",
-            refreshToken:refreshToken || "",
-            userId:userId || "",
-            userNo: Number.parseInt(userNo|| "0")  
+            accessToken: accessToken!,
+            refreshToken:refreshToken!,
+            userId:userId!,
+            userNo: Number.parseInt(userNo!)  
         });
+
+        localStorage.setItem("accessToken",accessToken!);
+        localStorage.setItem("refreshToken",refreshToken!);
+        localStorage.setItem("userId",userId!);
+        localStorage.setItem("userNo",userNo!);
 
         navigate("/");
 
@@ -42,7 +47,6 @@ function OauthLoginSuccess(){
 
     return (
         <>
-        <h1>OauthLoginSuccess</h1>
         </>
     )
 }
