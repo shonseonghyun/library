@@ -79,9 +79,26 @@ export const getBookInfoByBookNoFetch = async (bookNo:number)=>{
 }
 
 //도서 리뷰
+//도서 리뷰 조회
 export const getReviewsOfBookFetch = async (bookNo:number)=>{
     return await PublicAPI.get(`/review/book/${bookNo}`)
             .then(response=>response.data);
+}
+
+//도서 리뷰 삭제
+export const delReviewByReviewNo = async (reviewNo:number)=>{
+    return await PrivateAPI.delete(`/review/${reviewNo}`)
+        .then(response=>response.data);
+}
+
+//리뷰 수정
+export const modifyReviewByReviewNo = async (reviewNo:number,reviewContent:string)=>{
+    return await PrivateAPI.put(`/review/${reviewNo}`,
+        {
+            "updateReviewContent":reviewContent
+        }
+    )
+        .then(response=>response.data);
 }
 
 //도서 검색
@@ -127,6 +144,11 @@ export const getRentHistory = async (userNo:number)=>{
             .then(response=>response?.data);
 }
 
+/*리뷰 히스토리 */
+export const getReviewsHistory = async(userNo:number,currentPage:number,sizePerPage:number)=>{
+    return await PrivateAPI.get(`/review/user/${userNo}?page=${currentPage-1}&size=${sizePerPage}`)
+    .then(response=>response?.data);
+}
 
 export  const postReviewOfBook = async(userNo:number,bookNo:number,reviewContent:string)=>{
     return await PrivateAPI.post(

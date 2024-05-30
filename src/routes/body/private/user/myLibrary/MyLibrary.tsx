@@ -24,7 +24,7 @@ const ItemLink = styled(Link)`
 `;
 const OutletWrapper = styled.div`
   text-align:center;
-  background-color:red;
+  /* background-color:red; */
   width: 80%;
   margin: 0 auto;
 `;
@@ -32,8 +32,7 @@ const OutletWrapper = styled.div`
 const ListWrapper = styled.div`
     text-align: center;
     width: 80%;
-    margin: 0 auto;
-    margin-top: 10px;
+    margin: 10px auto;
 `;
 
 const List = styled.ul`

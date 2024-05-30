@@ -6,10 +6,10 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { regHeartBook, rentBook } from "../../../../../api/api";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../atoms/AuthUserInfo";
-import { getFilePath } from "../../../../../function/functions";
 import LoginModal from "../../../../../component/login/LoginModal";
 import Pagination from "../../../../../component/page/Pagination";
 import { useInquiryBooks, useRegHeartBook } from "../../../../../hooks/hooks";
+import { getFilePath } from "../../../../../api/utils";
 
 enum GridType  {
     ListType="listType",

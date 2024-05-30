@@ -1,12 +1,10 @@
-import React, {  useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
-import { useMutation, useQuery } from "react-query";
-import { extendBook, getRentStatus } from "../../../../../../api/api";
-import { useExtendBook, useGetRentStatus } from "../../../../../../hooks/hooks";
 
 
 
@@ -109,6 +107,11 @@ function RentStatus(){
         console.log(checkItems);
     }
 
+    const {mutate:returnMutate} = useReturnBook();
+    const clickedReturnBook = (bookNo:number)=>{
+        returnMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo});
+    }
+
     
     return (
         <>
@@ -144,6 +147,7 @@ function RentStatus(){
                             <Th>대출일</Th>
                             <Th>반납예정일</Th>
                             <Th>상태</Th>
+                            <Th>반납</Th>
                             <Th>반납 연장</Th>
                         </tr>  
                     </Thead>
@@ -176,6 +180,9 @@ function RentStatus(){
                                     </td>
                                     <td>
                                         "개발안함"
+                                    </td>
+                                    <td>
+                                        <button onClick={()=>clickedReturnBook(data.bookNo)}>반납</button>
                                     </td>
                                     <td>
                                         <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>

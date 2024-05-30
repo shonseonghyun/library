@@ -76,6 +76,7 @@ function RegBook(){
         formData.append('bookRegReqDto', new Blob([JSON.stringify(data)], {type:'application/json'})); // 텍스트 데이터들 추가
         formData.append("file",Array.from(data.bookImages)[0]);
         regBookMutate.mutate(formData);
+        setPreview("");
     }
 
     const onError=(data:any)=>{

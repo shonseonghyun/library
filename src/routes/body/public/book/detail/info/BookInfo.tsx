@@ -4,12 +4,12 @@ import { useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { getBookInfoByBookNoFetch, regHeartBook, rentBook } from "../../../../../../api/api";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../atoms/AuthUserInfo";
-import { getFilePath } from "../../../../../../function/functions";
 import Content from "./Content";
 import { IHeartBookProps } from "../../simple/Books";
 import { useCallback, useState } from "react";
 import LoginModal from "../../../../../../component/login/LoginModal";
 import { useGetBook, useRegHeartBook, useRentBook } from "../../../../../../hooks/hooks";
+import { getFilePath } from "../../../../../../api/utils";
 
 const Wrapper = styled.div`
     margin-top: 10px;

@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-    background-color:blue;
+text-align: center;
+padding: 20px;
 `;
 
 
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
 function Footer(){
     return (
         <Wrapper>
-            <p>Footer</p>
+            <p>Copyright © Sunghyun Corp. All rights reserved.</p>
         </Wrapper>
     )
 }

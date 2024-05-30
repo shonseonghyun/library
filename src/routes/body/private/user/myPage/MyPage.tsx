@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { AuthUserInfoAtom } from '../../../../../atoms/AuthUserInfo';
 import { useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
 import { useEffect, useState } from 'react';
+import { replaceDt, replaceTel, replaceTm } from '../../../../../api/utils';
 
 const Wrapper = styled.div`
 `;
@@ -126,140 +127,132 @@ const MyPage = () => {
             </SubSearchWrapper>
 
             <FormWrapper>
-                <form onSubmit={handleSubmit(onValid,onInValid)}>
-                    <Table>
-                        <Tbody>
-                            <tr>
-                                <Th>회원구분</Th>
-                                <Td>
-                                    {userInfo?.userGrade}
-                                </Td>
-                            </tr>
-                            <tr>
-                                <Th>성명</Th>
-                                <Td>
-                                    {userInfo?.userName}
-                                </Td>
-                            </tr>
-                            <tr>
-                                <Th>아이디</Th>
-                                <Td>
-                                    {userInfo?.userId}
-                                </Td>
-                            </tr>
-                            {
-                                userInfo?.provider !="NONE"  ? null
-                                :
-                                <>
-                                    <tr>
-                                        <Th>변경 비밀번호</Th>
-                                        <Td>
-                                            <input type="password" {...register("userPwd",{
-                                                required:"비밀번호는 필수 입력 값입니다.",
-                                                minLength:{
-                                                    value:4,
-                                                    message:"비밀번호 4자리 이상 입력하세요."
-                                                }
-                                            })}/>
-                                        </Td>
-                                        </tr>
-                                        <tr>
-                                        <Th>변경 비밀번호 확인</Th>
-                                        <Td>
-                                            <input type="password" {...register("passwordCheck",
-                                                {
-                                                    validate:{
-                                                        checkPwd:fieldValue => {
-                                                        return (fieldValue==getValues("userPwd")|| '비밀번호가 일치하지 않습니다.')
-                                                    }
-                                                }
-                                                }
-                                            )}/>
-                                        </Td>
-                                    </tr>
-                                </>
-                            }
-                            
-                            {
-                                userInfo?.provider!="NONE" &&
-                                <>
+                {
+                    isLoading ? null 
+                    :
+                    <form onSubmit={handleSubmit(onValid,onInValid)}>
+                        <Table>
+                            <Tbody>
                                 <tr>
-                                    <Th>
-                                        소셜 로그인 플랫폼
-                                    </Th>
+                                    <Th>회원구분</Th>
                                     <Td>
-                                        {userInfo?.provider}
+                                        {userInfo?.userGrade}
                                     </Td>
                                 </tr>
-                                </>
-                            }
-                            
-                            <tr>
-                                <Th>성별</Th>
-                                <Td>
-                                    <label>남성</label>
-                                    <input type="radio" id="male" value="M"  
-                                    // checked={true}
-                                    checked={userInfo?.gender =="M" ? true : undefined} 
-                                    // onClick={()=>console.log("s")} 
-                                    {...register("gender")} />
-                                    
-                                    <label>여성</label>
-                                    <input type="radio" id="female" value="W" 
-                                    // checked={false}
-                                    checked={userInfo?.gender =="W" ? true : undefined}
-                                     {...register("gender")} />
-                                </Td>
-                            </tr>
-                            <tr>
-                                <Th>이메일</Th>
-                                <Td>
-                                    {userInfo?.userEmail}
-                                </Td>
-                            </tr>
-                            <tr>
-                                <Th>휴대폰 번호</Th>
-                                <Td>
-                                    { userInfo?.tel &&
-                                     userInfo?.tel.replace(/[^0-9]/g, "").replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`)}
-                                </Td>
-                            </tr>
-                            <tr>
-                                <Th>가입일</Th>
-                                <Td>
-                                    {userInfo?.createdDt.replace(/[^0-9]/g, '')
-                                        .replace(/^(\d{0,4})(\d{0,2})(\d{0,2})$/g, "$1-$2-$3")
-                                        .replace(/(\-{1,2})$/g, "")
-                                    } 
-                                    &nbsp;
-                                    {userInfo?.createdTm
-                                        .replace(/[^0-9]/g, "")
-                                        .replace(/^(\d{2})(\d{2})(\d{2})$/, `$1:$2:$3`)
-                                    }
-                                </Td>
-                            </tr>
-                            <tr>
-                                <Th>정보 수정일</Th>
-                                <Td>
-                                {userInfo?.modifiedDt && userInfo?.modifiedDt.replace(/[^0-9]/g, '')
-                                        .replace(/^(\d{0,4})(\d{0,2})(\d{0,2})$/g, "$1-$2-$3")
-                                        .replace(/(\-{1,2})$/g, "")
+                                <tr>
+                                    <Th>성명</Th>
+                                    <Td>
+                                        {userInfo?.userName}
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>아이디</Th>
+                                    <Td>
+                                        {userInfo?.userId}
+                                    </Td>
+                                </tr>
+                                {
+                                    userInfo?.provider !="NONE"  ? null
+                                    :
+                                    <>
+                                        <tr>
+                                            <Th>변경 비밀번호</Th>
+                                            <Td>
+                                                <input type="password" {...register("userPwd",{
+                                                    required:"비밀번호는 필수 입력 값입니다.",
+                                                    minLength:{
+                                                        value:4,
+                                                        message:"비밀번호 4자리 이상 입력하세요."
+                                                    }
+                                                })}/>
+                                            </Td>
+                                            </tr>
+                                            <tr>
+                                            <Th>변경 비밀번호 확인</Th>
+                                            <Td>
+                                                <input type="password" {...register("passwordCheck",
+                                                    {
+                                                        validate:{
+                                                            checkPwd:fieldValue => {
+                                                            return (fieldValue==getValues("userPwd")|| '비밀번호가 일치하지 않습니다.')
+                                                        }
+                                                    }
+                                                    }
+                                                )}/>
+                                            </Td>
+                                        </tr>
+                                    </>
                                 }
-                                &nbsp;
-                                {userInfo?.modifiedTm &&  userInfo?.modifiedTm
-                                    .replace(/[^0-9]/g, "")
-                                    .replace(/^(\d{2})(\d{2})(\d{2})$/, `$1:$2:$3`)
+                                
+                                {
+                                    userInfo?.provider!="NONE" &&
+                                    <>
+                                    <tr>
+                                        <Th>
+                                            소셜 로그인 플랫폼
+                                        </Th>
+                                        <Td>
+                                            {userInfo?.provider}
+                                        </Td>
+                                    </tr>
+                                    </>
                                 }
-                                </Td>
-                            </tr>
-                            
-                        </Tbody>
-                    </Table>
+                                
+                                <tr>
+                                    <Th>성별</Th>
+                                    <Td>
+                                        <label>남성</label>
+                                        <input type="radio" id="male" value="M"  
+                                        // checked={true}
+                                        checked={userInfo?.gender =="M" ? true : undefined} 
+                                        // onClick={()=>console.log("s")} 
+                                        {...register("gender")} />
+                                        
+                                        <label>여성</label>
+                                        <input type="radio" id="female" value="W" 
+                                        // checked={false}
+                                        checked={userInfo?.gender =="W" ? true : undefined}
+                                        {...register("gender")} />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>이메일</Th>
+                                    <Td>
+                                        {userInfo?.userEmail}
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>휴대폰 번호</Th>
+                                    <Td>
+                                        {userInfo?.tel && replaceTel(userInfo.tel)}
+                                        
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>가입일</Th>
+                                    <Td>
+                                        {replaceDt(userInfo?.createdDt!)} 
+                                            &nbsp;
+                                        {replaceTm(userInfo?.createdTm!)}
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>정보 수정일</Th>
+                                    <Td>
+                                        {replaceDt(userInfo?.modifiedDt!)} 
+                                            &nbsp;
+                                        {replaceTm(userInfo?.createdTm!)}
+                                    </Td>
+                                </tr>
+                                
+                            </Tbody>
+                        </Table>
 
-                    <ButtonWrapper>
-                        <button>수정</button>
-                    </ButtonWrapper>
-                </form>
+                        <ButtonWrapper>
+                            <button>수정</button>
+                        </ButtonWrapper>
+                    </form>
+                }
             </FormWrapper>
 
 

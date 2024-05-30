@@ -1,5 +1,5 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { delHeartBook, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, getUserPage, inquiryBooks, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
+import { delHeartBook, delReviewByReviewNo, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 import { UseFormReset } from "react-hook-form";
 
 
@@ -230,7 +230,7 @@ export const useGetRentStatus= ({userNo,onSuccess}:IGetApiProps) =>{
             onSuccess(data) {
                 onSuccess(data);
             },
-            refetchOnWindowFocus:false
+            // refetchOnWindowFocus:false
         }
     ) 
     return {isLoading};
@@ -262,3 +262,56 @@ export const useRegBook= (reset:UseFormReset<IRegBookParams>)=>{
     })
     return {mutate};
 }
+
+interface IGetReviewsProps{
+    userNo:number,
+    currentPage:number,
+    sizePerPage:number,
+    totalCount:number,
+    onSuccess:any
+}
+
+export const useGetReviewHistory = ({userNo,currentPage,sizePerPage,totalCount,onSuccess}:IGetReviewsProps)=>{
+    const {data,isLoading} = useQuery(
+        ["getReviewHistory",`GetReviewHistory/${userNo}?page=${currentPage}&size=${sizePerPage}`],
+        ()=>getReviewsHistory(userNo,currentPage,sizePerPage),
+        {
+            onSuccess:onSuccess
+        }
+    )
+    return {isLoading,data};
+}
+
+export const useDelReview= ()=>{
+    console.log("useDelReview 훅 실행");
+    const mutate= useMutation((reviewNo:number)=>delReviewByReviewNo(reviewNo),{
+        onSuccess(data) {
+            if(data.code === "S00"){
+                alert("리뷰 삭제하였습니다.");
+            }else{
+                alert(data.msg);
+            }
+        },
+    })
+    return {mutate};
+}
+
+interface IReviewModifyProps{
+    reviewNo:number,
+    reviewContent:string
+}
+
+export const useModifyReview=()=>{
+    console.log("useModifyReview 훅 실행");
+    const mutate= useMutation(({reviewNo,reviewContent}:IReviewModifyProps)=>modifyReviewByReviewNo(reviewNo,reviewContent),{
+        onSuccess(data) {
+            if(data.code === "S00"){
+                alert("리뷰 수정하였습니다.");
+            }else{
+                alert(data.msg);
+            }
+        },
+    })
+    return {mutate};
+}
+
