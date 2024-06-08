@@ -1,10 +1,12 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { delHeartBook, delReviewByReviewNo, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
+import { delBook, delHeartBook, delReviewByReviewNo, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 import { UseFormReset } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 
 export interface IUserModifyProps{
     userPwd:string,
+    tel:string,
     gender:string
 }
 
@@ -34,6 +36,7 @@ export const useModifyUser = (userNo:number) =>{
                     alert("사용자 수정 완료하였습니다.");
                 }else{
                     alert(data.msg);
+
                 }
             }
         })
@@ -41,11 +44,14 @@ export const useModifyUser = (userNo:number) =>{
     return {mutate};
 }
 
-export const useGetBook= (bookNo:number) =>{
+export const useGetBook= (bookNo:number,onSuccess:any) =>{
     const {data,isLoading}= useQuery(
         "getBook",
         ()=>getBookInfoByBookNoFetch(bookNo)
         ,{
+            onSuccess(data) {
+                onSuccess(data);
+            },
             refetchOnWindowFocus: false
     });
     return {data,isLoading};
@@ -61,6 +67,7 @@ interface IUseInquriyBooksProps{
 }
 
 export const useInquiryBooks= ({category,inquiryWord,currentPage,sizePerPage,totalCount,onSuccess}:IUseInquriyBooksProps) =>{
+    console.log("hook실행");
     const {data,isLoading}= useQuery(
         ["inquiryBooksFetch",`${category}/${inquiryWord}?page=${currentPage}&size=${sizePerPage}`], //쿼리키 , 쿼리키로 구분해서 data fetching
         ()=>inquiryBooks(category,inquiryWord,currentPage,sizePerPage,totalCount),
@@ -196,6 +203,14 @@ export const useReturnBook= ()=>{
                 alert(data.msg);
             }
         },
+    })
+    return {mutate};
+}
+
+export const useDelBook= (onSuccess:any)=>{
+    console.log("useDelBook 훅 실행");
+    const mutate= useMutation((bookNo:number)=>delBook(bookNo),{
+        onSuccess(data) {onSuccess(data)}
     })
     return {mutate};
 }

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
+import { replaceDt } from "../../../../../../api/utils";
 
 
 
@@ -23,6 +24,7 @@ const Th = styled.th`
     border-bottom: 1px solid #dedede;
     // text-align: center;
     font-weight: 700;
+    font-size: 20px;
     color: #666;
     display: table-cell;
 `;
@@ -32,9 +34,31 @@ const TableContainer = styled.div`
 `;
 
 const Tbody = styled.tbody`
+    display: table-row-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
 `;
 
 const ArrangeSelectWrapper = styled.div`
+    float: right;
+`;
+
+const Td = styled.td`
+    font-size: 15px;
+    padding: 10px 5px 10px 5px;
+`;
+
+const Select = styled.select`
+    font-size: 13.55px;
+    box-sizing: border-box;
+    padding-left: 9px;
+    color: #5a5a5a;
+    background-color: #e8e8e8;
+    border: none;
+    height: 25px;
+    margin-right: 3px;
+    padding-right: 24px;
 `;
 
 export interface IBookInfo {
@@ -90,7 +114,7 @@ function RentStatus(){
     //정렬 핸들러
     const arrangeHandler = (e:React.ChangeEvent<HTMLSelectElement>)=>{
         const selectValue = e.currentTarget.value;
-        if(selectValue=="rentDt"){
+        if(selectValue=="renTdt"){
             setRentStatus( [...rentStatus].sort(function(a:IBookInfo,b:IBookInfo){
                 return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
             }));  
@@ -115,84 +139,88 @@ function RentStatus(){
     
     return (
         <>
-        <h1>
+        <div style={{fontSize:"30px",fontWeight:"900"}}>
             대출 현황
-        </h1>
+        </div>
         <RentRuleExplainComponent />
-            <ArrangeSelectWrapper>
-                <select name="Arrange" id="Arrange" onChange={arrangeHandler}>
-                    <option value="rentDt">대출일</option>
-                    <option value="returnDt">반납 예정일</option>
-                </select>
-            </ArrangeSelectWrapper>
+    <ArrangeSelectWrapper>
+        <Select name="Arrange" id="Arrange" onChange={arrangeHandler}>
+            <option value="renTdt">대출일</option>
+            <option value="returnDt">반납 예정일</option>
+        </Select>
+    </ArrangeSelectWrapper>
 
-            <div>
-                <button name="returnAllBtn" onClick={extendRequestAllHandler}>선택반납연기</button>
-            </div>
+    {/* <div>
+        <button name="returnAllBtn" onClick={extendRequestAllHandler}>선택반납연기</button>
+    </div> */}
 
-           <TableContainer>
-                <Table>
-                    <Thead>
-                        <tr>
-                            <Th>
+    <TableContainer>
+        <Table>
+            <Thead>
+                <tr>
+                    <Th>
+                        <input 
+                            type="checkbox" 
+                            name="select-all"
+                            onChange={handleAllCheckItems}
+                            checked={rentStatus?.length == checkItems.length}
+                        />
+                    </Th>
+                    <Th>번호</Th>
+                    <Th>도서정보</Th>
+                    <Th>대출일</Th>
+                    <Th>반납예정일</Th>
+                    <Th>상태</Th>
+                    <Th>반납</Th>
+                    <Th>반납 연장</Th>
+                </tr>  
+            </Thead>
+            <Tbody>
+                {
+                    rentStatus?.map((data,index)=>{
+                        return (
+                        <tr key={data.bookNo}>
+                            <Td>
                                 <input 
-                                    type="checkbox" 
-                                    name="select-all"
-                                    onChange={handleAllCheckItems}
-                                    checked={rentStatus?.length == checkItems.length}
+                                    value={data.bookNo}
+                                    type="checkbox"
+                                    checked={checkItems.includes(data.bookNo)}
+                                    onChange={handleSingleCheckItem}
                                 />
-                            </Th>
-                            <Th>번호</Th>
-                            <Th>도서정보</Th>
-                            <Th>대출일</Th>
-                            <Th>반납예정일</Th>
-                            <Th>상태</Th>
-                            <Th>반납</Th>
-                            <Th>반납 연장</Th>
-                        </tr>  
-                    </Thead>
-                    <Tbody>
-                        {
-                            rentStatus?.map(data=>{
-                                return (
-                                <tr key={data.bookNo}>
-                                    <td>
-                                        <input 
-                                            value={data.bookNo}
-                                            type="checkbox"
-                                            checked={checkItems.includes(data.bookNo)}
-                                            onChange={handleSingleCheckItem}
-                                        />
-                                    </td>
-                                    <td>
-                                        {data.bookNo}
-                                    </td>
-                                    <td>
-                                        <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none"}}>
-                                            {data.bookName}
-                                        </Link>
-                                    </td>
-                                    <td>
-                                        {data.rentDt}
-                                    </td>
-                                    <td>
-                                        {data.haveToReturnDt}
-                                    </td>
-                                    <td>
-                                        "개발안함"
-                                    </td>
-                                    <td>
-                                        <button onClick={()=>clickedReturnBook(data.bookNo)}>반납</button>
-                                    </td>
-                                    <td>
-                                        <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
-                                    </td>
-                                </tr>)
-                            })
-                        }
-                    </Tbody>
-                </Table>
-            </TableContainer>
+                            </Td>
+                            <Td>
+                                {index+1}
+                            </Td>
+                            <Td>
+                                <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
+                                    {data.bookName}
+                                </Link>
+                            </Td>
+                            <Td>
+                                {replaceDt(data.rentDt)}
+                            </Td>
+                            <Td>
+                                {replaceDt(data.haveToReturnDt)}
+                            </Td>
+                            <Td>
+                                {
+                                    data.rentDt>data.haveToReturnDt 
+                                    ? "연체"
+                                    : "대여"
+                                }
+                            </Td>
+                            <Td>
+                                <button onClick={()=>clickedReturnBook(data.bookNo)}>반납</button>
+                            </Td>
+                            <Td>
+                                <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
+                            </Td>
+                        </tr>)
+                    })
+                }
+            </Tbody>
+        </Table>
+    </TableContainer>
         </>
     );
 }

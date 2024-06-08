@@ -10,6 +10,7 @@ import LoginModal from "../../../../../component/login/LoginModal";
 import Pagination from "../../../../../component/page/Pagination";
 import { useInquiryBooks, useRegHeartBook } from "../../../../../hooks/hooks";
 import { getFilePath } from "../../../../../api/utils";
+import { useFocusEffect } from "@react-navigation/native";
 
 enum GridType  {
     ListType="listType",
@@ -246,6 +247,8 @@ interface IBookProps{
 function Books(){
     console.log("books 랜더링");
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location);
     const [books,setBooks] = useState<IBookProps[]>([]);
     const [showing,setShowing] = useState(false); 
     const isLogin = useRecoilValue(isLoginSelector);
@@ -263,7 +266,6 @@ function Books(){
     }
     const {isLoading} = useInquiryBooks({category,inquiryWord,currentPage,sizePerPage,totalCount,onSuccess});
     const {mutate:regHeartMutate} = useRegHeartBook();
-    
     const changeNum = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
         setSizePerPage(parseInt(e.currentTarget.value));
     },[]);
@@ -343,7 +345,7 @@ function Books(){
                     검색결과 총  
                         <HighLightWord style={{color:"red",display:"inline-block",fontSize:"15px"}}>
                             &nbsp; 
-                            {totalCount}
+                            {totalCount==-1 ? 0 : totalCount}
                             &nbsp; 
                         </HighLightWord> 
                         건

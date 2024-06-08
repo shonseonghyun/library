@@ -132,6 +132,14 @@ export const extendBook = async (userNo: number, bookNo : number)=>{
     .then(response=>response.data);
 }
 
+//도서 삭제
+export const delBook = async (bookNo : number)=>{
+    return await PrivateAPI.delete(
+        `/book/${bookNo}`
+    )
+    .then(response=>response.data);
+}
+
 /*현재 대여 상황 */
 export const getRentStatus = async (userNo:number)=>{
     return await PrivateAPI.get(`/user/rentStatus/${userNo}`)

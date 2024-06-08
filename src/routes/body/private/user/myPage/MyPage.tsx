@@ -5,6 +5,8 @@ import { AuthUserInfoAtom } from '../../../../../atoms/AuthUserInfo';
 import { useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
 import { useEffect, useState } from 'react';
 import { replaceDt, replaceTel, replaceTm } from '../../../../../api/utils';
+import { useQueryClient } from 'react-query';
+import Loading from '../../../../headers/component/loading/Loading';
 
 const Wrapper = styled.div`
 `;
@@ -48,7 +50,6 @@ const Th = styled.th`
     padding:10px 20px;
     text-align: left;
     white-space: nowrap;
-
 `;
 
 const Td = styled.td`
@@ -66,6 +67,7 @@ const ButtonWrapper = styled.div`
 interface IModifyProps{
     userPwd:string,
     passwordCheck:string,
+    tel:string,
     gender:string,
 }
 
@@ -88,9 +90,10 @@ export interface IUserInfo{
 
 const MyPage = () => {
     const authInfo = useRecoilValue(AuthUserInfoAtom);
-    const {register,handleSubmit,getValues} = useForm<IModifyProps>();
+    const {register,handleSubmit,getValues,reset} = useForm<IModifyProps>();
     const {mutate:modifyUserMutate} = useModifyUser(authInfo.userNo);
     const [userInfo,setUserInfo] = useState<IUserInfo>();
+    const queryClient = useQueryClient();
     const onSuccess= (data:any)=>{
         setUserInfo(data.data);
     }
@@ -99,6 +102,8 @@ const MyPage = () => {
     const onValid = (data:IModifyProps)=>{
         if(getValues("passwordCheck")==getValues("userPwd")){
             modifyUserMutate.mutate(data);
+            reset();
+            queryClient.removeQueries();
         }
         else{
             alert("패스워드가 일치하지 않습니다. 확인 바랍니다.");
@@ -128,7 +133,7 @@ const MyPage = () => {
 
             <FormWrapper>
                 {
-                    isLoading ? null 
+                    isLoading ? <Loading/> 
                     :
                     <form onSubmit={handleSubmit(onValid,onInValid)}>
                         <Table>
@@ -158,26 +163,28 @@ const MyPage = () => {
                                         <tr>
                                             <Th>변경 비밀번호</Th>
                                             <Td>
-                                                <input type="password" {...register("userPwd",{
-                                                    required:"비밀번호는 필수 입력 값입니다.",
-                                                    minLength:{
-                                                        value:4,
-                                                        message:"비밀번호 4자리 이상 입력하세요."
-                                                    }
-                                                })}/>
+                                                <input type="password" {...register("userPwd"
+                                                // ,{
+                                                //     required:"비밀번호는 필수 입력 값입니다.",
+                                                //     minLength:{
+                                                //         value:4,
+                                                //         message:"비밀번호 4자리 이상 입력하세요."
+                                                //     }
+                                                // }
+                                                )}/>
                                             </Td>
                                             </tr>
                                             <tr>
                                             <Th>변경 비밀번호 확인</Th>
                                             <Td>
-                                                <input type="password" {...register("passwordCheck",
-                                                    {
-                                                        validate:{
-                                                            checkPwd:fieldValue => {
-                                                            return (fieldValue==getValues("userPwd")|| '비밀번호가 일치하지 않습니다.')
-                                                        }
-                                                    }
-                                                    }
+                                                <input type="password" {...register("passwordCheck"
+                                                // ,{
+                                                //         validate:{
+                                                //             checkPwd:fieldValue => {
+                                                //             return (fieldValue==getValues("userPwd")|| '비밀번호가 일치하지 않습니다.')
+                                                //         }
+                                                //     }
+                                                //     }
                                                 )}/>
                                             </Td>
                                         </tr>
@@ -224,8 +231,14 @@ const MyPage = () => {
                                 <tr>
                                     <Th>휴대폰 번호</Th>
                                     <Td>
-                                        {userInfo?.tel && replaceTel(userInfo.tel)}
-                                        
+                                        <input type="text" {...register("tel"
+                                        // ,{
+                                        //     pattern:{
+                                        //         value:/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/,
+                                        //         message:"휴대폰번호 형식이 유효하지 않습니다."
+                                        //     }}
+                                        )} defaultValue={userInfo?.tel}/>
+                                        {/* {userInfo?.tel && replaceTel(userInfo.tel)} */}
                                     </Td>
                                 </tr>
                                 <tr>

@@ -8,7 +8,7 @@ import Content from "./Content";
 import { IHeartBookProps } from "../../simple/Books";
 import { useCallback, useState } from "react";
 import LoginModal from "../../../../../../component/login/LoginModal";
-import { useGetBook, useRegHeartBook, useRentBook } from "../../../../../../hooks/hooks";
+import { useDelBook, useGetBook, useRegHeartBook, useRentBook } from "../../../../../../hooks/hooks";
 import { getFilePath } from "../../../../../../api/utils";
 
 const Wrapper = styled.div`
@@ -81,10 +81,26 @@ function BookInfo({bookNo}:IBookInfo){
     const [showing,setShowing] = useState(false); 
     const isLogin = useRecoilValue(isLoginSelector);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
+    const navigate = useNavigate();
 
-    const {data,isLoading} = useGetBook(bookNo);
+    const onSuccessGetBook= (data:any)=>{
+        if(data.code!="S00"){
+            navigate(-1);
+        }
+    }
+    const {data,isLoading} = useGetBook(bookNo,onSuccessGetBook);
     const {mutate:regHeartMutate} = useRegHeartBook();
     const {mutate:rentBookMutate} = useRentBook();
+
+    const onSuccess=(data:any)=>{
+        if(data.code === "S00"){
+            alert("삭제 완료하였습니다.");
+            navigate(-1); //바로 이전 페이지로 이동
+        }else{
+            alert(data.msg);
+        }
+    }
+    const {mutate:delBookMutate} = useDelBook(onSuccess);
     
     const clickedHeart = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
@@ -103,6 +119,16 @@ function BookInfo({bookNo}:IBookInfo){
             setShowing(true);
         }
     },[isLogin]);
+
+    const clckedDel = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
+        if(isLogin){
+            const bookNo = parseInt(e.currentTarget.value);
+            delBookMutate.mutate(bookNo);
+        }else{
+            setShowing(true);
+        }
+    },[]
+    );
 
     return (
         <Wrapper>
@@ -147,6 +173,7 @@ function BookInfo({bookNo}:IBookInfo){
                                 대출하기
                             </Button>
                             <Button value={data?.data.bookNo} onClick={clickedHeart}>찜하기</Button>
+                            <Button value={data?.data.bookNo} onClick={clckedDel}>삭제하기</Button>
                         </ButtonWrapper>
                     </InfoWrapper>
                     <div style={{clear:"both"}} />
