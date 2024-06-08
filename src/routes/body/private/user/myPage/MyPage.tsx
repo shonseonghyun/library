@@ -6,7 +6,7 @@ import { useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
 import { useEffect, useState } from 'react';
 import { replaceDt, replaceTel, replaceTm } from '../../../../../api/utils';
 import { useQueryClient } from 'react-query';
-import Loading from '../../../../headers/component/loading/Loading';
+import Loading from '../../../../../component/loading/Loading';
 
 const Wrapper = styled.div`
 `;

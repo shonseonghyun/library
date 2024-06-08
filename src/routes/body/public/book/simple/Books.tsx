@@ -11,6 +11,7 @@ import Pagination from "../../../../../component/page/Pagination";
 import { useInquiryBooks, useRegHeartBook } from "../../../../../hooks/hooks";
 import { getFilePath } from "../../../../../api/utils";
 import { useFocusEffect } from "@react-navigation/native";
+import Loading from "../../../../../component/loading/Loading";
 
 enum GridType  {
     ListType="listType",
@@ -89,10 +90,10 @@ const GridTypeImg = styled.img`
     cursor: pointer;
 `;
 
-const InquriyResult =styled.div<{gridType:GridType}>`
+const InquriyResult =styled.div<{gridType:GridType,isLoading:boolean}>`
     display: grid;
     gap : ${props=> (props.gridType === GridType.ImgType) ? "40px" : "0px"} ;
-    grid-template-columns: repeat(${props=>props.gridType === GridType.ListType ? 1 : 5},1fr);
+    grid-template-columns: repeat(${props=>props.gridType === GridType.ListType || props.isLoading ? 1 : 5},1fr);
 `;
 
 
@@ -248,7 +249,6 @@ function Books(){
     console.log("books 랜더링");
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location);
     const [books,setBooks] = useState<IBookProps[]>([]);
     const [showing,setShowing] = useState(false); 
     const isLogin = useRecoilValue(isLoginSelector);
@@ -400,12 +400,10 @@ function Books(){
                     </GridTypeWrapper>
                 </InquriyOptionsWrapper>
 
-                <InquriyResult gridType={gridType}>
+                <InquriyResult gridType={gridType} isLoading={isLoading}>
                     {
                         isLoading ? 
-                        <p>
-                            Loading
-                        </p>
+                            <Loading /> 
                         :
                         books?.map((book,index: any) =>{
                             return (

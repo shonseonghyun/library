@@ -132,10 +132,11 @@ const overlayVariants = {
 interface ILoginModalProps{
     showing:boolean,
     setShowing: React.Dispatch<React.SetStateAction<boolean>>;
+    loginAfterUrl ?:string
 }
 
 
-const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
+const LoginModal = ({showing,setShowing,loginAfterUrl}:ILoginModalProps) => {
     const location = useLocation();
     const navigate  = useNavigate();
     // const from = location?.state?.redirectedFrom?.pathName || '/';
@@ -147,20 +148,26 @@ const LoginModal = ({showing,setShowing}:ILoginModalProps) => {
         doLoginFetch(loginParams)
         .then((data)=>{
             if(data.code=="S00"){
-               alert("로그인 성공");
-               setShowing(false);
-               console.log("로그인 후 응답받은 new 토큰");
-               console.log(data.data.accessToken);
-               setAuthUserInfo({
-                   accessToken:data.data.accessToken,
-                   refreshToken:data.data.refreshToken,
-                   userId:data.data.userId,
-                   userNo:data.data.userNo
-               });
-               localStorage.setItem("userId",data.data.userId);
-               localStorage.setItem("userNo",data.data.userNo);
-               localStorage.setItem("accessToken",data.data.accessToken);
-               localStorage.setItem("refreshToken",data.data.refreshToken);
+                alert("로그인 성공");
+                setShowing(false);
+                
+                console.log("로그인 후 응답받은 new 토큰");
+                console.log(data.data.accessToken);
+                setAuthUserInfo({
+                    accessToken:data.data.accessToken,
+                    refreshToken:data.data.refreshToken,
+                    userId:data.data.userId,
+                    userNo:data.data.userNo
+                    });
+                    localStorage.setItem("userId",data.data.userId);
+                    localStorage.setItem("userNo",data.data.userNo);
+                    localStorage.setItem("accessToken",data.data.accessToken);
+                    localStorage.setItem("refreshToken",data.data.refreshToken);
+                    //로그인 후 필요 시 로그인 후처리 페이지로 이동 조건 추가
+                    if(loginAfterUrl != "empty"){
+                        console.log(loginAfterUrl);
+                        navigate(loginAfterUrl!);
+                    }
             }else{ 
                 alert(data.msg);
             }
