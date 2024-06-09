@@ -6,6 +6,7 @@ import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
 import { replaceDt } from "../../../../../../api/utils";
+import Loading from "../../../../../../component/loading/Loading";
 
 
 
@@ -66,10 +67,9 @@ export interface IBookInfo {
     bookName:string,
     rentDt:string,
     haveToReturnDt:string,
-    // status:string,
     extensionFlg:boolean
 }
-
+  
 function RentStatus(){
     const [rentStatus,setRentStatus]= useState<IBookInfo[]>([]);
     const [checkItems,setCheckItems] = useState<number[]>([]);
@@ -139,88 +139,92 @@ function RentStatus(){
     
     return (
         <>
-        <div style={{fontSize:"30px",fontWeight:"900"}}>
-            대출 현황
-        </div>
-        <RentRuleExplainComponent />
-    <ArrangeSelectWrapper>
-        <Select name="Arrange" id="Arrange" onChange={arrangeHandler}>
-            <option value="renTdt">대출일</option>
-            <option value="returnDt">반납 예정일</option>
-        </Select>
-    </ArrangeSelectWrapper>
+            <div style={{fontSize:"30px",fontWeight:"900"}}>
+                대출 현황
+            </div>
+            <RentRuleExplainComponent />
+            <ArrangeSelectWrapper>
+                <Select name="Arrange" id="Arrange" onChange={arrangeHandler}>
+                    <option value="renTdt">대출일</option>
+                    <option value="returnDt">반납 예정일</option>
+                </Select>
+            </ArrangeSelectWrapper>
 
-    {/* <div>
-        <button name="returnAllBtn" onClick={extendRequestAllHandler}>선택반납연기</button>
-    </div> */}
+            {/* <div>
+                <button name="returnAllBtn" onClick={extendRequestAllHandler}>선택반납연기</button>
+            </div> */}
 
-    <TableContainer>
-        <Table>
-            <Thead>
-                <tr>
-                    <Th>
-                        <input 
-                            type="checkbox" 
-                            name="select-all"
-                            onChange={handleAllCheckItems}
-                            checked={rentStatus?.length == checkItems.length}
-                        />
-                    </Th>
-                    <Th>번호</Th>
-                    <Th>도서정보</Th>
-                    <Th>대출일</Th>
-                    <Th>반납예정일</Th>
-                    <Th>상태</Th>
-                    <Th>반납</Th>
-                    <Th>반납 연장</Th>
-                </tr>  
-            </Thead>
-            <Tbody>
-                {
-                    rentStatus?.map((data,index)=>{
-                        return (
-                        <tr key={data.bookNo}>
-                            <Td>
-                                <input 
-                                    value={data.bookNo}
-                                    type="checkbox"
-                                    checked={checkItems.includes(data.bookNo)}
-                                    onChange={handleSingleCheckItem}
-                                />
-                            </Td>
-                            <Td>
-                                {index+1}
-                            </Td>
-                            <Td>
-                                <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
-                                    {data.bookName}
-                                </Link>
-                            </Td>
-                            <Td>
-                                {replaceDt(data.rentDt)}
-                            </Td>
-                            <Td>
-                                {replaceDt(data.haveToReturnDt)}
-                            </Td>
-                            <Td>
-                                {
-                                    data.rentDt>data.haveToReturnDt 
-                                    ? "연체"
-                                    : "대여"
-                                }
-                            </Td>
-                            <Td>
-                                <button onClick={()=>clickedReturnBook(data.bookNo)}>반납</button>
-                            </Td>
-                            <Td>
-                                <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
-                            </Td>
-                        </tr>)
-                    })
-                }
-            </Tbody>
-        </Table>
-    </TableContainer>
+            {
+                isLoading ? <Loading />
+                :
+                <TableContainer>
+                    <Table>
+                        <Thead>
+                            <tr>
+                                <Th>
+                                    <input 
+                                        type="checkbox" 
+                                        name="select-all"
+                                        onChange={handleAllCheckItems}
+                                        checked={rentStatus?.length == checkItems.length}
+                                    />
+                                </Th>
+                                <Th>번호</Th>
+                                <Th>도서정보</Th>
+                                <Th>대출일</Th>
+                                <Th>반납예정일</Th>
+                                <Th>상태</Th>
+                                <Th>반납</Th>
+                                <Th>반납 연장</Th>
+                            </tr>  
+                        </Thead>
+                        <Tbody>
+                            {
+                                rentStatus?.map((data,index)=>{
+                                    return (
+                                    <tr key={data.bookNo}>
+                                        <Td>
+                                            <input 
+                                                value={data.bookNo}
+                                                type="checkbox"
+                                                checked={checkItems.includes(data.bookNo)}
+                                                onChange={handleSingleCheckItem}
+                                            />
+                                        </Td>
+                                        <Td>
+                                            {index+1}
+                                        </Td>
+                                        <Td>
+                                            <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
+                                                {data.bookName}
+                                            </Link>
+                                        </Td>
+                                        <Td>
+                                            {replaceDt(data.rentDt)}
+                                        </Td>
+                                        <Td>
+                                            {replaceDt(data.haveToReturnDt)}
+                                        </Td>
+                                        <Td>
+                                            {
+                                                data.rentDt>data.haveToReturnDt 
+                                                ? "연체"
+                                                : "대여"
+                                            }
+                                        </Td>
+                                        <Td>
+                                            <button onClick={()=>clickedReturnBook(data.bookNo)}>반납</button>
+                                        </Td>
+                                        <Td>
+                                            <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
+                                        </Td>
+                                    </tr>)
+                                })
+                            }
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            }
         </>
     );
 }

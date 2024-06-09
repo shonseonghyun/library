@@ -121,7 +121,7 @@ function Header(){
             alert("검색명을 입력해주세요.");
             return;
         }
-        navigate(`/book/inquiry/${data.selectOption}/${data.inquiryWord}`,{state:{totalCount:-1}});
+        window.location.href=`/book/inquiry/${data.selectOption}/${data.inquiryWord}`;
     }
 
     return (

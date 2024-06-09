@@ -1,5 +1,5 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { delBook, delHeartBook, delReviewByReviewNo, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
+import { delBook, delHeartBook, delReviewByReviewNo, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 import { UseFormReset } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -249,6 +249,19 @@ export const useGetRentStatus= ({userNo,onSuccess}:IGetApiProps) =>{
         }
     ) 
     return {isLoading};
+}
+
+export const useGetRentHistory= ({userNo,onSuccess}:IGetApiProps) =>{
+    const {isLoading,data} = useQuery(
+        ["getRentHistory",`getRentHistory-${userNo}`],
+        ()=>getRentHistory(userNo),
+        {
+            onSuccess(data) {
+                onSuccess(data);
+            },
+        }
+    ) 
+    return {isLoading,data};
 }
 
 export interface IRegBookParams{

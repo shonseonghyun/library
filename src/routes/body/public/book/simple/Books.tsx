@@ -1,17 +1,16 @@
 import { motion } from "framer-motion";
-import React, { useCallback, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { useCallback, useState } from "react";
+import { useMutation } from "react-query";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { regHeartBook, rentBook } from "../../../../../api/api";
+import { rentBook } from "../../../../../api/api";
+import { getFilePath } from "../../../../../api/utils";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../atoms/AuthUserInfo";
+import Loading from "../../../../../component/loading/Loading";
 import LoginModal from "../../../../../component/login/LoginModal";
 import Pagination from "../../../../../component/page/Pagination";
 import { useInquiryBooks, useRegHeartBook } from "../../../../../hooks/hooks";
-import { getFilePath } from "../../../../../api/utils";
-import { useFocusEffect } from "@react-navigation/native";
-import Loading from "../../../../../component/loading/Loading";
 
 enum GridType  {
     ListType="listType",
@@ -177,13 +176,6 @@ const HiddenContentWrapper = styled.div`
     position: relative;
 `;
 
-const HiddenContent = styled(motion.div)`
-    position: absolute;
-    width: 100%;
-    height: 100px;
-    background-color: yellow;
-`;
-
 const TextForHidden = styled.div`
     font-size: 15px;
     cursor: pointer;
@@ -248,7 +240,6 @@ interface IBookProps{
 function Books(){
     console.log("books 랜더링");
     const navigate = useNavigate();
-    const location = useLocation();
     const [books,setBooks] = useState<IBookProps[]>([]);
     const [showing,setShowing] = useState(false); 
     const isLogin = useRecoilValue(isLoginSelector);

@@ -148,7 +148,7 @@ export const getRentStatus = async (userNo:number)=>{
 
 /*대여 히스토리 */
 export const getRentHistory = async (userNo:number)=>{
-    return await PrivateAPI.get(`/user/rentStatus/${userNo}`)
+    return await PrivateAPI.get(`/user/rentHistory/${userNo}`)
             .then(response=>response?.data);
 }
 
