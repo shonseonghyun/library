@@ -2,11 +2,12 @@ import { useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { AuthUserInfoAtom } from '../../../../../atoms/AuthUserInfo';
-import { useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
+import { useDelUser, useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
 import { useEffect, useState } from 'react';
 import { replaceDt, replaceTel, replaceTm } from '../../../../../api/utils';
 import { useQueryClient } from 'react-query';
 import Loading from '../../../../../component/loading/Loading';
+import { useNavigate, useNavigation } from 'react-router-dom';
 
 const Wrapper = styled.div`
 `;
@@ -62,6 +63,15 @@ const Td = styled.td`
 const ButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
+    margin-top:30px;
+`;
+
+const Button = styled.button`
+    background-color:rgba(52, 152, 219,1.0);
+    width: 80px;
+    height: 40px;
+    margin-left:10px;
+    color:white;    
 `;
 
 interface IModifyProps{
@@ -90,14 +100,27 @@ export interface IUserInfo{
 
 const MyPage = () => {
     const authInfo = useRecoilValue(AuthUserInfoAtom);
+    const navigate = useNavigate();
     const {register,handleSubmit,getValues,reset} = useForm<IModifyProps>();
     const {mutate:modifyUserMutate} = useModifyUser(authInfo.userNo);
     const [userInfo,setUserInfo] = useState<IUserInfo>();
     const queryClient = useQueryClient();
-    const onSuccess= (data:any)=>{
+
+    
+    const onSuccessGetMyPage= (data:any)=>{
         setUserInfo(data.data);
     }
-    const {isLoading} = useGetMyPage({userNo:authInfo.userNo,onSuccess:onSuccess});
+    const {isLoading} = useGetMyPage({userNo:authInfo.userNo,onSuccess:onSuccessGetMyPage});
+    
+    const onSuccessDelUser = (data:any)=>{
+        if(data.code === "S00"){
+                    alert("탈퇴 처리되었습니다.");
+                    navigate("/");
+                }else{
+                    alert(data.msg);
+                }
+    }
+    const {mutate:delUserMutation} = useDelUser(authInfo.userNo,onSuccessDelUser);
 
     const onValid = (data:IModifyProps)=>{
         if(getValues("passwordCheck")==getValues("userPwd")){
@@ -110,10 +133,6 @@ const MyPage = () => {
         }
     }
 
-    useEffect(()=>{
-        console.log(userInfo);
-    },[userInfo]);
-
     const onInValid = (data:any)=>{
         if(data.userPwd){
             alert(data.userPwd.message);
@@ -121,6 +140,10 @@ const MyPage = () => {
         else if(data.passwordCheck){
             alert(data.passwordCheck.message);
         }
+    }
+
+    const clickedDelUser= () =>{
+        delUserMutation.mutate();
     }
 
     return (
@@ -262,7 +285,8 @@ const MyPage = () => {
                         </Table>
 
                         <ButtonWrapper>
-                            <button>수정</button>
+                            <Button>수정</Button>
+                            <Button type='button' onClick={clickedDelUser}>탈퇴</Button>
                         </ButtonWrapper>
                     </form>
                 }

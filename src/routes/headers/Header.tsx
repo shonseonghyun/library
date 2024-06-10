@@ -146,8 +146,8 @@ function Header(){
                 <SearchFormWrapper>
                     <SearchForm onSubmit={handleSubmit(onSubmit)}>
                         <Select {...register("selectOption")}>
-                            <option value="bookAuthor">저자</option>
                             <option value="bookName">도서 제목</option>
+                            <option value="bookAuthor">저자</option>
                         </Select>
                         <Input type="text" placeholder="도서검색" {...register("inquiryWord")} defaultValue={match ? (word ? decodeURI(word) : ""): ""}/>
                         <SearchBtn type="submit">

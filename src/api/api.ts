@@ -40,7 +40,11 @@ export const modifyUser = async (userNo:number, params:IUserModifyProps)=>{
             .then(response=>response.data);
 }
 
-/* */
+//유저 탈퇴
+export const delUser = async(userNo:number)=>{
+    return await PrivateAPI.delete(`/user/delete/${userNo}`)
+            .then(response=>response.data);
+}
 
 
 /* 찜 */

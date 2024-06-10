@@ -132,11 +132,12 @@ const overlayVariants = {
 interface ILoginModalProps{
     showing:boolean,
     setShowing: React.Dispatch<React.SetStateAction<boolean>>;
-    loginAfterUrl ?:string
+    loginAfterUrl ?:string //로그인 후 필요 시 로그인 후처리 페이지로 이동을 위하여 잔달받는  props
+    isEnteredInPrivateRoute?: boolean //유저가 직접 privateRoute로 치고 들어오는 경우 메인페이지로 보내기 위해 전달받는 props
 }
 
 
-const LoginModal = ({showing,setShowing,loginAfterUrl}:ILoginModalProps) => {
+const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginModalProps) => {
     const location = useLocation();
     const navigate  = useNavigate();
     // const from = location?.state?.redirectedFrom?.pathName || '/';
@@ -148,11 +149,8 @@ const LoginModal = ({showing,setShowing,loginAfterUrl}:ILoginModalProps) => {
         doLoginFetch(loginParams)
         .then((data)=>{
             if(data.code=="S00"){
-                alert("로그인 성공");
                 setShowing(false);
                 
-                console.log("로그인 후 응답받은 new 토큰");
-                console.log(data.data.accessToken);
                 setAuthUserInfo({
                     accessToken:data.data.accessToken,
                     refreshToken:data.data.refreshToken,
@@ -163,9 +161,9 @@ const LoginModal = ({showing,setShowing,loginAfterUrl}:ILoginModalProps) => {
                     localStorage.setItem("userNo",data.data.userNo);
                     localStorage.setItem("accessToken",data.data.accessToken);
                     localStorage.setItem("refreshToken",data.data.refreshToken);
+
                     //로그인 후 필요 시 로그인 후처리 페이지로 이동 조건 추가
                     if(loginAfterUrl != "empty"){
-                        console.log(loginAfterUrl);
                         navigate(loginAfterUrl!);
                     }
             }else{ 
@@ -183,6 +181,9 @@ const LoginModal = ({showing,setShowing,loginAfterUrl}:ILoginModalProps) => {
         setShowing(false);
         setValue("userId","");
         setValue("userPwd","");
+        if(isEnteredInPrivateRoute){
+            navigate("/");
+        }
     },[])
 
 

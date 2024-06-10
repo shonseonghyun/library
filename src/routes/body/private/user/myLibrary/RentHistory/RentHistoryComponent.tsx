@@ -11,7 +11,6 @@ import Loading from "../../../../../../component/loading/Loading";
 
 const Wrapper = styled.div`
     width:100%;
-    height:50px;
 `;
 
 const Table = styled.table`

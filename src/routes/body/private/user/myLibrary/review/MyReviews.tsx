@@ -36,6 +36,8 @@ const ReivewsListHeader = styled.div`
         font-size: 16px;
         height: 100%;
         line-height: 53px;
+        font-weight: 700;
+        color:#666;
     }
 
     span:first-child{

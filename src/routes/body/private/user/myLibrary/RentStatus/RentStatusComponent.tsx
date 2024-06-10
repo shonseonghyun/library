@@ -9,6 +9,9 @@ import { replaceDt } from "../../../../../../api/utils";
 import Loading from "../../../../../../component/loading/Loading";
 
 
+const Wrapper = styled.div`
+    
+`;
 
 const Table = styled.table`
     border-spacing: 0;
@@ -138,7 +141,7 @@ function RentStatus(){
 
     
     return (
-        <>
+        <Wrapper>
             <div style={{fontSize:"30px",fontWeight:"900"}}>
                 대출 현황
             </div>
@@ -225,7 +228,7 @@ function RentStatus(){
                     </Table>
                 </TableContainer>
             }
-        </>
+        </Wrapper>
     );
 }
 

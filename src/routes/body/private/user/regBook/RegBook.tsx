@@ -111,7 +111,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.bookName && <p>{errors.bookName.message}</p>}
 
                 <InputWrapper>
                     <Label>저자</Label>
@@ -123,7 +122,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.bookAuthor && <p>{errors.bookAuthor.message}</p>}
 
                 <InputWrapper>
                     <Label>isbn</Label>
@@ -135,7 +133,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.isbn && <p>{errors.isbn.message}</p>}
 
                 <InputWrapper>
                     <Label  >간단 설명</Label>
@@ -147,7 +144,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.bookContent && <p>{errors.bookContent.message}</p>}
 
                 <InputWrapper>
                     <Label  >출판사</Label>
@@ -159,7 +155,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.bookPublisher && <p>{errors.bookPublisher.message}</p>}
 
                 <InputWrapper>
                     <Label  >출판일자</Label>
@@ -177,7 +172,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.pubDt && <p>{errors.pubDt.message}</p>}
 
                 <InputWrapper>
                     <Label  >도서 위치</Label>
@@ -189,7 +183,6 @@ function RegBook(){
                         )
                     } />
                 </InputWrapper>
-                {errors.bookLocation && <p>{errors.bookLocation.message}</p>}
 
                 <InputWrapper>
                     <Label  >도서 이미지</Label>
@@ -202,7 +195,6 @@ function RegBook(){
                     }
                     />
                 </InputWrapper>
-                {errors.bookImages && <p>{errors.bookImages.message}</p>}
                 <InputWrapper>
                     {preview ? 
                         <Img

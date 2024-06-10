@@ -1,5 +1,5 @@
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { delBook, delHeartBook, delReviewByReviewNo, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
+import { delBook, delHeartBook, delReviewByReviewNo, delUser, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 import { UseFormReset } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -43,6 +43,23 @@ export const useModifyUser = (userNo:number) =>{
     ;
     return {mutate};
 }
+
+export const useDelUser = (userNo:number,onSuccess:any) =>{
+    const mutate = useMutation(()=>delUser(userNo),
+        {
+            onSuccess(data){
+                onSuccess(data);
+                // if(data.code === "S00"){
+                //     alert("탈퇴 처리되었습니다.");
+                // }else{
+                //     alert(data.msg);
+                // }
+            }
+        })
+    ;
+    return {mutate};
+}
+
 
 export const useGetBook= (bookNo:number,onSuccess:any) =>{
     const {data,isLoading}= useQuery(
