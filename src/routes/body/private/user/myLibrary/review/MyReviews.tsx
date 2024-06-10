@@ -133,6 +133,9 @@ const MyReviews = () => {
 
     return (
         <Wrapper>
+            <div style={{fontSize:"30px",fontWeight:"900"}}>
+                내 리뷰
+            </div>
             <ReivewsListHeader>
                 <span>도서 정보</span>
                 <span>내용</span>
