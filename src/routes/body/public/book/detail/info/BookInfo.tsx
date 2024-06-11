@@ -1,15 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import styled from "styled-components";
-import { getBookInfoByBookNoFetch, regHeartBook, rentBook } from "../../../../../../api/api";
-import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../atoms/AuthUserInfo";
-import Content from "./Content";
-import { IHeartBookProps } from "../../simple/Books";
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import styled from "styled-components";
+import { getFilePath } from "../../../../../../api/utils";
+import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../atoms/AuthUserInfo";
 import LoginModal from "../../../../../../component/login/LoginModal";
 import { useDelBook, useGetBook, useRegHeartBook, useRentBook } from "../../../../../../hooks/hooks";
-import { getFilePath } from "../../../../../../api/utils";
+import Content from "./Content";
 
 const Wrapper = styled.div`
     margin-top: 10px;
