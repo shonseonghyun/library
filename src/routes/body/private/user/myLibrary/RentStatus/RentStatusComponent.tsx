@@ -7,6 +7,7 @@ import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../.
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
 import { replaceDt } from "../../../../../../api/utils";
 import Loading from "../../../../../../component/loading/Loading";
+import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 
 
 const Wrapper = styled.div`
@@ -142,9 +143,7 @@ function RentStatus(){
     
     return (
         <Wrapper>
-            <div style={{fontSize:"30px",fontWeight:"900"}}>
-                대출 현황
-            </div>
+            <MyLibraryTitle title="대출 현황" />
             <RentRuleExplainComponent />
             <ArrangeSelectWrapper>
                 <Select name="Arrange" id="Arrange" onChange={arrangeHandler}>

@@ -4,6 +4,7 @@ import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import Loading from "../../../../../../component/loading/Loading";
 import { useGetHeartBooks } from "../../../../../../hooks/hooks";
 import HeartItem from "./HeartItem";
+import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 
 const GridWrapper = styled.div`
 display: grid;
@@ -44,27 +45,26 @@ function MyBookCase(){
     
     return (
         <>
-            <div style={{fontSize:"30px",fontWeight:"900"}}>
-                내 책장
-            </div>
-                 {
-                    isLoading
-                    ? <Loading />
-                    :
-                        data?.pages.map((page,idx)=>{
-                            return (
-                                <GridWrapper key={idx}>
-                                    {page.data.data.heartList.map((heart: IHeartInfo)=>{
-                                        return (
-                                            <HeartItem key={heart.bookCode} heart={heart} />
-                                        )
-                                    })}
-                                </GridWrapper>
-                            )
-                        })
-                 }
+            <MyLibraryTitle title="내 책장" />
 
-                 <button onClick={()=>fetchNextPage()} disabled={!hasNextPage} >btn</button>
+            {
+                isLoading
+                ? <Loading />
+                :
+                    data?.pages.map((page,idx)=>{
+                        return (
+                            <GridWrapper key={idx}>
+                                {page.data.data.heartList.map((heart: IHeartInfo)=>{
+                                    return (
+                                        <HeartItem key={heart.bookCode} heart={heart} />
+                                    )
+                                })}
+                            </GridWrapper>
+                        )
+                    })
+            }
+
+            <button onClick={()=>fetchNextPage()} disabled={!hasNextPage} >btn</button>
         </>
     )
 }

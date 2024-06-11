@@ -7,6 +7,8 @@ import { getFilePath, replaceDt, replaceTm } from "../../../../../../api/utils";
 import Pagination from "../../../../../../component/page/Pagination";
 import { Link } from "react-router-dom";
 import ModifyModal from "./ModifyModal";
+import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
+import Loading from "../../../../../../component/loading/Loading";
 
 export interface IReviewsResponse{
     reviewNo:number
@@ -27,8 +29,7 @@ const Wrapper = styled.div`
 `;
 
 const ReivewsListHeader = styled.div`
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #dedede;
     height: 53px;
     margin-bottom: 10px;
 
@@ -133,15 +134,17 @@ const MyReviews = () => {
 
     return (
         <Wrapper>
-            <div style={{fontSize:"30px",fontWeight:"900"}}>
-                내 리뷰
-            </div>
+            <MyLibraryTitle title="내 리뷰" />
+
             <ReivewsListHeader>
                 <span>도서 정보</span>
                 <span>내용</span>
                 <span>작성일</span>
             </ReivewsListHeader>
             {
+                isLoading ? 
+                <Loading />
+                :
                 reviews.map((review,index)=>(
                     <ReviewItem key={index}>
                         <BookInfoWrapper>

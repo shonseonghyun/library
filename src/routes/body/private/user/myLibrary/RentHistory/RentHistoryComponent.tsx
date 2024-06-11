@@ -8,6 +8,7 @@ import { useGetRentHistory } from "../../../../../../hooks/hooks";
 import { Link } from "react-router-dom";
 import { replaceDt } from "../../../../../../api/utils";
 import Loading from "../../../../../../component/loading/Loading";
+import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 
 const Wrapper = styled.div`
     width:100%;
@@ -74,9 +75,8 @@ function RentHistory(){
 
     return (
         <Wrapper>
-            <div style={{fontSize:"30px",fontWeight:"900"}}>
-                대출 이력
-            </div >
+            <MyLibraryTitle title="대출 이력" />
+            
             {
                 isLoading ? <Loading />
                 :
