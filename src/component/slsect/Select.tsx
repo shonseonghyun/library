@@ -15,19 +15,24 @@ const SelectInput = styled.select`
 interface ISelectProps{
     id:string,
     name:string,
+    sizepPerPage?: string,
     optionList:  {[key: string]: string} //object
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 
 
-const Select = ({id,name,optionList,onChange}:ISelectProps) => {
+const Select = ({id,name,optionList,sizepPerPage,onChange}:ISelectProps) => {
+    console.log(sizepPerPage);
+
     return (
         <SelectInput id={id} name={name} onChange={onChange}>
             {
                 Object.keys(optionList).map((value,index)=>{
                     return (
-                            <option key={index} value={value}>
+                            <option key={index} value={value} 
+                                selected={sizepPerPage==undefined ? false : sizepPerPage==value ? true : false}
+                            >
                                 {optionList[value]}
                             </option>
                         )

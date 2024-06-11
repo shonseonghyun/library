@@ -141,8 +141,10 @@ const BookResults = () => {
     }
     const {isLoading} = useInquiryBooks({category,inquiryWord,currentPage,sizePerPage,totalCount,onSuccess});
     const {mutate:regHeartMutate} = useRegHeartBook();
+
     const changeNum = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
         setSizePerPage(parseInt(e.currentTarget.value));
+        setCurrentPage(1);
     },[]);
 
     const clickedHeart = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
@@ -188,17 +190,16 @@ const BookResults = () => {
         },
     })
 
-    const clickedImgType = ()=>{
-        setGridType(GridType.ImgType);
-        // setSizePerPage(2);
-        setSizePerPage(sizePerPage);
-    }
-
     const clickedListType = ()=>{
         setGridType(GridType.ListType);
-        // setSizePerPage(1);
-        setSizePerPage(sizePerPage);
+        setSizePerPage(1);
     }
+
+    const clickedImgType = ()=>{
+        setGridType(GridType.ImgType);
+        setSizePerPage(2);
+    }
+
 
     const clickedRent = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
@@ -233,7 +234,7 @@ const BookResults = () => {
                 <InquriyOptionsWrapper>
                     <SelectGroup>
                         <Select id='orderCategory' name='orderCategory' onChange={changeOrder} optionList={ORDER_OPTIONS} />
-                        <Select id='num' name='num' onChange={changeNum} optionList={gridType === GridType.ListType ? LIST_TYPE_SIZE_OPTIONS : IMG_TYPE_SIZE_OPTIONS} />
+                        <Select id='num' name='num' onChange={changeNum} sizepPerPage={sizePerPage+""} optionList={gridType === GridType.ListType ? LIST_TYPE_SIZE_OPTIONS : IMG_TYPE_SIZE_OPTIONS} />
                     </SelectGroup>
 
                     <GridTypeWrapper>
