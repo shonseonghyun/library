@@ -12,7 +12,7 @@ export interface IHeartBookProps{
 }
 
 
-export interface IBookProps{
+export interface IBookInfo{
     bookNo:number,
     bookName:string,
     bookAuthor:string,

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFilePath } from '../../api/utils';
-import { IBookProps } from '../../routes/body/public/book/simple/Books';
+import { IBookInfo } from '../../routes/body/public/book/simple/Books';
 
 
 const IndexWrapper = styled.div`
@@ -85,7 +85,7 @@ const TextForHidden = styled.div`
 
 interface IGridTypeContentProps{
     index:number,
-    book:IBookProps,
+    book:IBookInfo,
     regHeart ?:(e: React.MouseEvent<HTMLButtonElement>) => void,
     rentBook ?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }

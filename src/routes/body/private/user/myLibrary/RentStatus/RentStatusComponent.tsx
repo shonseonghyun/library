@@ -65,7 +65,7 @@ const Select = styled.select`
     padding-right: 24px;
 `;
 
-export interface IBookInfo {
+export interface IRentStatusBookInfo {
     bookNo:number,
     bookName:string,
     rentDt:string,
@@ -74,7 +74,7 @@ export interface IBookInfo {
 }
   
 function RentStatus(){
-    const [rentStatus,setRentStatus]= useState<IBookInfo[]>([]);
+    const [rentStatus,setRentStatus]= useState<IRentStatusBookInfo[]>([]);
     const [checkItems,setCheckItems] = useState<number[]>([]);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
    
@@ -118,12 +118,12 @@ function RentStatus(){
     const arrangeHandler = (e:React.ChangeEvent<HTMLSelectElement>)=>{
         const selectValue = e.currentTarget.value;
         if(selectValue=="renTdt"){
-            setRentStatus( [...rentStatus].sort(function(a:IBookInfo,b:IBookInfo){
+            setRentStatus( [...rentStatus].sort(function(a:IRentStatusBookInfo,b:IRentStatusBookInfo){
                 return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
             }));  
         }
         else if(selectValue=="returnDt"){
-            setRentStatus( [...rentStatus].sort(function(a:IBookInfo,b:IBookInfo){
+            setRentStatus( [...rentStatus].sort(function(a:IRentStatusBookInfo,b:IRentStatusBookInfo){
                 return Number.parseInt(b.haveToReturnDt).valueOf() - Number.parseInt(a.haveToReturnDt).valueOf();
             }));  
         }

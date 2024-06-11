@@ -1,18 +1,18 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
-import { IBookProps } from './Books';
-import { AuthUserInfoAtom, isLoginSelector } from '../../../../../atoms/AuthUserInfo';
-import { useRecoilValue } from 'recoil';
-import { useInquiryBooks, useRegHeartBook } from '../../../../../hooks/hooks';
 import { useMutation } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import styled from 'styled-components';
 import { rentBook } from '../../../../../api/api';
-import LoginModal from '../../../../../component/login/LoginModal';
-import Pagination from '../../../../../component/page/Pagination';
+import { AuthUserInfoAtom, isLoginSelector } from '../../../../../atoms/AuthUserInfo';
 import GridTypeContent from '../../../../../component/Book/GridTypeContent';
 import ImgTypeContent from '../../../../../component/Book/ImgTypeContent';
 import Loading from '../../../../../component/loading/Loading';
+import LoginModal from '../../../../../component/login/LoginModal';
+import Pagination from '../../../../../component/page/Pagination';
 import Select from '../../../../../component/slsect/Select';
+import { useInquiryBooks, useRegHeartBook } from '../../../../../hooks/hooks';
+import { IBookInfo } from './Books';
 
 // const LIST_TYPE_SIZE_OPTIONS = ['1', '2', '3', '5'];
 // const IMG_TYPE_SIZE_OPTIONS = ['2', '3', '4', '5'];
@@ -124,7 +124,7 @@ export interface IHeartBookProps{
 }
 
 const BookResults = () => {
-    const [books,setBooks] = useState<IBookProps[]>([]);
+    const [books,setBooks] = useState<IBookInfo[]>([]);
     const [showing,setShowing] = useState(false); 
     const isLogin = useRecoilValue(isLoginSelector);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
