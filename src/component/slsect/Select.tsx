@@ -4,8 +4,6 @@ const SelectInput = styled.select`
     font-size: 13.55px;
     box-sizing: border-box;
     padding-left: 9px;
-    color: #5a5a5a;
-    background-color: #e8e8e8;
     border: none;
     height: 25px;
     margin-right: 3px;

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 const SubSearchWrapper =styled.div`
-    background:linear-gradient(to right, rgba(72, 52, 212,1.0), white); 
+    background:linear-gradient(to right, ${props=>props.theme.gradientColor}, white); 
 `;
 
 const SearchWrapper =styled.div`

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const ItemLink = styled(Link)<{$fontSize:string}>`
     font-size: ${props=>props.$fontSize};
+    color:${props=>props.theme.textColor};
 `;
 
 interface IPrivateLinkProps{

@@ -15,6 +15,10 @@ const HideWrapper = styled.div<{showing:boolean}>`
     }
 `;
 
+const Button =styled.button`
+  background-color  : transparent;
+`;
+
 interface IContentProps{
     content:string    
 }
@@ -33,11 +37,11 @@ const Content = ({content}:IContentProps) => {
                     책소개
                 </div>
                 <div>
-                    <button onClick={clickedBtn}>
+                    <Button onClick={clickedBtn}>
                         {
                             showing ? "접기" : "열기"
                         }
-                    </button>
+                    </Button>
                 </div>
             </div>
             <HideWrapper showing={showing}>

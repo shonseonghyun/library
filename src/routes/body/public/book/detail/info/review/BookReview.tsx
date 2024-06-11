@@ -51,7 +51,10 @@ const HideWrapper = styled.div<{$showing:boolean}>`
 
 const Tbody = styled.tbody`
 `;
-
+    
+const Button =styled.button`
+  background-color  : transparent;
+`;
 
 function BookReview({bookNo}:IBookReview){
     console.log("BookReview 랜더링");
@@ -86,11 +89,11 @@ function BookReview({bookNo}:IBookReview){
                     리뷰
                 </div>
                 <div>
-                    <button onClick={clickedBtn}>
+                    <Button onClick={clickedBtn}>
                         {
                             showing ? "접기" : "열기"
                         }
-                    </button>
+                    </Button>
                 </div>
             </div>
             <HideWrapper $showing={showing}>

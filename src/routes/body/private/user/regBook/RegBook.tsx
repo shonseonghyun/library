@@ -12,11 +12,9 @@ const Wrapper = styled.div`
 `;
 
 const Button = styled.button`   
-    background-color:rgba(52, 152, 219,1.0);  
     margin-right: 5px;
     height: 40px;
     padding: 0px 10px;
-    color: #fff!important;
 `;
 
 const InputWrapper = styled.div`

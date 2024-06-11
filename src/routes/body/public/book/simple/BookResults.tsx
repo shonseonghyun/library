@@ -106,11 +106,11 @@ const SelectGroup = styled.div`
     
 `;
 
-const Row = styled.div`
+const Row = styled.div<{$gridType:GridType}>`
     position: relative;
     margin-top: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #d2d2d2;
+    border-bottom: ${props=>props.$gridType===GridType.ImgType ? "none" : "2px solid #d2d2d2"};
 `;
 
 type InquriyBooksParams={
@@ -262,7 +262,7 @@ const BookResults = () => {
                         :
                         books?.map((book,index: any) =>{
                             return (
-                                <Row key={book.bookNo}>
+                                <Row key={book.bookNo} $gridType={gridType}>
                                     {
                                         gridType === GridType.ListType
                                         ?

@@ -68,11 +68,9 @@ const ButtonWrapper = styled.div`
 `;
 
 const Button = styled.button`
-    background-color:rgba(52, 152, 219,1.0);
     width: 80px;
     height: 40px;
     margin-left:10px;
-    color:white;    
 `;
 
 interface IModifyProps{

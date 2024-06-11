@@ -49,12 +49,12 @@ const ButtonWrapper = styled.div`
   margin-top: 10px;
 `;
 
-const Button = styled.button`   
-    background-color:rgba(52, 152, 219,1.0);  
+const Button = styled.button<{$bookState?:string}>`   
     margin-right: 5px;
     height: 40px;
     padding: 0px 10px;
-    color: #fff!important;
+    background-color: ${props=> props.$bookState==="RENT_UNAVAILABLE" ? props.theme.disableBtnColor : props.theme.btnColor};
+    cursor: ${props=>props.$bookState==="RENT_UNAVAILABLE" ? "not-allowed" : "pointer"};
 `;
 
 const InfoWrapper = styled.div`
@@ -161,10 +161,7 @@ function BookInfo({bookNo}:IBookInfo){
                             <Button 
                                 onClick={clickedRent}
                                 value={data?.data.bookNo}
-                                style={{ 
-                                    backgroundColor: data?.data.bookState==="RENT_UNAVAILABLE" ? "#a99e9e9c" : "rgba(52, 152, 219,1.0)",
-                                    cursor: data?.data.bookState==="RENT_UNAVAILABLE" ? "not-allowed" : "pointer"}
-                                } 
+                                $bookState={data?.data.bookState}
                                 disabled={data?.data.bookState==="RENT_UNAVAILABLE" ? true : false} 
                             >
                                 대출하기

@@ -10,6 +10,7 @@ const Item = styled.li`
     margin-left: 25px;
     display: inline-block;
     p{
+        color:${props=>props.theme.textColor};
         font-size: 13px;
     }
 `;
