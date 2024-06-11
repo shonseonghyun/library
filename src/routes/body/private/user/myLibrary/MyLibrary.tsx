@@ -47,16 +47,16 @@ function MyLibrary(){
             <ListWrapper>
                 <List>
                     <Item>
-                        <ItemLink to="rentStatus">대출 현황</ItemLink>
+                        <ItemLink to="rentStatus" state={{isEnteredInPrivateRoute:true}}>대출 현황</ItemLink>
                     </Item>
                     <Item>
-                        <ItemLink to="rentHistory">대출 이력</ItemLink>
+                        <ItemLink to="rentHistory" state={{isEnteredInPrivateRoute:true}}>대출 이력</ItemLink>
                     </Item>
                     <Item>
-                        <ItemLink to="myBookcase">내 책장</ItemLink>
+                        <ItemLink to="myBookcase" state={{isEnteredInPrivateRoute:true}}>내 책장</ItemLink>
                     </Item>
                     <Item>
-                        <ItemLink to="review">내 리뷰</ItemLink>
+                        <ItemLink to="review" state={{isEnteredInPrivateRoute:true}}>내 리뷰</ItemLink>
                     </Item>
                 </List>
             </ListWrapper>

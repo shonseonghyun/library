@@ -4,9 +4,7 @@ function PublicRoute(){
     console.log("publicRoute 랜더링");
 
     return (
-        <>
-            <Outlet></Outlet>
-        </>
+        <Outlet />
     );
 }
 
