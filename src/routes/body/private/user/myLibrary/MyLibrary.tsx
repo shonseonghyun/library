@@ -1,17 +1,14 @@
 import { Link, Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components"
 import SubTitle from "../../../../../component/header/SubTitle";
+import PrivateLink from "../../../../../component/Link/PrivateLink";
 
+const fontSize = "18px";
 
 const Wrapper = styled.div`
-    /* text-align:center; */
 
 `;
 
-const ItemLink = styled(Link)`
-    font-size: 20px;
-
-`;
 const OutletWrapper = styled.div`
   text-align:center;
   /* background-color:red; */
@@ -47,16 +44,16 @@ function MyLibrary(){
             <ListWrapper>
                 <List>
                     <Item>
-                        <ItemLink to="rentStatus" state={{isEnteredInPrivateRoute:true}}>대출 현황</ItemLink>
+                        <PrivateLink to="rentStatus" fontSize={fontSize}>대출 현황</PrivateLink>
                     </Item>
                     <Item>
-                        <ItemLink to="rentHistory" state={{isEnteredInPrivateRoute:true}}>대출 이력</ItemLink>
+                        <PrivateLink to="rentHistory" fontSize={fontSize}>대출 이력</PrivateLink>
                     </Item>
                     <Item>
-                        <ItemLink to="myBookcase" state={{isEnteredInPrivateRoute:true}}>내 책장</ItemLink>
+                        <PrivateLink to="myBookcase" fontSize={fontSize}>내 책장</PrivateLink>
                     </Item>
                     <Item>
-                        <ItemLink to="review" state={{isEnteredInPrivateRoute:true}}>내 리뷰</ItemLink>
+                        <PrivateLink to="review" fontSize={fontSize}>내 리뷰</PrivateLink>
                     </Item>
                 </List>
             </ListWrapper>

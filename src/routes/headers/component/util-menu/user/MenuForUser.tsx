@@ -2,16 +2,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import PrivateLink from "../../../../../component/Link/PrivateLink";
 
-const NavbarLink = styled(Link)`
-`;
+const fontSize = "13px";
 
 const Item = styled.li`
     margin-left: 25px;
     display: inline-block;
-    ${NavbarLink},p{
-        font-size: 15px;
-        cursor: pointer;
+    p{
+        font-size: 13px;
     }
 `;
 
@@ -36,15 +35,19 @@ function MenuForUser(){
     return (
         <>
             <Item>
-                <NavbarLink to="/user/myPage" state={{isEnteredInPrivateRoute:true}}>
+                <PrivateLink to="/user/myPage" fontSize={fontSize}>
                     {authUserInfo.userId + "님"}
-                </NavbarLink>
+                </PrivateLink>
             </Item>
             <Item>
-                <NavbarLink to="myLibrary/rentStatus" state={{isEnteredInPrivateRoute:true}}>내 서재</NavbarLink>
+                <PrivateLink to="myLibrary/rentStatus" fontSize={fontSize}>
+                    내 서재
+                </PrivateLink>
             </Item>
             <Item>
-                <NavbarLink to="/book/reg" state={{isEnteredInPrivateRoute:true}}>도서 등록</NavbarLink>
+                <PrivateLink to="/book/reg" fontSize={fontSize}>
+                  도서 등록
+                </PrivateLink>
             </Item>
             <Item>
                 <p onClick={clickedLogout}>로그아웃</p>
