@@ -1,7 +1,6 @@
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -13,38 +12,31 @@ const Wrapper = styled.div`
 const PageUl = styled.ul`
   list-style: none;
   text-align: center;
-  border-radius: 3px;
-  color: white;
-  padding: 1px;
-  border-top: 3px solid #186ead;
-  border-bottom: 3px solid #186ead;
-  background-color: rgba(0, 0, 0, 0.4);
 `;
 
-const PageLi = styled.li`
+const PageLi = styled.li<{currentPage?:number,page?:number}>`
   display: inline-block;
   font-size: 17px;
-  font-weight: 600;
-  padding: 5px;
+  padding-bottom: 5px;
   border-radius: 5px;
   width: 25px;
   &:hover {
     cursor: pointer;
     color: white;
-    background-color: #263a6c;
+    background-color: #646464;
   }
-  &:focus::after {
-    color: white;
-    background-color: #263a6c;
-  }
+  background-color: ${props=>props.currentPage && props.currentPage===props.page ? "#646464" : "transparent"};
+  color: ${props=>props.currentPage&& props.currentPage===props.page ? "white" : "black"};
 `;
 
 const PageSpan = styled.span`
-  &:hover::after,
-  &:focus::after {
-    border-radius: 100%;
-    color: white;
-    background-color: #263a6c;
+    height: 100%;
+    width: 100%;
+    &:hover::after,
+    &:focus::after {
+        border-radius: 100%;
+        color: white;
+        background-color: #263a6c;
   }
 `;
 
@@ -117,40 +109,24 @@ function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPaginat
     return (
     <Wrapper>
         <PageUl className="pagination">
-            <PageLi>
-            {
-                currentPage==1
-                ? 
+            <PageLi onClick={currentPage==1 ? ()=>alert("첫번째 페이지입니다.") :()=>setCurrentPage(backPage) }>
                 <span>
                     <FontAwesomeIcon icon={faArrowLeft} />
                 </span>
-                :
-            <span onClick={()=>setCurrentPage(backPage)}>
-                    <FontAwesomeIcon icon={faArrowLeft} />
-            </span>
-            }
             </PageLi>
 
           {pageNumbers.map((number) => (
-            <PageLi key={number} className="page-item">
-                <PageSpan onClick={()=>setCurrentPage(number)} className="page-link">
+            <PageLi key={number} onClick={()=>setCurrentPage(number)} currentPage={currentPage} page={number} className="page-item">
+                <PageSpan className="page-link" >
                     {number}
                 </PageSpan>
             </PageLi>
           ))}
 
-            <PageLi>
-            {
-                totalPage==currentPage
-                   ? 
+            <PageLi onClick={totalPage==currentPage ? ()=>alert("마지막 페이지입니다.") : ()=>setCurrentPage(frontPage)}>
                 <span>
                     <FontAwesomeIcon icon={faArrowRight} />
                 </span>
-                :
-                <span onClick={()=>setCurrentPage(frontPage)}>
-                    <FontAwesomeIcon icon={faArrowRight} />
-                </span>
-            }
             </PageLi>
         </PageUl>
     </Wrapper>
