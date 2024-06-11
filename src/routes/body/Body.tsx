@@ -43,7 +43,7 @@ function Body(){
                     <Route path="/user/myPage" element={<MyPage /> } />
                 </Route>
             </Routes>
-            <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />      
+            <ReactQueryDevtools initialIsOpen={false} position='bottom-right' /> 
         </div>
     )
 }
