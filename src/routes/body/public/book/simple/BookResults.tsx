@@ -1,17 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { useMutation } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { rentBook } from '../../../../../api/api';
 import { AuthUserInfoAtom, isLoginSelector } from '../../../../../atoms/AuthUserInfo';
-import GridTypeContent from '../../../../../component/Book/GridTypeContent';
 import ImgTypeContent from '../../../../../component/Book/ImgTypeContent';
+import GridTypeContent from '../../../../../component/Book/ListTypeContent';
 import Loading from '../../../../../component/loading/Loading';
 import LoginModal from '../../../../../component/login/LoginModal';
 import Pagination from '../../../../../component/page/Pagination';
 import Select from '../../../../../component/slsect/Select';
-import { useInquiryBooks, useRegHeartBook } from '../../../../../hooks/hooks';
+import { useInquiryBooks, useRegHeartBook, useRentBook } from '../../../../../hooks/hooks';
 import { IBookInfo } from './Books';
 
 // const LIST_TYPE_SIZE_OPTIONS = ['1', '2', '3', '5'];
@@ -141,6 +139,8 @@ const BookResults = () => {
     }
     const {isLoading} = useInquiryBooks({category,inquiryWord,currentPage,sizePerPage,totalCount,onSuccess});
     const {mutate:regHeartMutate} = useRegHeartBook();
+    const {mutate:rentBookMutate} = useRentBook();
+
 
     const changeNum = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
         setSizePerPage(parseInt(e.currentTarget.value));
@@ -180,16 +180,6 @@ const BookResults = () => {
         }
     },[books]);
 
-    const rent = useMutation(({userNo, bookNo}:IHeartBookProps)=>rentBook(userNo,bookNo),{
-        onSuccess(data) {
-            if(data.code === "S00"){
-                alert("대출 완료하였습니다.");
-            }else{
-                alert(data.msg);
-            }
-        },
-    })
-
     const clickedListType = ()=>{
         setGridType(GridType.ListType);
         setSizePerPage(1);
@@ -202,14 +192,15 @@ const BookResults = () => {
         setCurrentPage(1);
     }
 
-
     const clickedRent = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
-            rent.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
+            const bookNo = parseInt(e.currentTarget.value);
+            rentBookMutate.mutate({bookNo:bookNo,userNo:authUserInfo.userNo});
         }else{
             setShowing(true);
         }
     },[isLogin]);
+
     return (
         <>
         <InquriyResultWrapper>

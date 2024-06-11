@@ -1,7 +1,6 @@
+import { UseFormReset } from "react-hook-form";
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
 import { delBook, delHeartBook, delReviewByReviewNo, delUser, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
-import { UseFormReset } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 
 
 export interface IUserModifyProps{
@@ -69,7 +68,6 @@ export const useGetBook= (bookNo:number,onSuccess:any) =>{
             onSuccess(data) {
                 onSuccess(data);
             },
-            refetchOnWindowFocus: false
     });
     return {data,isLoading};
 }
