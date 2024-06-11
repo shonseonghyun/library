@@ -193,11 +193,13 @@ const BookResults = () => {
     const clickedListType = ()=>{
         setGridType(GridType.ListType);
         setSizePerPage(1);
+        setCurrentPage(1);
     }
 
     const clickedImgType = ()=>{
         setGridType(GridType.ImgType);
         setSizePerPage(2);
+        setCurrentPage(1);
     }
 
 
