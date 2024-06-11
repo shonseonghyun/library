@@ -96,10 +96,10 @@ const GridTypeImg = styled.img`
     cursor: pointer;
 `;
 
-const InquriyResult =styled.div<{gridType:GridType,isLoading:boolean}>`
+const InquriyResult =styled.div<{$gridType:GridType,$isLoading:boolean}>`
     display: grid;
-    gap : ${props=> (props.gridType === GridType.ImgType) ? "40px" : "0px"} ;
-    grid-template-columns: repeat(${props=>props.gridType === GridType.ListType || props.isLoading ? 1 : 5},1fr);
+    gap : ${props=> (props.$gridType === GridType.ImgType) ? "40px" : "0px"} ;
+    grid-template-columns: repeat(${props=>props.$gridType === GridType.ListType || props.$isLoading ? 1 : 5},1fr);
 `;
 
 const SelectGroup = styled.div`
@@ -255,7 +255,7 @@ const BookResults = () => {
                     </GridTypeWrapper>
                 </InquriyOptionsWrapper>
 
-                <InquriyResult gridType={gridType} isLoading={isLoading}>
+                <InquriyResult $gridType={gridType} $isLoading={isLoading}>
                     {
                         isLoading ? 
                             <Loading /> 

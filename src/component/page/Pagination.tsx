@@ -14,7 +14,7 @@ const PageUl = styled.ul`
   text-align: center;
 `;
 
-const PageLi = styled.li<{currentPage?:number,page?:number}>`
+const PageLi = styled.li<{$currentPage?:number,$page?:number}>`
   display: inline-block;
   font-size: 17px;
   padding-bottom: 5px;
@@ -25,8 +25,8 @@ const PageLi = styled.li<{currentPage?:number,page?:number}>`
     color: white;
     background-color: #646464;
   }
-  background-color: ${props=>props.currentPage && props.currentPage===props.page ? "#646464" : "transparent"};
-  color: ${props=>props.currentPage&& props.currentPage===props.page ? "white" : "black"};
+  background-color: ${props=>props.$currentPage && props.$currentPage===props.$page ? "#646464" : "transparent"};
+  color: ${props=>props.$currentPage&& props.$currentPage===props.$page ? "white" : "black"};
 `;
 
 const PageSpan = styled.span`
@@ -116,7 +116,7 @@ function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPaginat
             </PageLi>
 
           {pageNumbers.map((number) => (
-            <PageLi key={number} onClick={()=>setCurrentPage(number)} currentPage={currentPage} page={number} className="page-item">
+            <PageLi key={number} onClick={()=>setCurrentPage(number)} $currentPage={currentPage} $page={number} className="page-item">
                 <PageSpan className="page-link" >
                     {number}
                 </PageSpan>

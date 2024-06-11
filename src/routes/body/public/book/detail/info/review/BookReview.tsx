@@ -41,9 +41,9 @@ const Tr = styled.tr`
 const Td = styled.td`
     text-align: center;
 `;
-const HideWrapper = styled.div<{showing:boolean}>`
+const HideWrapper = styled.div<{$showing:boolean}>`
     width: 100%;
-    display: ${props=>props.showing ? "block" : "none"};
+    display: ${props=>props.$showing ? "block" : "none"};
     p{
         font-size: 15px;
     }
@@ -93,7 +93,7 @@ function BookReview({bookNo}:IBookReview){
                     </button>
                 </div>
             </div>
-            <HideWrapper showing={showing}>
+            <HideWrapper $showing={showing}>
                 <Table >
                     <thead>
                         <Tr>
