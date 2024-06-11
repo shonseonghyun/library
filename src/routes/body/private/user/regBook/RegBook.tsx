@@ -2,23 +2,13 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { IRegBookParams, useRegBook } from "../../../../../hooks/hooks";
+import SubTitle from "../../../../../component/header/SubTitle";
 
 
 const Wrapper = styled.div`
     margin: 0 auto;
     justify-content: center;
     margin-bottom: 30px;
-`;
-
-const SubSearchWrapper =styled.div`
-    background:linear-gradient(to right, rgba(72, 52, 212,1.0), white); 
-`;
-
-const SearchWrapper =styled.div`
-    width: 80%;
-    font-size: 28px;
-    padding: 15px 0px;
-    margin:0 auto;
 `;
 
 const Button = styled.button`   
@@ -94,11 +84,7 @@ function RegBook(){
 
     return (
         <Wrapper>
-            <SubSearchWrapper>
-                <SearchWrapper>
-                    도서 등록
-                </SearchWrapper>
-            </SubSearchWrapper>
+            <SubTitle title="도서 등록" />
 
             <form onSubmit={handleSubmit(onSubmit,onError)} >
                 <InputWrapper>

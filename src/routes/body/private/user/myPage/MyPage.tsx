@@ -8,6 +8,7 @@ import { replaceDt, replaceTel, replaceTm } from '../../../../../api/utils';
 import { useQueryClient } from 'react-query';
 import Loading from '../../../../../component/loading/Loading';
 import { useNavigate, useNavigation } from 'react-router-dom';
+import SubTitle from '../../../../../component/header/SubTitle';
 
 const Wrapper = styled.div`
 `;
@@ -148,11 +149,7 @@ const MyPage = () => {
 
     return (
         <Wrapper>
-            <SubSearchWrapper>
-                <SearchWrapper>
-                    마이 페이지
-                </SearchWrapper>
-            </SubSearchWrapper>
+            <SubTitle title="마이 페이지"/>
 
             <FormWrapper>
                 {

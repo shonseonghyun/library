@@ -1,21 +1,11 @@
 import { Link, Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components"
+import SubTitle from "../../../../../component/header/SubTitle";
 
 
 const Wrapper = styled.div`
     /* text-align:center; */
 
-`;
-
-const SubSearchWrapper =styled.div`
-    background:linear-gradient(to right, rgba(72, 52, 212,1.0), white); 
-`;
-
-const SearchWrapper =styled.div`
-    width: 80%;
-    font-size: 28px;
-    padding: 15px 0px;
-    margin:0 auto;
 `;
 
 const ItemLink = styled(Link)`
@@ -52,11 +42,7 @@ const Item = styled.li`
 function MyLibrary(){
     return (
         <Wrapper>
-            <SubSearchWrapper>
-                <SearchWrapper>
-                    내 서재
-                </SearchWrapper>
-            </SubSearchWrapper>
+            <SubTitle title="내 서재" />
 
             <ListWrapper>
                 <List>
