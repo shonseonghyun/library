@@ -1,12 +1,9 @@
-import { useEffect } from "react";
-import { useInfiniteQuery, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { getHeartBooks } from "../../../../../../api/api";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import HeartItem from "./HeartItem";
+import Loading from "../../../../../../component/loading/Loading";
 import { useGetHeartBooks } from "../../../../../../hooks/hooks";
+import HeartItem from "./HeartItem";
 
 const GridWrapper = styled.div`
 display: grid;
@@ -25,7 +22,14 @@ export interface IHeartInfo{
     bookName:string,
     bookAuthor:string,
     bookPublisher:string,
-    bookImage:string
+    bookImage:IBookImageInfo
+}
+
+interface IBookImageInfo{
+    originalFileName:string,
+    newFileName:string
+    fileSize:number,
+    filePath:string,
 }
 
 function MyBookCase(){
@@ -40,14 +44,13 @@ function MyBookCase(){
     
     return (
         <>
-            <h1>내책장</h1>
+            <div style={{fontSize:"30px",fontWeight:"900"}}>
+                내 책장
+            </div>
                  {
                     isLoading
-                    ? <div>Loading..</div>
+                    ? <Loading />
                     :
-                        // !hasNextPage 
-                        // ? <div></div>
-                        // : 
                         data?.pages.map((page,idx)=>{
                             return (
                                 <GridWrapper key={idx}>

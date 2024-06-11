@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFilePath } from '../../api/utils';
-import { IBookProps } from '../../routes/body/public/book/simple/Books';
+import { IHeartInfo } from '../../routes/body/private/user/myLibrary/heart/MyBookCase';
+import { IBookInfo } from '../../routes/body/public/book/simple/Books';
 
 const OverlayContent= styled.div`
     position: absolute;
@@ -56,29 +57,55 @@ const Text = styled.div`
 `;
 
 interface IImgTypeContentProps{
-    book:IBookProps,
+    book?:IBookInfo,
+    heart?:IHeartInfo
     regHeart ?:(e: React.MouseEvent<HTMLButtonElement>) => void,
+    delHeart ?:(e: React.MouseEvent<HTMLButtonElement>) => void,
 }
 
-const ImgTypeContent = ({book,regHeart}:IImgTypeContentProps) => {
+const ImgTypeContent = ({book,heart,delHeart,regHeart}:IImgTypeContentProps) => {
     const navigate = useNavigate();
 
     return (
         <ImgWrapper>
-            <Img src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} />
+        {
+            book && 
+            <>
+                <Img src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} />
+                
+                <OverlayContent onClick={()=>navigate(`/book/${book.bookNo}`)}>
+                    <Text>
+                        {book.bookName}
+                    </Text>
+                    <Text>
+                        {book.bookAuthor}
+                    </Text>
+                </OverlayContent>
+                <BtnWrapper>
+                    <Button value={book.bookNo} onClick={regHeart}>찜하기</Button>
+                </BtnWrapper>
+            </>
+        }
 
-            <OverlayContent onClick={()=>navigate(`/book/${book.bookNo}`)}>
-                <Text>
-                    {book.bookName}
-                </Text>
-                <Text>
-                    {book.bookAuthor}
-                </Text>
-            </OverlayContent>
-            <BtnWrapper>
-                <Button value={book.bookNo} onClick={regHeart}>찜하기</Button>
-            </BtnWrapper>
-        </ImgWrapper>
+        {
+            heart && 
+            <>
+                <Img src={`${process.env.PUBLIC_URL}/`+ getFilePath(heart.bookImage.filePath ,heart.bookImage.newFileName)} />
+
+                <OverlayContent onClick={()=>navigate(`/book/${heart.bookCode}`)}>
+                    <Text>
+                        {heart.bookName}
+                    </Text>
+                    <Text>
+                        {heart.bookAuthor}
+                    </Text>
+                </OverlayContent>
+                <BtnWrapper>
+                    <Button value={heart.heartNo} onClick={delHeart}>찜 해제</Button>
+                </BtnWrapper>
+            </>
+        }
+    </ImgWrapper>
     );
 };
 
