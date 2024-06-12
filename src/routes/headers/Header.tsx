@@ -110,13 +110,15 @@ interface IFormProps{
 function Header(){
     console.log("Header 랜더링");
     const match = useMatch("/book/inquiry/:cateogry/:inquiryWord") ;
-    const {register,handleSubmit,getValues} = useForm<IFormProps>();
+    const {register,handleSubmit,getValues,setValue,setFocus} = useForm<IFormProps>();
     const location = useLocation();
     const word = location.pathname.substring(location.pathname.lastIndexOf("/")+1);
 
     const onSubmit = (data :IFormProps) =>{
         if(getValues("inquiryWord").trim().length==0){
             alert("검색명을 입력해주세요.");
+            setValue("inquiryWord","");
+            setFocus("inquiryWord");
             return;
         }
         window.location.href=`/book/inquiry/${data.selectOption}/${data.inquiryWord}`;
