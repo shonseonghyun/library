@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFilePath } from '../../api/utils';
@@ -83,19 +84,15 @@ const TextForHidden = styled.div`
     font-weight: 700;
 `;
 
-interface IGridTypeContentProps{
-    index:number,
+interface IListTypeContentProps{
     book:IBookInfo,
-    regHeart ?:(e: React.MouseEvent<HTMLButtonElement>) => void,
-    rentBook ?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    regHeart :(e: React.MouseEvent<HTMLButtonElement>) => void,
+    rentBook : (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const GridTypeContent = ({index,book,regHeart,rentBook}:IGridTypeContentProps) => {
+const ListTypeContent = ({book,regHeart,rentBook}:IListTypeContentProps) => {
     return (
         <>
-            <IndexWrapper>
-                <span>{index+1}.</span>
-            </IndexWrapper>
             <BookImgWrapper>
                 <Img 
                     src={`${process.env.PUBLIC_URL}/`+ getFilePath(book.bookImage.filePath ,book.bookImage.newFileName)} 
@@ -143,4 +140,4 @@ const GridTypeContent = ({index,book,regHeart,rentBook}:IGridTypeContentProps) =
     );
 };
 
-export default GridTypeContent;
+export default React.memo(ListTypeContent);

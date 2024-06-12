@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFilePath } from '../../api/utils';
@@ -107,4 +108,4 @@ const ImgTypeContent = ({book,heart,delHeart,regHeart}:IImgTypeContentProps) => 
     );
 };
 
-export default ImgTypeContent;
+export default React.memo(ImgTypeContent);
