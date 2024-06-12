@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useCallback, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { replaceDt } from "../../../../../../api/utils";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 import Loading from "../../../../../../component/loading/Loading";
+import Select from "../../../../../../component/slsect/Select";
 import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
+import RentStatusRow from "./RentStatusRow";
 
+
+const ORDER_OPTIONS = {
+    rentDt:"대출일",
+    haveToReturnDt:"반납예정일"
+}
 
 const Wrapper = styled.div`
     
@@ -45,26 +50,21 @@ const Tbody = styled.tbody`
     border-color: inherit;
 `;
 
-const ArrangeSelectWrapper = styled.div`
+const SelectGroup = styled.div`
     float: right;
 `;
 
-const Td = styled.td`
-    font-size: 15px;
-    padding: 10px 5px 10px 5px;
-`;
-
-const Select = styled.select`
-    font-size: 13.55px;
-    box-sizing: border-box;
-    padding-left: 9px;
-    color: #5a5a5a;
-    background-color: #e8e8e8;
-    border: none;
-    height: 25px;
-    margin-right: 3px;
-    padding-right: 24px;
-`;
+// const Select = styled.select`
+//     font-size: 13.55px;
+//     box-sizing: border-box;
+//     padding-left: 9px;
+//     color: #5a5a5a;
+//     background-color: #e8e8e8;
+//     border: none;
+//     height: 25px;
+//     margin-right: 3px;
+//     padding-right: 24px;
+// `;
 
 export interface IRentStatusBookInfo {
     bookNo:number,
@@ -81,14 +81,25 @@ function RentStatus(){
    
     const onSuccess =(data:any)=>{
         setRentStatus(data.data);
+        setRentStatus( data.data.sort(function(a:IRentStatusBookInfo,b:IRentStatusBookInfo){
+            return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
+        }));  
     }
     const {isLoading} = useGetRentStatus({userNo:authUserInfo.userNo,onSuccess});
 
-    //연장 신청 개별 신청 api 핸들러
+    //도서 대여 연장 
     const {mutate:extendBookMutate} = useExtendBook();
-    const clickedExtendBook = (bookNo:number)=>{
+    const clickedExtendBook = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
+        const bookNo = parseInt(e.currentTarget.value);
         extendBookMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo})
-    }
+    },[]);
+
+    //도서 반납
+    const {mutate:returnMutate} = useReturnBook();
+    const clickedReturnBook = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
+        const bookNo = parseInt(e.currentTarget.value);
+        returnMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo});
+    },[]);
 
 
     //전체 선택 핸들러
@@ -116,14 +127,14 @@ function RentStatus(){
     }
 
     //정렬 핸들러
-    const arrangeHandler = (e:React.ChangeEvent<HTMLSelectElement>)=>{
+    const changeOrder = (e:React.ChangeEvent<HTMLSelectElement>)=>{
         const selectValue = e.currentTarget.value;
-        if(selectValue=="renTdt"){
+        if(selectValue=="rentDt"){
             setRentStatus( [...rentStatus].sort(function(a:IRentStatusBookInfo,b:IRentStatusBookInfo){
                 return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
             }));  
         }
-        else if(selectValue=="returnDt"){
+        else if(selectValue=="haveToReturnDt"){
             setRentStatus( [...rentStatus].sort(function(a:IRentStatusBookInfo,b:IRentStatusBookInfo){
                 return Number.parseInt(b.haveToReturnDt).valueOf() - Number.parseInt(a.haveToReturnDt).valueOf();
             }));  
@@ -135,31 +146,25 @@ function RentStatus(){
         console.log(checkItems);
     }
 
-    const {mutate:returnMutate} = useReturnBook();
-    const clickedReturnBook = (bookNo:number)=>{
-        returnMutate.mutate({userNo:authUserInfo.userNo,bookNo:bookNo});
-    }
+    
 
     
     return (
         <Wrapper>
             <MyLibraryTitle title="대출 현황" />
+            
             <RentRuleExplainComponent />
             
-            <ArrangeSelectWrapper>
-                <Select name="Arrange" id="Arrange" onChange={arrangeHandler}>
-                    <option value="renTdt">대출일</option>
-                    <option value="returnDt">반납 예정일</option>
-                </Select>
-            </ArrangeSelectWrapper>
+            <SelectGroup>
+                <Select id="orderCategory" name="orderCategory" onChange={changeOrder} optionList={ORDER_OPTIONS} /> 
+            </SelectGroup>
 
             {/* <div>
                 <button name="returnAllBtn" onClick={extendRequestAllHandler}>선택반납연기</button>
             </div> */}
 
             {
-                isLoading ? <Loading />
-                :
+                
                 <TableContainer>
                     <Table>
                         <Thead>
@@ -178,50 +183,16 @@ function RentStatus(){
                                 <Th>반납예정일</Th>
                                 <Th>상태</Th>
                                 <Th>반납</Th>
-                                <Th>반납 연장</Th>
+                                <Th>연장</Th>
                             </tr>  
                         </Thead>
                         <Tbody>
                             {
-                                rentStatus?.map((data,index)=>{
+                                isLoading ? <Loading />
+                                : rentStatus?.map((data)=>{
                                     return (
-                                    <tr key={data.bookNo}>
-                                        <Td>
-                                            <input 
-                                                value={data.bookNo}
-                                                type="checkbox"
-                                                checked={checkItems.includes(data.bookNo)}
-                                                onChange={handleSingleCheckItem}
-                                            />
-                                        </Td>
-                                        <Td>
-                                            {index+1}
-                                        </Td>
-                                        <Td>
-                                            <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
-                                                {data.bookName}
-                                            </Link>
-                                        </Td>
-                                        <Td>
-                                            {replaceDt(data.rentDt)}
-                                        </Td>
-                                        <Td>
-                                            {replaceDt(data.haveToReturnDt)}
-                                        </Td>
-                                        <Td>
-                                            {
-                                                data.rentDt>data.haveToReturnDt 
-                                                ? "연체"
-                                                : "대여"
-                                            }
-                                        </Td>
-                                        <Td>
-                                            <button onClick={()=>clickedReturnBook(data.bookNo)}>반납</button>
-                                        </Td>
-                                        <Td>
-                                            <button onClick={()=>clickedExtendBook(data.bookNo)} disabled={ data.extensionFlg }>연장</button>
-                                        </Td>
-                                    </tr>)
+                                        <RentStatusRow key={data.bookNo} rentStatusBook={data} extendBook={clickedExtendBook} returnBook={clickedReturnBook}/>
+                                    )
                                 })
                             }
                         </Tbody>

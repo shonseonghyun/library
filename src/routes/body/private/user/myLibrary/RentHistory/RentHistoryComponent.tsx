@@ -1,16 +1,25 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { replaceDt } from "../../../../../../api/utils";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 import Loading from "../../../../../../component/loading/Loading";
+import Select from "../../../../../../component/slsect/Select";
 import { useGetRentHistory } from "../../../../../../hooks/hooks";
+import RentHistoryRow from "./RentHistoryRow";
+
+const ORDER_OPTIONS = {
+    rentDt:"대출일",
+    returnDt:"반납일"
+}
 
 const Wrapper = styled.div`
     width:100%;
 `;
+
+const SelectGroup = styled.div`
+    float: right;
+`;  
 
 const Table = styled.table`
     border-spacing: 0;
@@ -43,13 +52,8 @@ const Tbody = styled.tbody`
     border-color: inherit;
 `;
 
-const Td = styled.td`
-    font-size: 15px;
-    padding: 10px 5px 10px 5px;
-`;
-
-
-interface IBookHistoryInfo {
+export interface IRentHistoryBookInfo {
+    historyNo:number,
     bookNo:number,
     bookName:string,
     rentDt:string,
@@ -62,80 +66,67 @@ interface IBookHistoryInfo {
 
 function RentHistory(){
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
-    const [bookHistory,setBookHistory] = useState<IBookHistoryInfo[]>([]);
+    const [rentHistory,setRentHistory] = useState<IRentHistoryBookInfo[]>([]);
 
     const onSuccess=(data:any)=>{
         if(data.code=="S00"){
-            setBookHistory(data.data);
+            // setRentHistory(data.data);
+            //받아올 때부터 정렬
+            setRentHistory( data.data.sort(function(a:IRentHistoryBookInfo,b:IRentHistoryBookInfo){
+                return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
+            }));  
         }
     }
     const {isLoading}= useGetRentHistory({userNo:authUserInfo.userNo,onSuccess:onSuccess});
+
+    //정렬 핸들러
+    const changeOrder = (e:React.ChangeEvent<HTMLSelectElement>)=>{
+        const selectValue = e.currentTarget.value;
+        if(selectValue=="rentDt"){
+            setRentHistory( [...rentHistory].sort(function(a:IRentHistoryBookInfo,b:IRentHistoryBookInfo){
+                return Number.parseInt(b.rentDt).valueOf() - Number.parseInt(a.rentDt).valueOf();
+            }));  
+        }
+        else if(selectValue=="returnDt"){
+            setRentHistory( [...rentHistory].sort(function(a:IRentHistoryBookInfo,b:IRentHistoryBookInfo){
+                return Number.parseInt(b.returnDt).valueOf() - Number.parseInt(a.returnDt).valueOf();
+            }));  
+        }
+    }
 
     return (
         <Wrapper>
             <MyLibraryTitle title="대출 이력" />
             
-            {
-                isLoading ? <Loading />
-                :
-                <TableContainer>
-                    <Table>
-                        <Thead>
-                            <tr>
-                            <Th>번호</Th>
-                                <Th>도서정보</Th>
-                                <Th>대출일</Th>
-                                <Th>반납일</Th>
-                                <Th>상태</Th>
-                                <Th>연체</Th>
-                                <Th>연장</Th>
-                            </tr>  
-                        </Thead>
-                        <Tbody>
-                            {
-                                bookHistory?.map((data,index)=>{
-                                    return (
-                                    <tr key={index}>
-                                        <Td>
-                                            {index+1}
-                                        </Td>
-                                        <Td>
-                                            <Link to={`/book/${data.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
-                                                {data.bookName}
-                                            </Link>
-                                        </Td>
-                                        <Td>
-                                            {replaceDt(data.rentDt)}
-                                        </Td>
-                                    <Td>
-                                            {replaceDt(data.returnDt)}
-                                        </Td>
-                                        <Td>
-                                            {
-                                                data.rentState == "NORMAL_RETURN"
-                                                ? "정상"
-                                                : "연체"
-                                            }
-                                        </Td>
-                                        <Td>
-                                            {
-                                                data.returnDt > data.haveToReturnDt 
-                                                ? parseInt(data.returnDt)-parseInt(data.haveToReturnDt)
-                                                : 0
-                                            }
-                                        </Td>
-                                        <Td>
-                                            {
-                                                data.extensionFlg ? "O" : "X"
-                                            }
-                                        </Td>
-                                    </tr>)
-                                })
-                            }
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-            }
+            <SelectGroup>
+                <Select id="orderCategory" name="orderCategory" onChange={changeOrder} optionList={ORDER_OPTIONS} /> 
+            </SelectGroup>
+
+            <TableContainer>
+                <Table>
+                    <Thead>
+                        <tr>
+                        <Th>번호</Th>
+                            <Th>도서정보</Th>
+                            <Th>대출일</Th>
+                            <Th>반납일</Th>
+                            <Th>상태</Th>
+                            <Th>연체</Th>
+                            <Th>연장</Th>
+                        </tr>  
+                    </Thead>
+                    <Tbody>
+                        {
+                            isLoading ? <Loading />
+                            : rentHistory?.map((data)=>{
+                                return (
+                                    <RentHistoryRow key={data.historyNo}  rentHistoryBook={data}/>
+                                )
+                            })
+                        }
+                    </Tbody>
+                </Table>
+            </TableContainer>
         </Wrapper>
     )
 }

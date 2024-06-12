@@ -149,7 +149,8 @@ const BookResults = () => {
 
     const clickedHeart = useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(isLogin){
-            regHeartMutate.mutate({bookNo:parseInt(e.currentTarget.value),userNo:authUserInfo.userNo});
+            const bookNo = parseInt(e.currentTarget.value);
+            regHeartMutate.mutate({bookNo:bookNo,userNo:authUserInfo.userNo});
         }else{
             setShowing(true);
         }
