@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
+import { replaceDt } from "../../../../../../api/utils";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
+import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
+import Loading from "../../../../../../component/loading/Loading";
 import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
 import RentRuleExplainComponent from "./RentRuleExplainComponent";
-import { replaceDt } from "../../../../../../api/utils";
-import Loading from "../../../../../../component/loading/Loading";
-import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 
 
 const Wrapper = styled.div`
@@ -145,6 +145,7 @@ function RentStatus(){
         <Wrapper>
             <MyLibraryTitle title="대출 현황" />
             <RentRuleExplainComponent />
+            
             <ArrangeSelectWrapper>
                 <Select name="Arrange" id="Arrange" onChange={arrangeHandler}>
                     <option value="renTdt">대출일</option>

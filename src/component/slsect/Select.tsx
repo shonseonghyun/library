@@ -21,7 +21,6 @@ interface ISelectProps{
 
 
 const Select = ({id,name,optionList,sizepPerPage,onChange}:ISelectProps) => {
-    console.log(sizepPerPage);
 
     return (
         <SelectInput id={id} name={name} onChange={onChange}>

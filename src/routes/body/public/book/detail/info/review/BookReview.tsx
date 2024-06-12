@@ -54,6 +54,7 @@ const Tbody = styled.tbody`
     
 const Button =styled.button`
   background-color  : transparent;
+  color:${props=>props.theme.textColor}
 `;
 
 function BookReview({bookNo}:IBookReview){

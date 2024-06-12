@@ -15,7 +15,7 @@ export const lightTheme:DefaultTheme={
     bgColor: "white",
     btnColor:"rgba(52, 152, 219,1.0)",
     disableBtnColor:"#a99e9e9c",
-    inputColor:"white",
+    inputColor:"#E2E2E2",
     textColor:"black",
     btnTextColor:"white",
     borderColor:"#5e02d8",

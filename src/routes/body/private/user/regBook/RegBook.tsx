@@ -36,12 +36,10 @@ const Img = styled.img`
 
 const Input = styled.input`
     font-size: 15px;
-    color: #222222;
     width: 300px;
     border: none;
     border-bottom: solid #aaaaaa 1px;
     padding-bottom: 10px;
-    background: none;
 `
 
 function RegBook(){

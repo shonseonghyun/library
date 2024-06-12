@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Mode } from '../../atoms/Mode';
 
 const Wrapper = styled.div`
+    cursor: pointer;    
     position: fixed;
     bottom: 50px;
     right: 20px;

@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useRecoilValue } from "recoil";
-import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import { getRentHistory } from "../../../../../../api/api";
-import { useQuery } from "react-query";
-import { useGetRentHistory } from "../../../../../../hooks/hooks";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 import { replaceDt } from "../../../../../../api/utils";
-import Loading from "../../../../../../component/loading/Loading";
+import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
+import Loading from "../../../../../../component/loading/Loading";
+import { useGetRentHistory } from "../../../../../../hooks/hooks";
 
 const Wrapper = styled.div`
     width:100%;
@@ -97,7 +95,7 @@ function RentHistory(){
                             {
                                 bookHistory?.map((data,index)=>{
                                     return (
-                                    <tr key={data.bookNo}>
+                                    <tr key={index}>
                                         <Td>
                                             {index+1}
                                         </Td>
@@ -109,7 +107,7 @@ function RentHistory(){
                                         <Td>
                                             {replaceDt(data.rentDt)}
                                         </Td>
-                                        <Td>
+                                    <Td>
                                             {replaceDt(data.returnDt)}
                                         </Td>
                                         <Td>

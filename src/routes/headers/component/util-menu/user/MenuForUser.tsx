@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
@@ -20,7 +20,6 @@ function MenuForUser(){
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const location = useLocation();
-    console.log(location); 
 
     const clickedLogout = ()=>{
         alert("로그아웃 진행");

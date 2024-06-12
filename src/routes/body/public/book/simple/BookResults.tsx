@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 import { AuthUserInfoAtom, isLoginSelector } from '../../../../../atoms/AuthUserInfo';
 import ImgTypeContent from '../../../../../component/Book/ImgTypeContent';
-import GridTypeContent from '../../../../../component/Book/ListTypeContent';
+import ListTypeContent from '../../../../../component/Book/ListTypeContent';
 import Loading from '../../../../../component/loading/Loading';
 import LoginModal from '../../../../../component/login/LoginModal';
 import Pagination from '../../../../../component/page/Pagination';
@@ -203,7 +203,7 @@ const BookResults = () => {
 
     return (
         <>
-        <InquriyResultWrapper>
+            <InquriyResultWrapper>
                 <InquriyCategory>
                    <InquriyCountWrapper>
                     검색결과 총  
@@ -251,13 +251,13 @@ const BookResults = () => {
                         isLoading ? 
                             <Loading /> 
                         :
-                        books?.map((book,index: any) =>{
+                        books?.map((book) =>{
                             return (
                                 <Row key={book.bookNo} $gridType={gridType}>
                                     {
                                         gridType === GridType.ListType
                                         ?
-                                        <GridTypeContent index={index} book={book} regHeart={clickedHeart} rentBook={clickedRent} />
+                                        <ListTypeContent book={book} regHeart={clickedHeart} rentBook={clickedRent} />
                                         :
                                         <ImgTypeContent book={book}  regHeart={clickedHeart} />
                                     }
@@ -271,7 +271,7 @@ const BookResults = () => {
             <LoginModal showing={showing} setShowing={setShowing} />
             <Pagination totalCount={totalCount} sizePerPage={sizePerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
 
-            </>
+        </>
     );
 };
 

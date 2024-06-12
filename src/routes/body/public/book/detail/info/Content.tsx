@@ -17,6 +17,7 @@ const HideWrapper = styled.div<{showing:boolean}>`
 
 const Button =styled.button`
   background-color  : transparent;
+  color:${props=>props.theme.textColor}
 `;
 
 interface IContentProps{

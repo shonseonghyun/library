@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { doLoginFetch } from "../../api/api";
-import { useRecoilState } from "recoil";
-import { AnimatePresence, motion } from "framer-motion";
-import { useLocation, useNavigate } from "react-router-dom";
 import { AuthUserInfoAtom } from "../../atoms/AuthUserInfo";
 
 export interface LoginFormValue{
