@@ -112,7 +112,7 @@ const MyReviews = () => {
     const [reviews,setReviews] = useState<IReviewsResponse[]>([]);
     const [totalCount,setTotalCount] = useState(-1);
     const [currentPage,setCurrentPage] = useState(1);
-    const [sizePerPage,setSizePerPage] = useState(1);
+    const [sizePerPage,setSizePerPage] = useState(5);
     const [showing,setShowing]= useState(false);
 
     const authInfo = useRecoilValue(AuthUserInfoAtom);
@@ -120,7 +120,7 @@ const MyReviews = () => {
 
     const onSuccess=(data:any)=>{
         setReviews(data.data.reviewList);
-        setTotalCount(data.data.totalCnt);
+        setTotalCount(data.data.totalCount);
     }
     const {isLoading,data} = useGetReviewHistory({userNo,currentPage,sizePerPage,totalCount,onSuccess});
     const {mutate:delReviewMutate} = useDelReview();
@@ -128,9 +128,6 @@ const MyReviews = () => {
         delReviewMutate.mutate(reviewNo);
     }
 
-    useEffect(()=>{
-        console.log(totalCount);
-    },[totalCount]);
 
     return (
         <Wrapper>
@@ -160,12 +157,21 @@ const MyReviews = () => {
 
                         <ReviewContentWrapper>
                             <BtnWrapper>
-                                <button style={{borderRight:"1px solid #d2d2d2",padding:"0px 3px"}} onClick={()=>setShowing(true)}>수정</button>
-                                    {/* &nbsp; */}
-                                    {/* &nbsp; */}
-                                <button style={{padding:"0px 3px"}} onClick={()=>clickedDelReview(review.reviewNo)}>
-                                    삭제
-                                </button>
+                                {
+                                    review.reviewNo ?
+                                    <>
+                                        <button style={{borderRight:"1px solid #d2d2d2",padding:"0px 3px"}} onClick={()=>setShowing(true)}>
+                                            수정
+                                        </button>
+                                        <button style={{padding:"0px 3px"}} onClick={()=>clickedDelReview(review.reviewNo)}>
+                                            삭제
+                                        </button>
+                                    </>
+                                    :
+                                    <button style={{borderRight:"1px solid #d2d2d2",padding:"0px 3px"}} onClick={()=>setShowing(true)}>
+                                        작성
+                                    </button>
+                                }
                             </BtnWrapper>
 
                             {review.reviewContent}
@@ -173,8 +179,6 @@ const MyReviews = () => {
                     
                         <ReviewRegDate>
                             {replaceDt(review.regDt)}
-                            {/* &nbsp;
-                            {replaceTm(review.regTm)} */}
                         </ReviewRegDate>
                         {
                             showing
@@ -188,7 +192,7 @@ const MyReviews = () => {
             }
             <div style={{clear:"both"}} /> 
             {
-                totalCount ==0 ? null :
+                totalCount == 0 ? null :
                 <Pagination totalCount={totalCount} sizePerPage={sizePerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
             }
         </Wrapper>

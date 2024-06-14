@@ -12,6 +12,12 @@ const ModifyOverlay =styled.div`
     background-color: rgba(0,0,0,0.5);
 `;
 
+const Label = styled.label`
+    color:${props=>props.theme.textColor};
+    font-size: 20px;
+    font-weight: 800;
+`;
+
 const ReviewModifyModal=styled.div`
     position: fixed;
     z-index: 99;
@@ -59,7 +65,7 @@ const ModifyModal = ({review,setShowing}:IModifyReviewProps) => {
             <ModifyOverlay onClick={()=>setShowing(false)}/>
             <ReviewModifyModal>
                 <div style={{margin: "10px"}}>
-                    <label style={{fontSize:"20px",fontWeight:"800"}}>내용</label>
+                    <Label style={{fontSize:"20px",fontWeight:"800"}}>내용</Label>
                 </div>
                 <div style={{marginBottom:"10px"}}>
                     <input onChange={changeModifyReview} style={{width:"300px",height:"80px",textAlign:"start",paddingTop:"-10px"}} type="text" defaultValue={review.reviewContent}/>

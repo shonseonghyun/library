@@ -48,16 +48,21 @@ interface IPagination{
 }
 
 function Pagination({totalCount,sizePerPage,currentPage,setCurrentPage}:IPagination){
+    console.log(totalCount); //2
+    console.log(sizePerPage); //1
+    console.log(currentPage); //1
     const [backPage,setBackPage] = useState(0);
     const [frontPage,setFrontPage] = useState(0);
     const MaxSizeInPage = 5 ;
     const a = Math.ceil(currentPage/MaxSizeInPage); //올림
     const pageNumbers = [];
     const totalPage = Math.ceil(totalCount / sizePerPage);
+    console.log("totalPage:",totalPage);
 
     for (let i = 1; i <= totalPage; i++) {
         if(currentPage<=MaxSizeInPage*1){
             if(i<=MaxSizeInPage*a){
+                console.log("push:",i);
                 pageNumbers.push(i)
             }
         }

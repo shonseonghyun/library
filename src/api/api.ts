@@ -158,7 +158,7 @@ export const getRentHistory = async (userNo:number)=>{
 
 /*리뷰 히스토리 */
 export const getReviewsHistory = async(userNo:number,currentPage:number,sizePerPage:number)=>{
-    return await PrivateAPI.get(`/review/user/${userNo}?page=${currentPage-1}&size=${sizePerPage}`)
+    return await PrivateAPI.get(`/review/user/${userNo}?page=${currentPage}&size=${sizePerPage}`)
     .then(response=>response?.data);
 }
 
