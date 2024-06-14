@@ -22,6 +22,7 @@ export const useGetMyPage = ({userNo,onSuccess}:IGetApiProps)=>{
             onSuccess(data) {
                 onSuccess(data);
             },
+            refetchOnWindowFocus:false,
         }
     ) 
     return {isLoading};
@@ -236,15 +237,11 @@ interface IRegReview{
     reviewContent:string
 }
 
-export const useRegReview= ()=>{
+export const useRegReview= (onSuccess:any)=>{
     console.log("useRegReview 훅 실행");
     const mutate= useMutation(({userNo,bookNo,reviewContent}:IRegReview)=>postReviewOfBook(userNo,bookNo,reviewContent),{
         onSuccess(data) {
-            if(data.code === "S00"){
-                alert("리뷰 등록하였습니다.");
-            }else{
-                alert(data.msg);
-            }
+            onSuccess(data);
         },
     })
     return {mutate};

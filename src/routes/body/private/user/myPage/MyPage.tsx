@@ -1,14 +1,14 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { replaceDt, replaceTm } from '../../../../../api/utils';
 import { AuthUserInfoAtom } from '../../../../../atoms/AuthUserInfo';
-import { useDelUser, useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
-import { useEffect, useState } from 'react';
-import { replaceDt, replaceTel, replaceTm } from '../../../../../api/utils';
-import { useQueryClient } from 'react-query';
-import Loading from '../../../../../component/loading/Loading';
-import { useNavigate, useNavigation } from 'react-router-dom';
 import SubTitle from '../../../../../component/header/SubTitle';
+import Loading from '../../../../../component/loading/Loading';
+import { useDelUser, useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
 
 const Wrapper = styled.div`
 `;

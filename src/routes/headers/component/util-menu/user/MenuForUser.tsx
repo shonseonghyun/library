@@ -12,6 +12,7 @@ const Item = styled.li`
     p{
         color:${props=>props.theme.textColor};
         font-size: 13px;
+        cursor: pointer;
     }
 `;
 
@@ -23,7 +24,7 @@ function MenuForUser(){
 
     const clickedLogout = ()=>{
         alert("로그아웃 진행");
-        // resetAuthUserInfo();
+        resetAuthUserInfo();
 
         //PrivateRoute내 컴포넌트에서 로그아웃 진행 시 메인페이지로 보내기
         if(location.state?.isEnteredInPrivateRoute){
