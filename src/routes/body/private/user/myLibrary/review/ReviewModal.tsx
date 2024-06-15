@@ -1,9 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IReviewsResponse } from './MyReviews';
-import { useModifyReview } from '../../../../../../hooks/hooks';
+import { useModifyReview, useRegReview } from '../../../../../../hooks/hooks';
+import { IReviewResponse } from './MyReviews';
+import { AuthUserInfoAtom } from '../../../../../../atoms/AuthUserInfo';
+import { useRecoilValue } from 'recoil';
 
-const ModifyOverlay =styled.div`
+const Wrapper = styled.div`
+`;
+
+const ReviewOverlay =styled.div`
     position: fixed;
     top: 0;
     left:0;
@@ -34,35 +39,60 @@ const ReviewModifyModal=styled.div`
 `;
 
 interface IModifyReviewProps{
-    review:IReviewsResponse,
+    // type:string,
+    review:IReviewResponse,
     setShowing:  React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const ModifyModal = ({review,setShowing}:IModifyReviewProps) => {
+const ReviewModal = ({review,setShowing}:IModifyReviewProps) => {
     const [value,setValue] = useState(review.reviewContent);
-
+    const authUserInfo =useRecoilValue(AuthUserInfoAtom);
     const {mutate:modifyReviewMutate}=useModifyReview();
+    
+    const onSuccess = (data:any) =>{    
+        if(data.code === "S00"){
+            alert("리뷰 등록하였습니다.");
+            setShowing(false);
+        }else{
+            alert(data.msg);
+        }
+        
+    }
+    const {mutate:regReviewMutate} = useRegReview(onSuccess);
 
     const changeModifyReview = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setValue(e.currentTarget.value);
     }
 
     const clickedModifyReview = ()=>{
-        if(review.reviewContent != value){
-            modifyReviewMutate.mutate({reviewNo:review.reviewNo,reviewContent:value});
-            setShowing(false);
-            return;
+        if(!(value.trim().length>0)){
+            alert("리뷰 내용을 작성해주세요.");
+            return ;
         }
+        
+        //리뷰 수정
+        if(review.reviewNo){
+            if(review.reviewContent != value){
+                modifyReviewMutate.mutate({reviewNo:review.reviewNo,reviewContent:value});
+                setShowing(false);
+                return;
+            }
+            else{
+                alert("변경 완료하였습니다.");
+                setShowing(false);
+            }
+        }
+        //리뷰 작성
         else{
-            alert("변경 완료하였습니다.");
+            regReviewMutate.mutate({userNo:authUserInfo.userNo,bookNo:review.bookNo,reviewContent:value});
             setShowing(false);
         }
     }
 
 
     return (
-        <>
-            <ModifyOverlay onClick={()=>setShowing(false)}/>
+        <Wrapper>
+            <ReviewOverlay onClick={()=>setShowing(false)}/>
             <ReviewModifyModal>
                 <div style={{margin: "10px"}}>
                     <Label style={{fontSize:"20px",fontWeight:"800"}}>내용</Label>
@@ -74,8 +104,8 @@ const ModifyModal = ({review,setShowing}:IModifyReviewProps) => {
                     <button style={{border:"1px solid black",borderRadius:"5px",padding:"5px"}} onClick={clickedModifyReview}>수정</button>
                 </div>
             </ReviewModifyModal>
-        </>
+        </Wrapper>
     );
 };
 
-export default ModifyModal;
+export default ReviewModal;
