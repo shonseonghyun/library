@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFilePath, replaceDt } from '../../../../../../api/utils';
 import { useDelReview } from '../../../../../../hooks/hooks';
 import { IReviewResponse } from './MyReviews';
 import ReviewModal from './ReviewModal';
+
+
+
 
 const Wrapper = styled.div`
     height: 90px;
@@ -61,18 +64,18 @@ const BtnWrapper = styled.div`
     margin-bottom: 10px;
 `;
 
+
 interface IReviewRowProps{
     review : IReviewResponse,
 }
 
 const ReviewRow = ({review}:IReviewRowProps) => {
+    console.log(review.bookName," 랜더링");
     const [showing,setShowing]= useState(false);
-
     const {mutate:delReviewMutate} = useDelReview();
     const clickedDelReview = (reviewNo:number)=>{
         delReviewMutate.mutate(reviewNo);
     }
-
 
     return (
         <Wrapper>
@@ -86,6 +89,7 @@ const ReviewRow = ({review}:IReviewRowProps) => {
                     </BookTitleWrapper>
                 </Link>
             </BookInfoWrapper>
+
 
             <ReviewContentWrapper>
                 <BtnWrapper>
@@ -116,14 +120,11 @@ const ReviewRow = ({review}:IReviewRowProps) => {
                 showing
                 ?
                 <ReviewModal review={review} setShowing={setShowing} />
-
                 :                
                 null
-                // <ModifyModal  review={review} setShowing={setShowing} />
-
             }
         </Wrapper>
     );
 };
 
-export default ReviewRow;
+export default React.memo(ReviewRow);

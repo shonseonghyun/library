@@ -54,7 +54,7 @@ const Tbody = styled.tbody`
     
 const Button =styled.button`
   background-color  : transparent;
-  color:${props=>props.theme.textColor}
+  color:${props=>props.theme.textColor};
 `;
 
 function BookReview({bookNo}:IBookReview){
@@ -122,9 +122,8 @@ function BookReview({bookNo}:IBookReview){
                         }
                     </Tbody>
                 </Table>
-
             </HideWrapper>
-            <BookRegReview bookNo={bookNo} /> 
+            /* <BookRegReview bookNo={bookNo} />  */
         </Wrapper>
         
 

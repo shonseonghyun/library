@@ -1,13 +1,12 @@
+import { useRef } from "react";
 import { useRecoilValue } from "recoil";
-import { IBookReview } from "./BookReview";
-import { HTMLInputTypeAttribute, useRef, useState } from "react";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../../atoms/AuthUserInfo";
 import { useRegReview } from "../../../../../../../hooks/hooks";
+import { IBookReview } from "./BookReview";
 
 function BookRegReview({bookNo}:IBookReview){
     const isLogin = useRecoilValue(isLoginSelector);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
-    // const [reviewContent,setReviewContent] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
 
     const onSuccess = (data:any) =>{    
@@ -24,7 +23,6 @@ function BookRegReview({bookNo}:IBookReview){
     const {mutate:regReviewMutate} = useRegReview(onSuccess);
 
     const clickedReviewReg = (e:React.MouseEvent<HTMLButtonElement>)=>{
-        console.log("zmffr");
         if(inputRef.current){
             if(inputRef.current.value.trim().length==0){
                 alert("리뷰 내용을 입력해주세요.");
@@ -34,7 +32,6 @@ function BookRegReview({bookNo}:IBookReview){
         }
     }
 
-   
     return (
             isLogin 
             ? 

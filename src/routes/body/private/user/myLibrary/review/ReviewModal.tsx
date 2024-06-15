@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
+import { AuthUserInfoAtom } from '../../../../../../atoms/AuthUserInfo';
 import { useModifyReview, useRegReview } from '../../../../../../hooks/hooks';
 import { IReviewResponse } from './MyReviews';
-import { AuthUserInfoAtom } from '../../../../../../atoms/AuthUserInfo';
-import { useRecoilValue } from 'recoil';
 
 const Wrapper = styled.div`
 `;
@@ -23,13 +23,20 @@ const Label = styled.label`
     font-weight: 800;
 `;
 
-const ReviewModifyModal=styled.div`
+const Input = styled.input`
+    width:300px;
+    height:80px;
+    text-align: start;
+    padding-top: -10px;
+`;
+
+
+const ReviewContentModal=styled.div`
     position: fixed;
     z-index: 99;
     top: 40%;
     left: 50%;
     width : 90% ;
-    /* height : 20vh ; */
 
     max-width: 500px;
     min-width: 300px;
@@ -39,16 +46,14 @@ const ReviewModifyModal=styled.div`
 `;
 
 interface IModifyReviewProps{
-    // type:string,
     review:IReviewResponse,
     setShowing:  React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const ReviewModal = ({review,setShowing}:IModifyReviewProps) => {
-    const [value,setValue] = useState(review.reviewContent);
+    const inputRef = useRef<HTMLInputElement>(null);
     const authUserInfo =useRecoilValue(AuthUserInfoAtom);
-    const {mutate:modifyReviewMutate}=useModifyReview();
-    
+
     const onSuccess = (data:any) =>{    
         if(data.code === "S00"){
             alert("리뷰 등록하였습니다.");
@@ -56,36 +61,37 @@ const ReviewModal = ({review,setShowing}:IModifyReviewProps) => {
         }else{
             alert(data.msg);
         }
-        
     }
+    const {mutate:modifyReviewMutate}=useModifyReview();
     const {mutate:regReviewMutate} = useRegReview(onSuccess);
 
-    const changeModifyReview = (e:React.ChangeEvent<HTMLInputElement>)=>{
-        setValue(e.currentTarget.value);
-    }
+    
 
-    const clickedModifyReview = ()=>{
-        if(!(value.trim().length>0)){
-            alert("리뷰 내용을 작성해주세요.");
-            return ;
-        }
-        
-        //리뷰 수정
-        if(review.reviewNo){
-            if(review.reviewContent != value){
-                modifyReviewMutate.mutate({reviewNo:review.reviewNo,reviewContent:value});
+    const clickedReview = ()=>{
+        if(inputRef.current){
+            if(inputRef.current.value.trim().length>0){
+
+                //리뷰 수정
+                if(review.reviewNo){
+                    if(review.reviewContent != inputRef.current.value){
+                        modifyReviewMutate.mutate({reviewNo:review.reviewNo,reviewContent:inputRef.current.value});
+                    }
+                    else{ // 수정 내용이 없을 시 변경 완료 alert 출력
+                        alert("변경 완료하였습니다.");
+                    }
+                }
+                //리뷰 작성
+                else{
+                    regReviewMutate.mutate({userNo:authUserInfo.userNo,bookNo:review.bookNo,reviewContent:inputRef.current.value});
+                }
                 setShowing(false);
-                return;
             }
+            //리뷰 내용이 없는 경우
             else{
-                alert("변경 완료하였습니다.");
-                setShowing(false);
+                alert("리뷰 내용을 작성해주세요.");
+                return ;
             }
-        }
-        //리뷰 작성
-        else{
-            regReviewMutate.mutate({userNo:authUserInfo.userNo,bookNo:review.bookNo,reviewContent:value});
-            setShowing(false);
+
         }
     }
 
@@ -93,17 +99,18 @@ const ReviewModal = ({review,setShowing}:IModifyReviewProps) => {
     return (
         <Wrapper>
             <ReviewOverlay onClick={()=>setShowing(false)}/>
-            <ReviewModifyModal>
+            <ReviewContentModal>
                 <div style={{margin: "10px"}}>
                     <Label style={{fontSize:"20px",fontWeight:"800"}}>내용</Label>
                 </div>
                 <div style={{marginBottom:"10px"}}>
-                    <input onChange={changeModifyReview} style={{width:"300px",height:"80px",textAlign:"start",paddingTop:"-10px"}} type="text" defaultValue={review.reviewContent}/>
+                    <Input ref={inputRef} 
+                    type="text" defaultValue={review.reviewContent}/>
                 </div>
                 <div style={{marginBottom:"10px"}}>
-                    <button style={{border:"1px solid black",borderRadius:"5px",padding:"5px"}} onClick={clickedModifyReview}>수정</button>
+                    <button style={{border:"1px solid black",borderRadius:"5px",padding:"5px"}} onClick={clickedReview}>수정</button>
                 </div>
-            </ReviewModifyModal>
+            </ReviewContentModal>
         </Wrapper>
     );
 };

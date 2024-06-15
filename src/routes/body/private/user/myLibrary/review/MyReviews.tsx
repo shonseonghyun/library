@@ -1,11 +1,12 @@
-import { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
 import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 import Loading from "../../../../../../component/loading/Loading";
 import Pagination from "../../../../../../component/page/Pagination";
-import { useDelReview, useGetReviewHistory } from "../../../../../../hooks/hooks";
+import Select from "../../../../../../component/slsect/Select";
+import { useGetReviewHistory } from "../../../../../../hooks/hooks";
 import ReviewRow from "./ReviewRow";
 
 export interface IReviewResponse{
@@ -53,6 +54,25 @@ const ReivewsListHeader = styled.div`
     }
 `;
 
+const SelectGroup = styled.div`
+    /* position:relative;
+    right: -10px; */
+    display: flex;
+    justify-content: end;
+`;
+
+
+const ORDER_OPTIONS = {
+    recent:"작성일자",
+    bookTitle:"제목",
+}
+
+enum OrderCategory  {
+    BookTitle = "bookTitle",
+    Recent="recent"
+}
+
+
 const MyReviews = () => {
     const [reviews,setReviews] = useState<IReviewResponse[]>([]);
     const [totalCount,setTotalCount] = useState(-1);
@@ -69,24 +89,54 @@ const MyReviews = () => {
     const {isLoading} = useGetReviewHistory({userNo,currentPage,sizePerPage,totalCount,onSuccess});
 
 
+    const changeOrder = useCallback((e:React.ChangeEvent<HTMLSelectElement>)=>{
+        const orderVal = e.currentTarget.value;
+        
+        if(orderVal ===OrderCategory.Recent){
+            setReviews(
+                [...reviews].sort(function(a,b){
+                    return b.reviewNo-a.reviewNo
+                })
+            )
+        }
+        else if(orderVal===OrderCategory.BookTitle){
+            setReviews(
+                [...reviews].sort(function(a,b){
+                    return b.bookName < a.bookName ? -1 : b.bookName > a.bookName ? 1 : 0;
+                })
+            )
+        }
+    },[reviews]);
+
     return (
         <Wrapper>
             <MyLibraryTitle title="내 리뷰" />
+            
+            <SelectGroup>
+                <Select id='orderCategory' name='orderCategory' onChange={changeOrder} optionList={ORDER_OPTIONS} />
+            </SelectGroup>
 
             <ReivewsListHeader>
                 <span>도서 정보</span>
                 <span>내용</span>
                 <span>작성일</span>
             </ReivewsListHeader>
+
+
+
             {
                 isLoading ? 
                 <Loading />
                 :
                 reviews.map((review,index)=>(
-                    <ReviewRow key={index} review={review} />
+                    <React.Fragment key={index}>
+                        <ReviewRow review={review} />
+                    </React.Fragment>
                 ))
             }
+
             <div style={{clear:"both"}} /> 
+            
             {
                 totalCount == 0 ? null :
                 <Pagination totalCount={totalCount} sizePerPage={sizePerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
