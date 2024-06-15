@@ -2,8 +2,6 @@ import { LoginFormValue } from "../component/login/LoginModal";
 import { IUserModifyProps } from "../hooks/hooks";
 import { PrivateAPI, PublicAPI } from "./instance/axiosInstance";
 
-export const baseUrl="https://3.234.227.180:8000";
-
 export interface IReponse{
     code:string,
     msg:string

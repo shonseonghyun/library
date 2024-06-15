@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { baseUrl } from "../../../../../api/api";
 import { PrivateAPI, PublicAPI } from "../../../../../api/instance/axiosInstance";
 import LoginModal from "../../../../../component/login/LoginModal";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
@@ -16,7 +15,7 @@ function TokenRefresher(){
 
     useEffect(()=>{
         const refreshAPI = axios.create({
-            baseURL:`${baseUrl}`,
+            baseURL:`${process.env.REACT_APP_BASE_URL}`,
             headers:{
                 // "Content-Type":"application/json",
             },
@@ -81,7 +80,7 @@ function TokenRefresher(){
                         console.log("재발급 진행 요청");
 
                         //accessToken 재발급 요청
-                        const response = await axios.post(`${baseUrl}/user/auth/refreshToken/reissue`,{
+                        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/user/auth/refreshToken/reissue`,{
                                  refreshToken: localStorage.getItem("refreshToken")
                                  //  refreshToken: authUserInfo.refreshToken
                         });
