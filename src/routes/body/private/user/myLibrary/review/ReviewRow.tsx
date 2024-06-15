@@ -70,7 +70,6 @@ interface IReviewRowProps{
 }
 
 const ReviewRow = ({review}:IReviewRowProps) => {
-    console.log(review.bookName," 랜더링");
     const [showing,setShowing]= useState(false);
     const {mutate:delReviewMutate} = useDelReview();
     const clickedDelReview = (reviewNo:number)=>{
