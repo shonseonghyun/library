@@ -1,7 +1,8 @@
 import axios from "axios";
+import { baseUrl } from "../api";
 
 export const PrivateAPI = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: baseUrl,
     withCredentials: true, 
     headers:{
         "Content-Type": "application/json",
@@ -9,7 +10,7 @@ export const PrivateAPI = axios.create({
 });
 
 export const PublicAPI = axios.create({
-    baseURL: "http://localhost:8000",
+    baseURL: baseUrl,
     withCredentials: true, 
     headers:{
         "Content-Type": "application/json",
