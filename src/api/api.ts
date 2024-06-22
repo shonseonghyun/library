@@ -171,7 +171,7 @@ export  const postReviewOfBook = async(userNo:number,bookNo:number,reviewContent
 
 /* 회원가입 */
 export const checkExistUserIdFetch= async (userId:string)=>{
-    return await PrivateAPI.get(`/user/userId/${userId}/exist`)
+    return await PublicAPI.get(`/user/userId/${userId}/exist`)
        .then(response=>response.data);
 }
 
