@@ -128,10 +128,8 @@ const MyReviews = () => {
                 isLoading ? 
                 <Loading />
                 :
-                reviews.map((review,index)=>(
-                    <React.Fragment key={index}>
-                        <ReviewRow review={review} />
-                    </React.Fragment>
+                reviews.map((review)=>(
+                        <ReviewRow  key={review.bookNo} review={review} />
                 ))
             }
 
