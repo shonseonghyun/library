@@ -28,7 +28,6 @@ function MenuForUser(){
 
         //PrivateRoute내 컴포넌트에서 로그아웃 진행 시 메인페이지로 보내기
         if(location.state?.isEnteredInPrivateRoute){
-            alert("privateRoute에서 로그아웃 진행");
             navigate("/");
         }
     }
