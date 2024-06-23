@@ -21,13 +21,6 @@ const InputWrapper = styled.div`
     text-align: center;
 `;
 
-const Label = styled.label`
-    display: inline-block;
-    background: white;
-    font-size: 14px;
-    color: #888;
-    font-weight: bold;
-`;
 
 const Img = styled.img`
     width:300px;
@@ -37,10 +30,47 @@ const Img = styled.img`
 const Input = styled.input`
     font-size: 15px;
     width: 300px;
-    border: none;
-    border-bottom: solid #aaaaaa 1px;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
+    padding-top:5px;
 `
+
+const FormWrapper =styled.div`
+    width: 80%;
+    font-size: 28px;
+    padding: 15px 0px;
+    margin:0 auto;
+`;
+
+const Table = styled.table`
+    border:  1px solid #d2d2d2;
+    border-collapse: collapse ;
+`;
+
+const Tbody = styled.tbody`
+    display: table-row-group;
+    vertical-align: middle;
+    unicode-bidi: isolate;
+    border-color: inherit;
+
+
+`;
+
+const Th = styled.th`
+    border:  1px solid #d2d2d2;
+    background-color: #6ab2cb;
+    color:white;
+    padding:10px 20px;
+    text-align: left;
+    white-space: nowrap;
+`;
+
+const Td = styled.td`
+    border:  1px solid #d2d2d2;
+    width: 90%;
+    padding-left: 10px;
+    text-align: left;
+`;
+
 
 function RegBook(){
     const {
@@ -65,7 +95,15 @@ function RegBook(){
     }
 
     const onError=(data:any)=>{
+        console.log(data);
     }
+
+    useEffect(()=>{
+        console.log("useEffect:" , files);
+        if(files==undefined || files.length==0){
+            setPreview("");
+        }
+    },[files])
 
     useEffect(()=>{
         if(files){
@@ -82,116 +120,135 @@ function RegBook(){
         <Wrapper>
             <SubTitle title="도서 등록" />
 
-            <form onSubmit={handleSubmit(onSubmit,onError)} >
-                <InputWrapper>
-                    <Label>도서 제목</Label>
-                    <Input type="text" {
-                        ...register("bookName",
-                            {
-                                required:"도서제목은 필수입니다."
-                            }
-                        )
-                    } />
-                </InputWrapper>
+            <FormWrapper>
+                {
+                    <form onSubmit={handleSubmit(onSubmit,onError)}> 
+                        <Table>
+                            <Tbody>
+                                <tr>
+                                    <Th>제목</Th>
+                                    <Td>
+                                        <Input type="text" {
+                                            ...register("bookName",
+                                                {
+                                                    required:"도서제목은 필수입니다."
+                                                }
+                                            )
+                                        } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>저자</Th>
+                                    <Td>
+                                        <Input type="text" {
+                                            ...register("bookAuthor",
+                                                {
+                                                    required:"저자는 필수입니다."
+                                                }
+                                            )
+                                        } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>ISBN</Th>
+                                    <Td>
+                                        <Input type="text" {
+                                            ...register("isbn",
+                                                {
+                                                    required:"isbn은 필수입니다."
+                                                }
+                                            )
+                                        } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>간단설명</Th>
+                                    <Td>
+                                        <Input type="text" {
+                                            ...register("bookContent",
+                                                {
+                                                    required:"도서 내용은 필수입니다."
+                                                }
+                                            )
+                                        } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>출판사</Th>
+                                    <Td>
+                                        <Input type="text" {
+                                            ...register("bookPublisher",
+                                                {
+                                                    required:"출판사는 필수입니다."
+                                                }
+                                            )
+                                        } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>출판일자</Th>
+                                    <Td>
+                                        <Input type="date" 
+                                            pattern="\d{4}-\d{2}-\d{2}" 
+                                        {
+                                            ...register("pubDt",
+                                                {
+                                                    required:"출판일자는 필수입니다.",
+                                                    pattern:{
+                                                        value: /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
+                                                        message:"날짜 형식에 맞춰 입력 바랍니다"
+                                                    }
+                                                }
+                                            )
+                                        } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>도서 위치</Th>
+                                    <Td>
+                                    <Input type="text" {
+                                        ...register("bookLocation",
+                                            {
+                                                required:"도서위치는 필수입니다."
+                                            }
+                                        )
+                                    } />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Th>도서 이미지</Th>
+                                    <Td>
+                                        <div>
+                                            <Input type="file" {
+                                                ...register("bookImages",
+                                                    {
+                                                        required:"도서 이미지는 필수입니다."
+                                                    }
+                                                )
+                                            }
+                                            />
+                                        </div>
+                                        {preview ? 
+                                            <div>
+                                                <Img
+                                                    src={preview}
+                                                />
+                                            </div>
+                                            : 
+                                            <div/>
+                                        }
+                                    </Td>
+                                </tr>
+                            </Tbody>
+                        </Table>
 
-                <InputWrapper>
-                    <Label>저자</Label>
-                    <Input type="text" {
-                        ...register("bookAuthor",
-                            {
-                                required:"저자는 필수입니다."
-                            }
-                        )
-                    } />
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Label>isbn</Label>
-                    <Input type="text" {
-                        ...register("isbn",
-                            {
-                                required:"isbn은 필수입니다."
-                            }
-                        )
-                    } />
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Label  >간단 설명</Label>
-                    <Input type="text" {
-                        ...register("bookContent",
-                            {
-                                required:"도서 내용은 필수입니다."
-                            }
-                        )
-                    } />
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Label  >출판사</Label>
-                    <Input type="text" {
-                        ...register("bookPublisher",
-                            {
-                                required:"출판사는 필수입니다."
-                            }
-                        )
-                    } />
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Label  >출판일자</Label>
-                    <Input type="date" 
-                        pattern="\d{4}-\d{2}-\d{2}" 
-                    {
-                        ...register("pubDt",
-                            {
-                                required:"출판일자는 필수입니다.",
-                                pattern:{
-                                    value: /^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/,
-                                    message:"날짜 형식에 맞춰 입력 바랍니다"
-                                }
-                            }
-                        )
-                    } />
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Label  >도서 위치</Label>
-                    <Input type="text" {
-                        ...register("bookLocation",
-                            {
-                                required:"도서위치는 필수입니다."
-                            }
-                        )
-                    } />
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Label  >도서 이미지</Label>
-                    <Input type="file" {
-                        ...register("bookImages",
-                            {
-                                required:"도서 이미지는 필수입니다."
-                            }
-                        )
-                    }
-                    />
-                </InputWrapper>
-                <InputWrapper>
-                    {preview ? 
-                        <Img
-                            src={preview}
-                        />
-                        : 
-                        <div/>
-                    }
-                </InputWrapper>
-
-                <InputWrapper>
-                    <Button>등록</Button>
-                    <Button type="button" onClick={()=>reset()}>초기화</Button>
-                </InputWrapper>
-            </form>
+                        <InputWrapper>
+                            <Button>등록</Button>
+                            <Button type="button" onClick={()=>reset()}>초기화</Button>
+                        </InputWrapper>
+                    </form>
+                }
+            </FormWrapper>
 
 
         </Wrapper>
