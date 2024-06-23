@@ -164,41 +164,45 @@ function RentStatus(){
             </div> */}
 
             {
-                
                 <TableContainer>
-                    <Table>
-                        <Thead>
-                            <tr>
-                                <Th>
-                                    <input 
-                                        type="checkbox" 
-                                        name="select-all"
-                                        onChange={handleAllCheckItems}
-                                        checked={rentStatus?.length == checkItems.length}
-                                    />
-                                </Th>
-                                <Th>번호</Th>
-                                <Th>도서정보</Th>
-                                <Th>대출일</Th>
-                                <Th>반납예정일</Th>
-                                <Th>상태</Th>
-                                <Th>반납</Th>
-                                <Th>연장</Th>
-                            </tr>  
-                        </Thead>
-                        <Tbody>
-                            {
-                                isLoading ? <Loading />
-                                : rentStatus?.map((data)=>{
-                                    return (
-                                        <RentStatusRow key={data.bookNo} rentStatusBook={data} extendBook={clickedExtendBook} returnBook={clickedReturnBook}/>
-                                    )
-                                })
-                            }
-                        </Tbody>
-                    </Table>
+                    {
+                        isLoading ? 
+                            <Loading />
+                        :
+                        <Table>
+                            <Thead>
+                                <tr>
+                                    <Th>
+                                        <input 
+                                            type="checkbox" 
+                                            name="select-all"
+                                            onChange={handleAllCheckItems}
+                                            checked={rentStatus?.length == checkItems.length}
+                                        />
+                                    </Th>
+                                    <Th>번호</Th>
+                                    <Th>도서정보</Th>
+                                    <Th>대출일</Th>
+                                    <Th>반납예정일</Th>
+                                    <Th>상태</Th>
+                                    <Th>반납</Th>
+                                    <Th>연장</Th>
+                                </tr>  
+                            </Thead>
+                            <Tbody>
+                                {
+                                    rentStatus?.map((data)=>{
+                                            return (
+                                                    <RentStatusRow key={data.bookNo} rentStatusBook={data} extendBook={clickedExtendBook} returnBook={clickedReturnBook}/>
+                                                )
+                                            })
+                                        }
+                            </Tbody>
+                        </Table>
+                    }
                 </TableContainer>
             }
+
         </Wrapper>
     );
 }

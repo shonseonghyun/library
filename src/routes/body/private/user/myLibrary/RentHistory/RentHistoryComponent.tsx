@@ -103,29 +103,34 @@ function RentHistory(){
             </SelectGroup>
 
             <TableContainer>
-                <Table>
-                    <Thead>
-                        <tr>
-                        <Th>번호</Th>
-                            <Th>도서정보</Th>
-                            <Th>대출일</Th>
-                            <Th>반납일</Th>
-                            <Th>상태</Th>
-                            <Th>연체</Th>
-                            <Th>연장</Th>
-                        </tr>  
-                    </Thead>
-                    <Tbody>
-                        {
-                            isLoading ? <Loading />
-                            : rentHistory?.map((data)=>{
-                                return (
-                                    <RentHistoryRow key={data.historyNo}  rentHistoryBook={data}/>
-                                )
-                            })
-                        }
-                    </Tbody>
-                </Table>
+            {
+                isLoading ?
+                <Loading />
+                :
+                    <Table>
+                        <Thead>
+                            <tr>
+                            <Th>번호</Th>
+                                <Th>도서정보</Th>
+                                <Th>대출일</Th>
+                                <Th>반납일</Th>
+                                <Th>상태</Th>
+                                <Th>연체</Th>
+                                <Th>연장</Th>
+                            </tr>  
+                        </Thead>
+                        <Tbody>
+                            {
+                                isLoading ? <Loading />
+                                : rentHistory?.map((data)=>{
+                                    return (
+                                        <RentHistoryRow key={data.historyNo}  rentHistoryBook={data}/>
+                                    )
+                                })
+                            }
+                        </Tbody>
+                    </Table>
+            }
             </TableContainer>
         </Wrapper>
     )
