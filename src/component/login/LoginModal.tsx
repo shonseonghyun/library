@@ -31,6 +31,7 @@ const MotionWrapper = styled(motion.div)`
 const Wrapper = styled.div`
     width: 100%;
     height: 100%;
+    background-color: ${props=>props.theme.bgColor};
 `;
 
 const PopHeader = styled.div`
@@ -53,7 +54,6 @@ const RightWrapper = styled.div`
 `;
 
 const LoginFormWrapper = styled.div`
-    /* background-color: red; */
     height: 40%;
     margin: 0 auto;
     width: 300px;
@@ -90,9 +90,10 @@ const SocialLogins = styled.div`
 `;
 
 const SocialLoginBtn = styled.button`
+    background-color: transparent;
     img{
-        width: 30px;
-        height: 30px;
+        width: 20px;
+        height: 20px;
     }
 `;
 
@@ -138,7 +139,6 @@ interface ILoginModalProps{
 
 
 const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginModalProps) => {
-    const location = useLocation();
     const navigate  = useNavigate();
     // const from = location?.state?.redirectedFrom?.pathName || '/';
 

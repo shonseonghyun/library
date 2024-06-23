@@ -13,17 +13,6 @@ import { useDelUser, useGetMyPage, useModifyUser } from '../../../../../hooks/ho
 const Wrapper = styled.div`
 `;
 
-const SubSearchWrapper =styled.div`
-    background:linear-gradient(to right, rgba(72, 52, 212,1.0), white); 
-`;
-
-const SearchWrapper =styled.div`
-    width: 80%;
-    font-size: 28px;
-    padding: 15px 0px;
-    margin:0 auto;
-`;
-
 const FormWrapper =styled.div`
     width: 80%;
     font-size: 28px;

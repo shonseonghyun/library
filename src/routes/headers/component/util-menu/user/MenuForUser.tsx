@@ -25,6 +25,10 @@ function MenuForUser(){
     const clickedLogout = ()=>{
         alert("로그아웃 진행");
         resetAuthUserInfo();
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userNo");
 
         //PrivateRoute내 컴포넌트에서 로그아웃 진행 시 메인페이지로 보내기
         if(location.state?.isEnteredInPrivateRoute){

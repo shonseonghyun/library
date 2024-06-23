@@ -123,7 +123,6 @@ function BookReview({bookNo}:IBookReview){
                     </Tbody>
                 </Table>
             </HideWrapper>
-            /* <BookRegReview bookNo={bookNo} />  */
         </Wrapper>
         
 
