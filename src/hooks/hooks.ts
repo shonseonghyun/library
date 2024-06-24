@@ -22,7 +22,6 @@ export const useGetMyPage = ({userNo,onSuccess}:IGetApiProps)=>{
             onSuccess(data) {
                 onSuccess(data);
             },
-            refetchOnWindowFocus:false,
         }
     ) 
     return {isLoading};

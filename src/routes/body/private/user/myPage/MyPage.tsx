@@ -87,12 +87,13 @@ export interface IUserInfo{
 }
 
 const MyPage = () => {
+    console.log("Mypage 랜더링");
     const authInfo = useRecoilValue(AuthUserInfoAtom);
     const navigate = useNavigate();
     const {register,handleSubmit,getValues,reset} = useForm<IModifyProps>();
+    
     const {mutate:modifyUserMutate} = useModifyUser(authInfo.userNo);
     const [userInfo,setUserInfo] = useState<IUserInfo>();
-    const queryClient = useQueryClient();
 
     
     const onSuccessGetMyPage= (data:any)=>{
@@ -114,7 +115,6 @@ const MyPage = () => {
         if(getValues("passwordCheck")==getValues("userPwd")){
             modifyUserMutate.mutate(data);
             reset();
-            queryClient.removeQueries();
         }
         else{
             alert("패스워드가 일치하지 않습니다. 확인 바랍니다.");
@@ -261,7 +261,7 @@ const MyPage = () => {
                                     <Td>
                                         {replaceDt(userInfo?.modifiedDt!)} 
                                             &nbsp;
-                                        {replaceTm(userInfo?.createdTm!)}
+                                        {replaceTm(userInfo?.modifiedTm!)}
                                     </Td>
                                 </tr>
                                 
