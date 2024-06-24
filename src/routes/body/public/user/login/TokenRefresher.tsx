@@ -1,16 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { PrivateAPI, PublicAPI } from "../../../../../api/instance/axiosInstance";
-import LoginModal from "../../../../../component/login/LoginModal";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { PrivateAPI } from "../../../../../api/instance/axiosInstance";
 import { AuthUserInfoAtom } from "../../../../../atoms/AuthUserInfo";
+import LoginModal from "../../../../../component/login/LoginModal";
 
 
 
 function TokenRefresher(){
     const [showing,setShowing] =useState(false);
-    const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
+    const setAuthUserInfo = useSetRecoilState(AuthUserInfoAtom);
     const resetAuthUserInfo = useResetRecoilState(AuthUserInfoAtom);
 
     useEffect(()=>{
@@ -48,7 +47,6 @@ function TokenRefresher(){
                 const originalConfig = error.config;
                 const code = error.response.data.code;
                 const msg = error.response.data.msg;
-
                 if(code =="T01"){
                     console.log(localStorage.getItem("refreshToken"));
                     if(! (localStorage.getItem("refreshToken")=== "undefined")){
@@ -121,7 +119,15 @@ function TokenRefresher(){
     },[]);
 
     return (
-        <LoginModal showing={showing} setShowing={setShowing}/>
+        <>
+            {
+                showing 
+                ? 
+                    <LoginModal setShowing={setShowing}/>
+                : 
+                null
+            }
+        </>
     );
 }
 

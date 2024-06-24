@@ -132,14 +132,13 @@ const overlayVariants = {
 }
 
 interface ILoginModalProps{
-    showing?:boolean,
     setShowing: React.Dispatch<React.SetStateAction<boolean>>;
     loginAfterUrl ?:string //로그인 후 필요 시 로그인 후처리 페이지로 이동을 위하여 잔달받는  props
     isEnteredInPrivateRoute?: boolean //유저가 직접 privateRoute로 치고 들어오는 경우 메인페이지로 보내기 위해 전달받는 props
 }
 
 
-const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginModalProps) => {
+const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginModalProps) => {
     console.log("LoginModal 랜더링");
     const navigate  = useNavigate();
     const setAuthUserInfo = useSetRecoilState(AuthUserInfoAtom);

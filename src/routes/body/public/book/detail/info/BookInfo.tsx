@@ -177,7 +177,12 @@ function BookInfo({bookNo}:IBookInfo){
                     <Content content={data?.data.bookContent}/>
                 </>
             }
-            <LoginModal showing={showing} setShowing={setShowing} />
+            {
+                showing ? 
+                <LoginModal setShowing={setShowing} />
+                :
+                null
+            }
         </Wrapper>
     )
 }

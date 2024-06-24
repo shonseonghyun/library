@@ -269,7 +269,12 @@ const BookResults = () => {
                 </InquriyResult>
             </InquriyResultWrapper>
 
-            <LoginModal showing={showing} setShowing={setShowing} />
+            {
+                showing ? 
+                <LoginModal setShowing={setShowing} />
+                :
+                null
+            }            
             <Pagination totalCount={totalCount} sizePerPage={sizePerPage} currentPage={currentPage} setCurrentPage={setCurrentPage}/>
 
         </>

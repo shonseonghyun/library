@@ -5,6 +5,7 @@ import { isLoginSelector } from "../../../atoms/AuthUserInfo";
 import LoginModal from "../../../component/login/LoginModal";
 
 function PrivateRoute(){
+    console.log("privateRoute 랜더링");
     const isLogin = useRecoilValue(isLoginSelector);
     const [showing,setShowing] = useState(true);
 
@@ -13,7 +14,7 @@ function PrivateRoute(){
         ? 
         <Outlet />
         : 
-        <LoginModal setShowing={setShowing} showing={showing} isEnteredInPrivateRoute={true} />
+        <LoginModal setShowing={setShowing} isEnteredInPrivateRoute={true} />
     );
 }
 
