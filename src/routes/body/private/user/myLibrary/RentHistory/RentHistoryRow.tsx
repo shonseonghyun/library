@@ -18,9 +18,9 @@ const RentHistoryRow = ({rentHistoryBook}:IRentHistoryRowProps) => {
     return (
         <React.Fragment>
             <tr>
-                <Td>
+                {/* <Td>
                     인덱스
-                </Td>
+                </Td> */}
                 <Td>
                         <Link to={`/book/${rentHistoryBook.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
                             {rentHistoryBook.bookName}

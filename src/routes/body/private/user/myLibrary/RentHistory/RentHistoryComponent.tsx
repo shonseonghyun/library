@@ -110,7 +110,7 @@ function RentHistory(){
                     <Table>
                         <Thead>
                             <tr>
-                            <Th>번호</Th>
+                            {/* <Th>번호</Th> */}
                                 <Th>도서정보</Th>
                                 <Th>대출일</Th>
                                 <Th>반납일</Th>

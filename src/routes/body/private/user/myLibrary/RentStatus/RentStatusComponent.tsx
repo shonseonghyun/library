@@ -180,7 +180,7 @@ function RentStatus(){
                                             checked={rentStatus?.length == checkItems.length}
                                         />
                                     </Th>
-                                    <Th>번호</Th>
+                                    {/* <Th>번호</Th> */}
                                     <Th>도서정보</Th>
                                     <Th>대출일</Th>
                                     <Th>반납예정일</Th>

@@ -8,8 +8,8 @@ const Wrapper = styled.div`
     font-size: 15px;  
 `;
 
-const HideWrapper = styled.div<{showing:boolean}>`
-    display: ${props=>props.showing ? "block" : "none"};
+const HideWrapper = styled.div<{$showing:boolean}>`
+    display: ${props=>props.$showing ? "block" : "none"};
     p{
         font-size: 15px;
     }
@@ -45,7 +45,7 @@ const Content = ({content}:IContentProps) => {
                     </Button>
                 </div>
             </div>
-            <HideWrapper showing={showing}>
+            <HideWrapper $showing={showing}>
                 <p>
                     {content}
                 </p> 

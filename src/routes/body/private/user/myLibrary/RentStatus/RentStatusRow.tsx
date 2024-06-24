@@ -32,10 +32,9 @@ const RentStatusRow = ({rentStatusBook,returnBook,extendBook}:IRentStatusRowProp
                         // onChange={handleSingleCheckItem}
                     />
                 </Td>
-                <Td>
-                    {/* {index+1} */}
+                {/* <Td>
                     index
-                </Td>
+                </Td> */}
                 <Td>
                     <Link to={`/book/${rentStatusBook.bookNo}`} style={{textDecoration:"none",fontSize:"inherit"}}>
                         {rentStatusBook.bookName}
