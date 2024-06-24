@@ -1,6 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useRef } from "react";
-import { useCookies } from "react-cookie";
+import { motion } from "framer-motion";
+import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
@@ -133,7 +132,7 @@ const overlayVariants = {
 }
 
 interface ILoginModalProps{
-    showing:boolean,
+    showing?:boolean,
     setShowing: React.Dispatch<React.SetStateAction<boolean>>;
     loginAfterUrl ?:string //로그인 후 필요 시 로그인 후처리 페이지로 이동을 위하여 잔달받는  props
     isEnteredInPrivateRoute?: boolean //유저가 직접 privateRoute로 치고 들어오는 경우 메인페이지로 보내기 위해 전달받는 props
@@ -141,13 +140,14 @@ interface ILoginModalProps{
 
 
 const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginModalProps) => {
+    console.log("LoginModal 랜더링");
     const navigate  = useNavigate();
     const setAuthUserInfo = useSetRecoilState(AuthUserInfoAtom);
     const {register,handleSubmit,setValue,getValues} = useForm<LoginFormValue>();
     const [isRememberId,onToggle,checkboxRef,doRememberId,rememberId] = useRememberId(false,getValues);
-
+    
     const onSubmit = (loginParams:LoginFormValue)=>{
-        doRememberId();
+        doRememberId(); 
 
         doLoginFetch(loginParams)
         .then((data)=>{
@@ -180,7 +180,7 @@ const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:I
     };
     
     const onInvalid = (data:any)=>{
-        doRememberId();
+        doRememberId(); 
 
         if(data.userId){
             alert(data.userId.message);
@@ -209,88 +209,86 @@ const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:I
     },[])
 
     return (
-        <AnimatePresence>
-        {
-            showing ?
         <>
-        {/* 오버레이 */}
-        <OverlayForLogin
-            variants={overlayVariants}
-            initial="normal"
-            animate="animate"
-            onClick={clickedOverlay}
-        />
+            {/* 오버레이 */}
+            <OverlayForLogin
+                variants={overlayVariants}
+                initial="normal"
+                animate="animate"
+                onClick={clickedOverlay}
+            />
 
-        {/* 로그인 */}
-        <MotionWrapper>
-        <Wrapper>
-            <PopHeader>
-                회원 로그인
-            </PopHeader>
-            <LoginFormWrapper>
-                <Form onSubmit={handleSubmit(onSubmit,onInvalid)}>
-                    <LeftWrapper>
-                        <InputWrapper>
-                            <label style={{marginTop:"5px"}}>
-                                <img style={{width:"15px",height:"15px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAYCAYAAAAVibZIAAACWklEQVQ4ja2VPWgUQRSAv+Q0J4gEbYKImrtCzNX+YBUXlkMEI2S1UiGRYGEhgkhUSJEIKoiNRQoDoqiVjqCCog4MVmJQLM+IhIs/yDWCinjnD5Fn3oZl2N0Y8DWzM++9b97MvPe2jQwJwqgA7AP2A1uATuAzMAlcB244a36neadCgzBaD9wCNmVtCjwH9jhrZhaEBmHUpdGsA1rAJcAAH4A1QAQcAorAWzmFs6aRZCxJiWBcgZ+AqrPmRUL3BngShNFV4JHajetG6ZEGYbQRqOl0t7PmbtbZgzDqA+7otMdZ8yrWtXu2O3ScygOKqH7K80uFduv4Mg+YkNiuO7noQ1s6LvtHaGzXSi760Pg+e4MwKubRVN/r+aVC5Z6awEpgeIEoh9WuqX7zUkhO6tO176VypUMj2F4qV76UypXJ+nRtNhFhe6lcOQqc1ew546x5kOSkJX9Bd96pS6+B28BHYDXQD2xQ3X2gzy/XrDKVojgNHAOWppj8BC4AI86aX74ys6EofK3UN7AVWKVV9kz6grPmXZ7vf5fcSDVayUXpWsuBb8CMs6aZ55N1p0XtoweAbUBHQv0DeApck77qrGn5/mmvvwu46JeeNuhOb60OHHHW3EuFBmEk3+f1xUW+AhPATWnI8sqaFZuBvcAQsEJtJROOO2tm56EKvAwMqJHk5WG/+Xon6tJe2q9LV4CDAo7LdCwBHNXfRCaQudbX0HQb1aUB5dAWhFEVeKiKc86ak3mwjKilZE/otCqRyj9I5DFwarFAFfETf5EJgcox3gOD8UUvVtRv8C8HGn8A1py1P45QIK4AAAAASUVORK5CYII=" />
-                            </label>
-                            <Input type="text" id="userIdId"  placeholder="id" 
-                                defaultValue={rememberId}
-                                {...register("userId", /*해당 값이 name속성의 밸류 */
+            {/* 로그인 */}
+            <MotionWrapper>
+            <Wrapper>
+                <PopHeader>
+                    회원 로그인
+                </PopHeader>
+                <LoginFormWrapper>
+                    <Form onSubmit={handleSubmit(onSubmit,onInvalid)}>
+                        <LeftWrapper>
+                            <InputWrapper>
+                                <label style={{marginTop:"5px"}}>
+                                    <img style={{width:"15px",height:"15px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAYCAYAAAAVibZIAAACWklEQVQ4ja2VPWgUQRSAv+Q0J4gEbYKImrtCzNX+YBUXlkMEI2S1UiGRYGEhgkhUSJEIKoiNRQoDoqiVjqCCog4MVmJQLM+IhIs/yDWCinjnD5Fn3oZl2N0Y8DWzM++9b97MvPe2jQwJwqgA7AP2A1uATuAzMAlcB244a36neadCgzBaD9wCNmVtCjwH9jhrZhaEBmHUpdGsA1rAJcAAH4A1QAQcAorAWzmFs6aRZCxJiWBcgZ+AqrPmRUL3BngShNFV4JHajetG6ZEGYbQRqOl0t7PmbtbZgzDqA+7otMdZ8yrWtXu2O3ScygOKqH7K80uFduv4Mg+YkNiuO7noQ1s6LvtHaGzXSi760Pg+e4MwKubRVN/r+aVC5Z6awEpgeIEoh9WuqX7zUkhO6tO176VypUMj2F4qV76UypXJ+nRtNhFhe6lcOQqc1ew546x5kOSkJX9Bd96pS6+B28BHYDXQD2xQ3X2gzy/XrDKVojgNHAOWppj8BC4AI86aX74ys6EofK3UN7AVWKVV9kz6grPmXZ7vf5fcSDVayUXpWsuBb8CMs6aZ55N1p0XtoweAbUBHQv0DeApck77qrGn5/mmvvwu46JeeNuhOb60OHHHW3EuFBmEk3+f1xUW+AhPATWnI8sqaFZuBvcAQsEJtJROOO2tm56EKvAwMqJHk5WG/+Xon6tJe2q9LV4CDAo7LdCwBHNXfRCaQudbX0HQb1aUB5dAWhFEVeKiKc86ak3mwjKilZE/otCqRyj9I5DFwarFAFfETf5EJgcox3gOD8UUvVtRv8C8HGn8A1py1P45QIK4AAAAASUVORK5CYII=" />
+                                </label>
+                                <Input type="text" placeholder="id" 
+                                    defaultValue={rememberId || ""}
+                                    {...register("userId", /*해당 값이 name속성의 밸류 */
+                                        {
+                                            required: "아이디는 필수 입력입니다." , 
+                                            minLength:{
+                                                value:1,
+                                                message: "1자리 이상 아이디를 입력해주세요."
+                                            }
+                                        }
+                                    )} 
+                                />
+                            </InputWrapper>
+
+                            <InputWrapper>
+                                <label style={{marginTop:"5px"}}>
+                                    <img style={{width:"15px",height:"15px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAYCAYAAAAYl8YPAAAB5UlEQVQ4ja2VS0hWQRTHf5+GokEG4k5QN257bBJaDQwK4SZmpwZitIyoTQWtxA8SQQkXLoSQHpjCoIsK1KHZ6iZoG4Eu2vYJigaZGgeO8nm5j3yczbkz939+nDtzzrklMsxY1wm8AO4AzcAv4DMwEoP/nhaVCjPWdQMLQCOwBawDHcAVYBe4G4NfTsbVpIBagHkFSWYtMfjr4nUt+/OqO2GXUhK7DzQB0zH48tFmDP4PUDbWtQEPVPcyNzPghvrZjOOcTehyYfXqNzNgmwldLuzMdqGw49Iw1t0EHsu1A5eBw4K4HS2fiRj812OYse4RMK6Z7heAqoG1wAHwJAb/qqQFugT8Bh4Cb7UMcs1YVwfcAyaBBqBHYF/kHTAQg39/2nMy1vUD76QUpWhvA9vAhwxxO3AN+BaD30iRSNyUcOSMJN1KDH4/BTQA/AAWxRvr+pIajasIp6g0RvSQUV/OExfB/ibWubdcBBsG9vRZPuf5mWEx+DfAkC4HY/Bz58kMvelqnwuTz2gy1mWN8BWdXStpLzVO5t+e1Jn01S2d9Z+S4hi8jOnXOQlJ3FVgTTIb080Zba3/NtXPaMDYUaPL+H2qmz/1T1Rk8sdqVdFoDP5Z9Qjqle4HurRxi0wGw6pMmxj8R4B/bIyGhxDY7wQAAAAASUVORK5CYII=" />
+                                </label>
+                                <Input type="password" placeholder="pwd" {...register("userPwd", /*해당 값이 name속성의 밸류 */
                                     {
-                                        required: "아이디는 필수 입력입니다." , 
+                                        required: "패스워드는 필수 입력입니다." ,
                                         minLength:{
                                             value:1,
-                                            message: "1자리 이상 아이디를 입력해주세요."
+                                            message: "1자리 이상 패스워드를 입력해주세요."
                                         }
                                     }
-                                )} 
-                            />
-                        </InputWrapper>
+                                )} />
+                            </InputWrapper>
+                        </LeftWrapper>
 
-                        <InputWrapper>
-                            <label style={{marginTop:"5px"}}>
-                                <img style={{width:"15px",height:"15px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAYCAYAAAAYl8YPAAAB5UlEQVQ4ja2VS0hWQRTHf5+GokEG4k5QN257bBJaDQwK4SZmpwZitIyoTQWtxA8SQQkXLoSQHpjCoIsK1KHZ6iZoG4Eu2vYJigaZGgeO8nm5j3yczbkz939+nDtzzrklMsxY1wm8AO4AzcAv4DMwEoP/nhaVCjPWdQMLQCOwBawDHcAVYBe4G4NfTsbVpIBagHkFSWYtMfjr4nUt+/OqO2GXUhK7DzQB0zH48tFmDP4PUDbWtQEPVPcyNzPghvrZjOOcTehyYfXqNzNgmwldLuzMdqGw49Iw1t0EHsu1A5eBw4K4HS2fiRj812OYse4RMK6Z7heAqoG1wAHwJAb/qqQFugT8Bh4Cb7UMcs1YVwfcAyaBBqBHYF/kHTAQg39/2nMy1vUD76QUpWhvA9vAhwxxO3AN+BaD30iRSNyUcOSMJN1KDH4/BTQA/AAWxRvr+pIajasIp6g0RvSQUV/OExfB/ibWubdcBBsG9vRZPuf5mWEx+DfAkC4HY/Bz58kMvelqnwuTz2gy1mWN8BWdXStpLzVO5t+e1Jn01S2d9Z+S4hi8jOnXOQlJ3FVgTTIb080Zba3/NtXPaMDYUaPL+H2qmz/1T1Rk8sdqVdFoDP5Z9Qjqle4HurRxi0wGw6pMmxj8R4B/bIyGhxDY7wQAAAAASUVORK5CYII=" />
-                            </label>
-                            <Input type="password" id="userPwdId"  placeholder="pwd" {...register("userPwd", /*해당 값이 name속성의 밸류 */
-                                {
-                                    required: "패스워드는 필수 입력입니다." ,
-                                    minLength:{
-                                        value:1,
-                                        message: "1자리 이상 패스워드를 입력해주세요."
-                                    }
-                                }
-                            )} />
-                        </InputWrapper>
-                    </LeftWrapper>
-
-                    <RightWrapper>
-                        <LoginBtn type="submit">로그인</LoginBtn>
-                    </RightWrapper>
-                    <LoginOptions>
-                        <label>자동로그인</label>
-                        <input id="autoLoginFlg" type="checkbox" value="true" {...register("autoLogin")} />
-                        
-                        <label>아이디 기억</label>
-                        <input ref={checkboxRef} id="remeberId" type="checkbox" onClick={onToggle} checked={isRememberId}/>
-                    </LoginOptions>
-                </Form>
-                <SocialLogins>
-                    <SocialLoginBtn onClick={naverLogin}>
-                        <SocialLoginImg style={{border:"0.5px solid black",borderRadius:"5px"}} src={`${process.env.PUBLIC_URL}/img/socialLogin/naver.PNG`} />
-                    </SocialLoginBtn>
-                    <SocialLoginBtn onClick={naverGoogle}>
-                        <SocialLoginImg style={{border:"0.5px solid black",borderRadius:"5px"}} src={`${process.env.PUBLIC_URL}/img/socialLogin/google.PNG`} />
-                    </SocialLoginBtn>
-                </SocialLogins>
-            </LoginFormWrapper>
-        </Wrapper>
-        </MotionWrapper>
+                        <RightWrapper>
+                            <LoginBtn type="submit">로그인</LoginBtn>
+                        </RightWrapper>
+                        <LoginOptions>
+                            <label>자동로그인</label>
+                            <input id="autoLoginFlg" type="checkbox" value="true" {...register("autoLogin")} />
+                            
+                            <label>아이디 기억</label>
+                            <input 
+                                ref={checkboxRef}
+                                id="rememberId" type="checkbox"
+                                onChange={onToggle} 
+                                checked={isRememberId}
+                                />
+                        </LoginOptions>
+                    </Form>
+                    <SocialLogins>
+                        <SocialLoginBtn onClick={naverLogin}>
+                            <SocialLoginImg src={`${process.env.PUBLIC_URL}/img/socialLogin/naver.PNG`} />
+                        </SocialLoginBtn>
+                        <SocialLoginBtn onClick={naverGoogle}>
+                            <SocialLoginImg src={`${process.env.PUBLIC_URL}/img/socialLogin/google.PNG`} />
+                        </SocialLoginBtn>
+                    </SocialLogins>
+                </LoginFormWrapper>
+            </Wrapper>
+            </MotionWrapper>
         </>
-        :
-        null
-        }
-        </AnimatePresence>
     );
 };
 

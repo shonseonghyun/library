@@ -16,6 +16,7 @@ const Item = styled.li`
 `;
 
 function MenuForGuest(){
+    console.log("menuForguest 랜더링");
     const [showing,setShowing] = useState(false);
     const [loginAfterUrl,setLoginAfterUrl] = useState("");
 
@@ -31,7 +32,13 @@ function MenuForGuest(){
 
     return (
         <>
-            <LoginModal showing={showing} setShowing={setShowing} loginAfterUrl={loginAfterUrl}/>
+            {
+                showing 
+                ?
+                <LoginModal setShowing={setShowing} loginAfterUrl={loginAfterUrl}/>
+                : 
+                null
+            }
 
             <Item>
                 <p onClick={clickedLogin}>
