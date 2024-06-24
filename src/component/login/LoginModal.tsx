@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
+import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { doLoginFetch } from "../../api/api";
 import { AuthUserInfoAtom } from "../../atoms/AuthUserInfo";
+import useRememberId from "./useRememberId";
 
 export interface LoginFormValue{
     userId     :   string,
@@ -140,12 +142,13 @@ interface ILoginModalProps{
 
 const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginModalProps) => {
     const navigate  = useNavigate();
-    // const from = location?.state?.redirectedFrom?.pathName || '/';
+    const setAuthUserInfo = useSetRecoilState(AuthUserInfoAtom);
+    const {register,handleSubmit,setValue,getValues} = useForm<LoginFormValue>();
+    const [isRememberId,onToggle,checkboxRef,doRememberId,rememberId] = useRememberId(false,getValues);
 
-    const [authUserInfo,setAuthUserInfo] = useRecoilState(AuthUserInfoAtom);
-
-    const {register,handleSubmit,setValue} = useForm<LoginFormValue>();
     const onSubmit = (loginParams:LoginFormValue)=>{
+        doRememberId();
+
         doLoginFetch(loginParams)
         .then((data)=>{
             if(data.code=="S00"){
@@ -175,7 +178,16 @@ const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:I
         })
         ;
     };
+    
+    const onInvalid = (data:any)=>{
+        doRememberId();
 
+        if(data.userId){
+            alert(data.userId.message);
+        }else{
+            alert(data.userPwd.message);
+        }
+    };
        
     const clickedOverlay = useCallback(() =>{
         setShowing(false);
@@ -185,15 +197,6 @@ const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:I
             navigate("/");
         }
     },[])
-
-
-    const onInvalid = (data:any)=>{
-        if(data.userId){
-            alert(data.userId.message);
-        }else{
-            alert(data.userPwd.message);
-        }
-    };
 
     const naverLogin=  useCallback(() =>{
         const url = "http://localhost:8000/api/user/oauth2/authorize/naver"
@@ -231,15 +234,18 @@ const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:I
                             <label style={{marginTop:"5px"}}>
                                 <img style={{width:"15px",height:"15px"}} src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAYCAYAAAAVibZIAAACWklEQVQ4ja2VPWgUQRSAv+Q0J4gEbYKImrtCzNX+YBUXlkMEI2S1UiGRYGEhgkhUSJEIKoiNRQoDoqiVjqCCog4MVmJQLM+IhIs/yDWCinjnD5Fn3oZl2N0Y8DWzM++9b97MvPe2jQwJwqgA7AP2A1uATuAzMAlcB244a36neadCgzBaD9wCNmVtCjwH9jhrZhaEBmHUpdGsA1rAJcAAH4A1QAQcAorAWzmFs6aRZCxJiWBcgZ+AqrPmRUL3BngShNFV4JHajetG6ZEGYbQRqOl0t7PmbtbZgzDqA+7otMdZ8yrWtXu2O3ScygOKqH7K80uFduv4Mg+YkNiuO7noQ1s6LvtHaGzXSi760Pg+e4MwKubRVN/r+aVC5Z6awEpgeIEoh9WuqX7zUkhO6tO176VypUMj2F4qV76UypXJ+nRtNhFhe6lcOQqc1ew546x5kOSkJX9Bd96pS6+B28BHYDXQD2xQ3X2gzy/XrDKVojgNHAOWppj8BC4AI86aX74ys6EofK3UN7AVWKVV9kz6grPmXZ7vf5fcSDVayUXpWsuBb8CMs6aZ55N1p0XtoweAbUBHQv0DeApck77qrGn5/mmvvwu46JeeNuhOb60OHHHW3EuFBmEk3+f1xUW+AhPATWnI8sqaFZuBvcAQsEJtJROOO2tm56EKvAwMqJHk5WG/+Xon6tJe2q9LV4CDAo7LdCwBHNXfRCaQudbX0HQb1aUB5dAWhFEVeKiKc86ak3mwjKilZE/otCqRyj9I5DFwarFAFfETf5EJgcox3gOD8UUvVtRv8C8HGn8A1py1P45QIK4AAAAASUVORK5CYII=" />
                             </label>
-                            <Input type="text" id="userIdId"  placeholder="id" {...register("userId", /*해당 값이 name속성의 밸류 */
-                                {
-                                    required: "아이디는 필수 입력입니다." , 
-                                    minLength:{
-                                        value:1,
-                                        message: "1자리 이상 아이디를 입력해주세요."
+                            <Input type="text" id="userIdId"  placeholder="id" 
+                                defaultValue={rememberId}
+                                {...register("userId", /*해당 값이 name속성의 밸류 */
+                                    {
+                                        required: "아이디는 필수 입력입니다." , 
+                                        minLength:{
+                                            value:1,
+                                            message: "1자리 이상 아이디를 입력해주세요."
+                                        }
                                     }
-                                }
-                            )} />
+                                )} 
+                            />
                         </InputWrapper>
 
                         <InputWrapper>
@@ -266,7 +272,7 @@ const LoginModal = ({showing,setShowing,loginAfterUrl,isEnteredInPrivateRoute}:I
                         <input id="autoLoginFlg" type="checkbox" value="true" {...register("autoLogin")} />
                         
                         <label>아이디 기억</label>
-                        <input id="" type="checkbox" value="" />
+                        <input ref={checkboxRef} id="remeberId" type="checkbox" onClick={onToggle} checked={isRememberId}/>
                     </LoginOptions>
                 </Form>
                 <SocialLogins>
