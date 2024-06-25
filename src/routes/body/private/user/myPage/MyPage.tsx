@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -9,6 +8,9 @@ import { AuthUserInfoAtom } from '../../../../../atoms/AuthUserInfo';
 import SubTitle from '../../../../../component/header/SubTitle';
 import Loading from '../../../../../component/loading/Loading';
 import { useDelUser, useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
+import Radio from './Radio';
+import RadioGroup from './RadioGroup';
+import { userInfo } from 'os';
 
 const Wrapper = styled.div`
 `;
@@ -88,18 +90,25 @@ export interface IUserInfo{
 
 const MyPage = () => {
     console.log("Mypage 랜더링");
+    
+    const [userInfo,setUserInfo] = useState<IUserInfo>();
     const authInfo = useRecoilValue(AuthUserInfoAtom);
     const navigate = useNavigate();
     const {register,handleSubmit,getValues,reset} = useForm<IModifyProps>();
-    
     const {mutate:modifyUserMutate} = useModifyUser(authInfo.userNo);
-    const [userInfo,setUserInfo] = useState<IUserInfo>();
-
     
     const onSuccessGetMyPage= (data:any)=>{
         setUserInfo(data.data);
     }
     const {isLoading} = useGetMyPage({userNo:authInfo.userNo,onSuccess:onSuccessGetMyPage});
+    const [gender,setGender] = useState("");
+    
+    useEffect(()=>{
+        console.log(userInfo?.gender);
+        if(userInfo!==undefined){
+            setGender(userInfo.gender);
+        }
+    },[userInfo]);
     
     const onSuccessDelUser = (data:any)=>{
         if(data.code === "S00"){
@@ -112,6 +121,7 @@ const MyPage = () => {
     const {mutate:delUserMutation} = useDelUser(authInfo.userNo,onSuccessDelUser);
 
     const onValid = (data:IModifyProps)=>{
+        console.log(data);
         if(getValues("passwordCheck")==getValues("userPwd")){
             modifyUserMutate.mutate(data);
             reset();
@@ -215,19 +225,11 @@ const MyPage = () => {
                                 <tr>
                                     <Th>성별</Th>
                                     <Td>
-                                        <label>남성</label>
-                                        <input type="radio" id="male" value="M"  
-                                        // checked={true}
-                                        checked={userInfo?.gender =="M" ? true : undefined} 
-                                        // onClick={()=>console.log("s")} 
-                                        {...register("gender")} />
-                                        
-                                        <label>여성</label>
-                                        <input type="radio" id="female" value="W" 
-                                        // checked={false}
-                                        checked={userInfo?.gender =="W" ? true : undefined}
-                                        {...register("gender")} />
-                                    </Td>
+                                        <RadioGroup value={gender} onChange={setGender}>
+                                            <Radio register={register("gender")} value="M">남성</Radio>
+                                            <Radio register={register("gender")} value="W">여성</Radio>
+                                        </RadioGroup>
+                                    </Td> 
                                 </tr>
                                 <tr>
                                     <Th>이메일</Th>
@@ -244,7 +246,9 @@ const MyPage = () => {
                                         //         value:/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/,
                                         //         message:"휴대폰번호 형식이 유효하지 않습니다."
                                         //     }}
-                                        )} defaultValue={userInfo?.tel}/>
+                                        )} 
+                                        defaultValue={userInfo?.tel}
+                                        />
                                         {/* {userInfo?.tel && replaceTel(userInfo.tel)} */}
                                     </Td>
                                 </tr>
