@@ -10,7 +10,6 @@ import Loading from '../../../../../component/loading/Loading';
 import { useDelUser, useGetMyPage, useModifyUser } from '../../../../../hooks/hooks';
 import Radio from './Radio';
 import RadioGroup from './RadioGroup';
-import { userInfo } from 'os';
 
 const Wrapper = styled.div`
 `;
@@ -75,7 +74,6 @@ export interface IUserInfo{
     userNo:number
     userId:string,
     userName:string,
-    // userPwd: string,
     gender:string,
     provider:string,
     tel:string,
@@ -89,7 +87,6 @@ export interface IUserInfo{
 }
 
 const MyPage = () => {
-    console.log("Mypage 랜더링");
     
     const [userInfo,setUserInfo] = useState<IUserInfo>();
     const authInfo = useRecoilValue(AuthUserInfoAtom);
@@ -101,10 +98,9 @@ const MyPage = () => {
         setUserInfo(data.data);
     }
     const {isLoading} = useGetMyPage({userNo:authInfo.userNo,onSuccess:onSuccessGetMyPage});
-    const [gender,setGender] = useState("");
     
+    const [gender,setGender] = useState("");
     useEffect(()=>{
-        console.log(userInfo?.gender);
         if(userInfo!==undefined){
             setGender(userInfo.gender);
         }
