@@ -264,8 +264,6 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
                             <LoginBtn type="submit">로그인</LoginBtn>
                         </RightWrapper>
                         <LoginOptions>
-                            <label>자동로그인</label>
-                            <input id="autoLoginFlg" type="checkbox" value="true" {...register("autoLogin")} />
                             
                             <label>아이디 기억</label>
                             <input 
@@ -273,7 +271,10 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
                                 id="rememberId" type="checkbox"
                                 onChange={onToggle} 
                                 checked={isRememberId}
-                                />
+                            />
+
+                            <label>자동로그인</label>
+                            <input id="autoLoginFlg" type="checkbox" value="true" {...register("autoLogin")} />
                         </LoginOptions>
                     </Form>
                     <SocialLogins>

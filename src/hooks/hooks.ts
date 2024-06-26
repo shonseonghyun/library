@@ -82,7 +82,6 @@ interface IUseInquriyBooksProps{
 }
 
 export const useInquiryBooks= ({category,inquiryWord,currentPage,sizePerPage,totalCount,onSuccess}:IUseInquriyBooksProps) =>{
-    console.log("hook실행");
     const {data,isLoading}= useQuery(
         ["inquiryBooksFetch",`${category}/${inquiryWord}?page=${currentPage}&size=${sizePerPage}`], //쿼리키 , 쿼리키로 구분해서 data fetching
         ()=>inquiryBooks(category,inquiryWord,currentPage,sizePerPage,totalCount),
@@ -93,6 +92,10 @@ export const useInquiryBooks= ({category,inquiryWord,currentPage,sizePerPage,tot
                 // setBooks(data.data.bookList);
                 // setTotalCount(data.data.totalCount);
             },
+            onError(err) {
+                console.log(err);
+            },
+            // useErrorBoundary: (error:any)=> error.response?.status > 200
             // cacheTime: 10000, //default 5분
             // staleTime: 2000, //default 0초
             // refetchOnMount:false, 
@@ -145,7 +148,6 @@ export const useGetHeartBooks=({userNo,pageSize}:IHeartBookGetProps)=>{
 }
 
 export const useRegHeartBook= ()=>{
-    console.log("useRegHeartBook 훅 실행");
     const mutate= useMutation(
         ({userNo, bookNo}:IHeartBookMutateProps)=>regHeartBook(userNo,bookNo),
         {
@@ -162,7 +164,6 @@ export const useRegHeartBook= ()=>{
 }
 
 export const useDelHeartBook= (queryClient:QueryClient)=>{
-    console.log("useDelHeartBook 훅 실행");
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps) => delHeartBook(userNo,bookNo),{
             onSuccess: (data) => { 
                     queryClient.invalidateQueries("getAllHearts"); //이게 있으니 새로고침한듯 되네?
@@ -181,7 +182,6 @@ export const useDelHeartBook= (queryClient:QueryClient)=>{
 }
 
 export const useRentBook= ()=>{
-    console.log("useRentBook 훅 실행");
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>rentBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
@@ -195,7 +195,6 @@ export const useRentBook= ()=>{
 }
 
 export const useExtendBook= ()=>{
-    console.log("useRentBook 훅 실행");
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>extendBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
@@ -209,7 +208,6 @@ export const useExtendBook= ()=>{
 }
 
 export const useReturnBook= ()=>{
-    console.log("useReturnBook 훅 실행");
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>returnBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
@@ -223,7 +221,6 @@ export const useReturnBook= ()=>{
 }
 
 export const useDelBook= (onSuccess:any)=>{
-    console.log("useDelBook 훅 실행");
     const mutate= useMutation((bookNo:number)=>delBook(bookNo),{
         onSuccess(data) {onSuccess(data)}
     })
@@ -237,7 +234,6 @@ interface IRegReview{
 }
 
 export const useRegReview= (onSuccess:any)=>{
-    console.log("useRegReview 훅 실행");
     const mutate= useMutation(({userNo,bookNo,reviewContent}:IRegReview)=>postReviewOfBook(userNo,bookNo,reviewContent),{
         onSuccess(data) {
             onSuccess(data);
@@ -288,7 +284,6 @@ export interface IRegBookParams{
 
 
 export const useRegBook= (reset:UseFormReset<IRegBookParams>)=>{
-    console.log("useRegBook 훅 실행");
     const mutate= useMutation((formData:FormData)=>regBook(formData),{
         onSuccess(data) {
             if(data.code === "S00"){
@@ -322,7 +317,6 @@ export const useGetReviewHistory = ({userNo,currentPage,sizePerPage,totalCount,o
 }
 
 export const useDelReview= ()=>{
-    console.log("useDelReview 훅 실행");
     const mutate= useMutation((reviewNo:number)=>delReviewByReviewNo(reviewNo),{
         onSuccess(data) {
             if(data.code === "S00"){
@@ -341,7 +335,6 @@ interface IReviewModifyProps{
 }
 
 export const useModifyReview=()=>{
-    console.log("useModifyReview 훅 실행");
     const mutate= useMutation(({reviewNo,reviewContent}:IReviewModifyProps)=>modifyReviewByReviewNo(reviewNo,reviewContent),{
         onSuccess(data) {
             if(data.code === "S00"){
@@ -353,4 +346,3 @@ export const useModifyReview=()=>{
     })
     return {mutate};
 }
-
