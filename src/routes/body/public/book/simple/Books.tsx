@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import SubTitle from "../../../../../component/header/SubTitle";
 import BookResults from "./BookResults";
+import { ErrorBoundary } from "react-error-boundary";
+import OurError from "../../../../../error/OurError";
 
 const Wrapper = styled.div`
 `;
@@ -30,7 +32,9 @@ function Books(){
     return (
         <Wrapper>
             <SubTitle title="도서 검색 결과" />
-            <BookResults />
+            <ErrorBoundary  FallbackComponent={OurError}>
+                <BookResults />
+            </ErrorBoundary>
         </Wrapper>
     );
 }
