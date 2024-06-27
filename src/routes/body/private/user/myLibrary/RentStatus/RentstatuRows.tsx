@@ -1,23 +1,19 @@
-import React, { useCallback, useState } from "react";
-import { useRecoilValue } from "recoil";
-import styled from "styled-components";
-import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
-import Loading from "../../../../../../component/loading/Loading";
-import Select from "../../../../../../component/slsect/Select";
-import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
-import RentRuleExplainComponent from "./RentRuleExplainComponent";
-import RentStatusRow from "./RentStatusRow";
-
+import React, { useCallback, useState } from 'react';
+import { useExtendBook, useGetRentStatus, useReturnBook } from '../../../../../../hooks/hooks';
+import { IRentStatusBookInfo } from './RentStatus';
+import { AuthUserInfoAtom } from '../../../../../../atoms/AuthUserInfo';
+import { useRecoilValue } from 'recoil';
+import styled from 'styled-components';
+import RentStatusRow from './RentStatusRow';
+import Loading from '../../../../../../component/loading/Loading';
+import Select from '../../../../../../component/slsect/Select';
 
 const ORDER_OPTIONS = {
     rentDt:"대출일",
     haveToReturnDt:"반납예정일"
 }
 
-const Wrapper = styled.div`
-    
-`;
+
 
 const Table = styled.table`
     border-spacing: 0;
@@ -54,27 +50,7 @@ const SelectGroup = styled.div`
     float: right;
 `;
 
-// const Select = styled.select`
-//     font-size: 13.55px;
-//     box-sizing: border-box;
-//     padding-left: 9px;
-//     color: #5a5a5a;
-//     background-color: #e8e8e8;
-//     border: none;
-//     height: 25px;
-//     margin-right: 3px;
-//     padding-right: 24px;
-// `;
-
-export interface IRentStatusBookInfo {
-    bookNo:number,
-    bookName:string,
-    rentDt:string,
-    haveToReturnDt:string,
-    extensionFlg:boolean
-}
-  
-function RentStatus(){
+const RentstatuRows = () => {
     const [rentStatus,setRentStatus]= useState<IRentStatusBookInfo[]>([]);
     const [checkItems,setCheckItems] = useState<number[]>([]);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
@@ -146,16 +122,9 @@ function RentStatus(){
         console.log(checkItems);
     }
 
-    
-
-    
     return (
-        <Wrapper>
-            <MyLibraryTitle title="대출 현황" />
-            
-            <RentRuleExplainComponent />
-            
-            <SelectGroup>
+        <>
+             <SelectGroup>
                 <Select id="orderCategory" name="orderCategory" onChange={changeOrder} optionList={ORDER_OPTIONS} /> 
             </SelectGroup>
 
@@ -202,10 +171,8 @@ function RentStatus(){
                     }
                 </TableContainer>
             }
-
-        </Wrapper>
+        </>
     );
-}
+};
 
-
-export default RentStatus;
+export default RentstatuRows;

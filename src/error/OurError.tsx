@@ -1,30 +1,48 @@
 import { FallbackProps } from 'react-error-boundary';
+import styled from 'styled-components';
+
+const Wrapper =styled.div`
+    width:80%;
+    margin: 0 auto;
+  `;
+
+const ErrorWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+  flex-direction: column;
+`;
+
+const ErrorTitle = styled.div`
+  margin: 50px 0 0 0;
+  font-size: 30px;
+  font-weight: 900;
+`;
+
+const ErrorContent = styled.div`
+  font-size: 25px;
+  margin: 10px 0 50px 0;
+`;
 
 const OurError = ({error,resetErrorBoundary}:FallbackProps) => {
-    console.log(error.code);
-    console.log(resetErrorBoundary);
-    // const { status } = error.response;
-    // const navigate = useNavigate();
-    // // const { title, content } = getErrorMessage();
-    // const isNotAuthorized = status === 401 || status === 403;
-    // const buttonMessage = isNotAuthorized ? '로그인' : '새로고침';
-  
     const onClickHandler = () => {
         resetErrorBoundary();
     };
   
     return (
-      <div className="error-fallback-wrapper">
-        <div className="inner">
-          <h2 className="title">{"title"}</h2>
-          <p className="content">{"content"}</p>
-          <button type="button"
-           onClick={onClickHandler}
-        >
-            {"buttonMessage"}
+      <Wrapper>
+        <ErrorWrapper className="inner">
+          <ErrorTitle>
+            서비스에 접속할 수 없습니다.
+          </ErrorTitle>
+          <ErrorContent>
+            새로고침을 하거나 잠시 후 다시 접속 바랍니다.
+          </ErrorContent>
+          <button type="button"onClick={onClickHandler}>
+            새로고침
           </button>
-        </div>
-      </div>
+        </ErrorWrapper>
+      </Wrapper>
     );
 };
 

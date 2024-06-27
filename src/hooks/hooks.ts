@@ -252,7 +252,7 @@ export const useGetRentStatus= ({userNo,onSuccess}:IGetApiProps) =>{
             onSuccess(data) {
                 onSuccess(data);
             },
-            // refetchOnWindowFocus:false
+            refetchOnWindowFocus:false
         }
     ) 
     return {isLoading};

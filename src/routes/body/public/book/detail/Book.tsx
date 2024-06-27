@@ -3,6 +3,8 @@ import styled from "styled-components";
 import BookReview from "./info/review/BookReview";
 import BookInfo from "./info/BookInfo";
 import SubTitle from "../../../../../component/header/SubTitle";
+import { ErrorBoundary } from "react-error-boundary";
+import OurError from "../../../../../error/OurError";
 
 const Wrapper = styled.div`
     
@@ -27,12 +29,14 @@ function Book(){
             <SubTitle title="상세 정보"/>
 
             <BookInfoWrapper>
-                <BookInfo bookNo={bookNo}/>
+                <ErrorBoundary FallbackComponent={OurError}>
+                    <BookInfo bookNo={bookNo}/>
+                </ErrorBoundary>
             </BookInfoWrapper>
-
-            <BookReviewWrapper className="hio">
+            <BookReviewWrapper>
                 <BookReview bookNo={bookNo}/>
             </BookReviewWrapper>
+
         </Wrapper>
     )
 }

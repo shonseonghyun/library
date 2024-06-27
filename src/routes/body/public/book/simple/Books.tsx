@@ -3,6 +3,7 @@ import SubTitle from "../../../../../component/header/SubTitle";
 import BookResults from "./BookResults";
 import { ErrorBoundary } from "react-error-boundary";
 import OurError from "../../../../../error/OurError";
+import { QueryErrorResetBoundary } from "react-query";
 
 const Wrapper = styled.div`
 `;
@@ -32,9 +33,13 @@ function Books(){
     return (
         <Wrapper>
             <SubTitle title="도서 검색 결과" />
-            <ErrorBoundary  FallbackComponent={OurError}>
-                <BookResults />
-            </ErrorBoundary>
+            <QueryErrorResetBoundary>
+                {({ reset }) => (
+                    <ErrorBoundary  FallbackComponent={OurError}>
+                        <BookResults />
+                    </ErrorBoundary>
+                )}
+            </QueryErrorResetBoundary>
         </Wrapper>
     );
 }

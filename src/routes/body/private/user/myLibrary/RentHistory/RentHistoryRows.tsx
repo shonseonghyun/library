@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 import Loading from "../../../../../../component/loading/Loading";
 import Select from "../../../../../../component/slsect/Select";
 import { useGetRentHistory } from "../../../../../../hooks/hooks";
 import RentHistoryRow from "./RentHistoryRow";
+import { IRentHistoryBookInfo } from './RentHistory';
 
 const ORDER_OPTIONS = {
     rentDt:"대출일",
     returnDt:"반납일"
 }
 
-const Wrapper = styled.div`
-    width:100%;
-`;
+
 
 const SelectGroup = styled.div`
     float: right;
@@ -52,19 +50,7 @@ const Tbody = styled.tbody`
     border-color: inherit;
 `;
 
-export interface IRentHistoryBookInfo {
-    historyNo:number,
-    bookNo:number,
-    bookName:string,
-    rentDt:string,
-    haveToReturnDt:string,
-    returnDt:string,
-    rentState:string,
-    // status:string,
-    extensionFlg:boolean
-}
-
-function RentHistory(){
+const RentHistoryRows = () => {
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const [rentHistory,setRentHistory] = useState<IRentHistoryBookInfo[]>([]);
 
@@ -95,9 +81,7 @@ function RentHistory(){
     }
 
     return (
-        <Wrapper>
-            <MyLibraryTitle title="대출 이력" />
-            
+        <>
             <SelectGroup>
                 <Select id="orderCategory" name="orderCategory" onChange={changeOrder} optionList={ORDER_OPTIONS} /> 
             </SelectGroup>
@@ -132,8 +116,8 @@ function RentHistory(){
                     </Table>
             }
             </TableContainer>
-        </Wrapper>
-    )
-}
+        </>
+    );
+};
 
-export default RentHistory;
+export default RentHistoryRows;

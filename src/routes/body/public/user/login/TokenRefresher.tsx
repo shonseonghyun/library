@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import { PrivateAPI } from "../../../../../api/instance/axiosInstance";
@@ -44,14 +44,17 @@ function TokenRefresher(){
 
             //200 외 응답인 경우
             async (error)=>{
+                if(error.reponse == undefined){
+                    // alert("데이터를 불러올 수 없습니다. 재시도 부탁드립니다.");
+                    return Promise.reject(error); // 리액트 쿼리 onError 탐
+                    // return ; //리액트 쿼리 onSuccess 탐
+                }
+
                 const originalConfig = error.config;
                 const code = error.response.data.code;
                 const msg = error.response.data.msg;
                 if(code =="T01"){
-                    console.log(localStorage.getItem("refreshToken"));
-                    if(! (localStorage.getItem("refreshToken")=== "undefined")){
-                        console.log("진입");
-
+                    if(!(localStorage.getItem("refreshToken")=== "undefined")){
                         /* 기존코드 */
                         // await axios.post(`${baseUrl}/user/auth/refreshToken/reissue`,{
                         //     refreshToken: authUserInfo.refreshToken
@@ -104,7 +107,7 @@ function TokenRefresher(){
                     else{
                         console.log("자동 로그인하지 않음");
                         alert(msg);
-                        // resetAuthUserInfo();
+                        resetAuthUserInfo();
                         localStorage.clear()
                         setShowing(true);
                     }

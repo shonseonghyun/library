@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { replaceDt } from '../../../../../../api/utils';
-import { IRentHistoryBookInfo } from './RentHistoryComponent';
+import { IRentHistoryBookInfo } from './RentHistory';
 
 const Td = styled.td`
     font-size: 15px;

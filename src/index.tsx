@@ -3,27 +3,29 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import App from './App';
-import OurError from './error/OurError';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
 export const queryErrorHandler = (error:any) => {
-  console.log("queryErrorHandler");
-  // toast(`데이터를 가져오지 못했습니다! ${error.message}`);
+  alert("데이터를 불러올 수 없습니다. 재시도 부탁드립니다.");
 };
 
+export const mutateErrorHandler = (error:any) => {
+  alert("사용자 요청에 실패하였습니다. 잠시 후 다시 시도 바랍니다");
+};
 
 const queryClient = new QueryClient({
   defaultOptions:{
     queries:{
       useErrorBoundary:true,
-      // onError:OurError,
+      refetchOnWindowFocus:false,
+      onError: queryErrorHandler,
       retry:0,
-      // useErrorBoundary:true
-      // suspense:true
-      // 
+    },
+    mutations:{
+      onError:mutateErrorHandler,
     }
   }
 });

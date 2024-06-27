@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
-import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { getFilePath } from "../../../../../../api/utils";
 import { AuthUserInfoAtom, isLoginSelector } from "../../../../../../atoms/AuthUserInfo";
+import Loading from "../../../../../../component/loading/Loading";
 import LoginModal from "../../../../../../component/login/LoginModal";
 import { useDelBook, useGetBook, useRegHeartBook, useRentBook } from "../../../../../../hooks/hooks";
 import Content from "./Content";
@@ -77,7 +77,6 @@ interface IBookInfo{
 
 function BookInfo({bookNo}:IBookInfo){
     const [showing,setShowing] = useState(false); 
-    const queryClient= useQueryClient();
     const isLogin = useRecoilValue(isLoginSelector);
     const authUserInfo = useRecoilValue(AuthUserInfoAtom);
     const navigate = useNavigate();
@@ -134,7 +133,7 @@ function BookInfo({bookNo}:IBookInfo){
             {
                 isLoading
                 ?
-                <p>isLoading</p>
+                <Loading />
                 :
                 <>
                     <input type="hidden" name="bookNo" value={bookNo} />
