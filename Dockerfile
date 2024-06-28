@@ -1,6 +1,6 @@
 FROM node:16.20.2
 
-WORKDIR /home/ec2-user/front
+WORKDIR /app
 
 COPY pacakage.sjon package-lock.json ./
 
@@ -10,4 +10,4 @@ COPY . ./
 
 EXPOSE 3000
 
-CMD ["npm","start"]
+CMD ["npm","start"] 
