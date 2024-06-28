@@ -27,8 +27,8 @@ function Body(){
                 <Route element={<PublicRoute />}>
                     <Route path="/" element={<Main/> }/>
                     <Route path="/join" element={<Join />} />
+                    <Route path="/book/:bookNo" element={<Book />} />
                     <Route path="/book/inquiry/:category/:inquiryWord" element={<Books />} />
-                    <Route path="/book/:bookNo  " element={<Book />} />
                     <Route path="/api/user/login/oauth" element={<OauthLoginSuccess />} />
                 </Route>
 
@@ -44,7 +44,7 @@ function Body(){
                     <Route path="/user/myPage" element={<MyPage /> } />
                 </Route>
 
-                <Route path="*" element={<NotFound />} />
+                {/* <Route path="*" element={<NotFound />} /> */}
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} position='bottom-right' /> 
         </div>

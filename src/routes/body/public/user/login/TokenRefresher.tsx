@@ -44,7 +44,7 @@ function TokenRefresher(){
 
             //200 외 응답인 경우
             async (error)=>{
-                if(error.reponse == undefined){
+                if(error.response ===undefined){
                     // alert("데이터를 불러올 수 없습니다. 재시도 부탁드립니다.");
                     return Promise.reject(error); // 리액트 쿼리 onError 탐
                     // return ; //리액트 쿼리 onSuccess 탐
