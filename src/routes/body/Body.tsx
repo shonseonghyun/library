@@ -44,7 +44,7 @@ function Body(){
                     <Route path="/user/myPage" element={<MyPage /> } />
                 </Route>
 
-                {/* <Route path="*" element={<NotFound />} /> */}
+                <Route path="*" element={<NotFound />} />
             </Routes>
             <ReactQueryDevtools initialIsOpen={false} position='bottom-right' /> 
         </div>
