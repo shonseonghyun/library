@@ -1,10 +1,11 @@
+import { ErrorBoundary } from "react-error-boundary";
+import { QueryErrorResetBoundary } from "react-query";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import BookReview from "./info/review/BookReview";
-import BookInfo from "./info/BookInfo";
 import SubTitle from "../../../../../component/header/SubTitle";
-import { ErrorBoundary } from "react-error-boundary";
 import OurError from "../../../../../error/OurError";
+import BookInfo from "./info/BookInfo";
+import BookReview from "./info/review/BookReview";
 
 const Wrapper = styled.div`
     
@@ -29,14 +30,19 @@ function Book(){
             <SubTitle title="상세 정보"/>
 
             <BookInfoWrapper>
-                <ErrorBoundary FallbackComponent={OurError}>
-                    <BookInfo bookNo={bookNo}/>
-                </ErrorBoundary>
+                <QueryErrorResetBoundary>
+                    {({ reset }) => (
+                        <ErrorBoundary onReset={reset}  FallbackComponent={OurError}>
+                        <BookInfo bookNo={bookNo}/>
+
+                        </ErrorBoundary>
+                    )}
+                </QueryErrorResetBoundary>
             </BookInfoWrapper>
+
             <BookReviewWrapper>
                 <BookReview bookNo={bookNo}/>
             </BookReviewWrapper>
-
         </Wrapper>
     )
 }

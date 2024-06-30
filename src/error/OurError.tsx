@@ -25,9 +25,6 @@ const ErrorContent = styled.div`
 `;
 
 const OurError = ({error,resetErrorBoundary}:FallbackProps) => {
-    const onClickHandler = () => {
-        resetErrorBoundary();
-    };
   
     return (
       <Wrapper>
@@ -38,7 +35,7 @@ const OurError = ({error,resetErrorBoundary}:FallbackProps) => {
           <ErrorContent>
             새로고침을 하거나 잠시 후 다시 접속 바랍니다.
           </ErrorContent>
-          <button type="button"onClick={onClickHandler}>
+          <button type="button" onClick={resetErrorBoundary}>
             새로고침
           </button>
         </ErrorWrapper>

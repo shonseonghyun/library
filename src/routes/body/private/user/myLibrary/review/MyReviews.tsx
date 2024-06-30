@@ -3,6 +3,7 @@ import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 import ReviewRows from "./ReviewRows";
 import { ErrorBoundary } from "react-error-boundary";
 import OurError from "../../../../../../error/OurError";
+import { QueryErrorResetBoundary } from "react-query";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -28,9 +29,14 @@ const MyReviews = () => {
     return (
         <Wrapper>
             <MyLibraryTitle title="내 리뷰" />
-            <ErrorBoundary FallbackComponent={OurError}>
-                <ReviewRows /> 
-            </ErrorBoundary>
+            <QueryErrorResetBoundary>
+                {({ reset }) => (
+                    <ErrorBoundary onReset={reset}  FallbackComponent={OurError}>
+                        <ReviewRows /> 
+                    </ErrorBoundary>
+                )}
+            </QueryErrorResetBoundary>
+
         </Wrapper>
     );
 };

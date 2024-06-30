@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions:{
     queries:{
       useErrorBoundary:true,
-      refetchOnWindowFocus:false,
+      // refetchOnWindowFocus:false,
       onError: queryErrorHandler,
       retry:0,
     },

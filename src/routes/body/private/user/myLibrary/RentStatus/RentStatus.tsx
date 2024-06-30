@@ -1,16 +1,10 @@
-import React, { useCallback, useState } from "react";
-import { useRecoilValue } from "recoil";
-import styled from "styled-components";
-import { AuthUserInfoAtom } from "../../../../../../atoms/AuthUserInfo";
-import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
-import Loading from "../../../../../../component/loading/Loading";
-import Select from "../../../../../../component/slsect/Select";
-import { useExtendBook, useGetRentStatus, useReturnBook } from "../../../../../../hooks/hooks";
-import RentRuleExplainComponent from "./RentRuleExplainComponent";
-import RentStatusRow from "./RentStatusRow";
-import RentstatuRows from "./RentstatuRows";
 import { ErrorBoundary } from "react-error-boundary";
+import { QueryErrorResetBoundary } from "react-query";
+import styled from "styled-components";
+import MyLibraryTitle from "../../../../../../component/header/MyLibraryTitle";
 import OurError from "../../../../../../error/OurError";
+import RentRuleExplainComponent from "./RentRuleExplainComponent";
+import RentstatuRows from "./RentstatuRows";
 
 const Wrapper = styled.div`
     
@@ -48,10 +42,13 @@ function RentStatus(){
             
             <RentRuleExplainComponent />
             
-            <ErrorBoundary FallbackComponent={OurError}>
-                <RentstatuRows />
-            </ErrorBoundary>
-
+            <QueryErrorResetBoundary>
+                {({ reset }) => (
+                    <ErrorBoundary onReset={reset}  FallbackComponent={OurError}>
+                        <RentstatuRows />
+                    </ErrorBoundary>
+                )}
+            </QueryErrorResetBoundary>
         </Wrapper>
     );
 }
