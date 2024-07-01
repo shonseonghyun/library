@@ -198,12 +198,12 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
     },[])
 
     const naverLogin=  useCallback(() =>{
-        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/naver`
-        window.location.href=url;
+        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/naver`;
+        window.location.href = url;
     },[])
 
-    const naverGoogle=  useCallback(() =>{
-        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/google`
+    const googleLogin=  useCallback(() =>{
+        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/google`;   
         window.location.href=url;
     },[])
 
@@ -281,7 +281,7 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
                         <SocialLoginBtn onClick={naverLogin}>
                             <SocialLoginImg src={`${process.env.PUBLIC_URL}/img/socialLogin/naver.PNG`} />
                         </SocialLoginBtn>
-                        <SocialLoginBtn onClick={naverGoogle}>
+                        <SocialLoginBtn onClick={googleLogin}>
                             <SocialLoginImg src={`${process.env.PUBLIC_URL}/img/socialLogin/google.PNG`} />
                         </SocialLoginBtn>
                     </SocialLogins>
