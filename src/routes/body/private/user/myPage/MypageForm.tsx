@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { replaceDt, replaceTm } from '../../../../../api/utils';
 import { AuthUserInfoAtom } from '../../../../../atoms/AuthUserInfo';
@@ -70,6 +70,7 @@ interface IModifyProps{
 const MypageForm = () => {
     const [userInfo,setUserInfo] = useState<IUserInfo>();
     const authInfo = useRecoilValue(AuthUserInfoAtom);
+    const  resetUserInfo = useResetRecoilState(AuthUserInfoAtom);
     const navigate = useNavigate();
     const {register,handleSubmit,getValues,reset} = useForm<IModifyProps>();
     const {mutate:modifyUserMutate} = useModifyUser(authInfo.userNo);
@@ -89,6 +90,8 @@ const MypageForm = () => {
     const onSuccessDelUser = (data:any)=>{
         if(data.code === "S00"){
                     alert("탈퇴 처리되었습니다.");
+                    resetUserInfo();
+                    localStorage.clear();
                     navigate("/");
                 }else{
                     alert(data.msg);
