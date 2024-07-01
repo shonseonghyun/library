@@ -108,7 +108,9 @@ const ReviewModal = ({review,setShowing}:IModifyReviewProps) => {
                     type="text" defaultValue={review.reviewContent}/>
                 </div>
                 <div style={{marginBottom:"10px"}}>
-                    <button style={{border:"1px solid black",borderRadius:"5px",padding:"5px"}} onClick={clickedReview}>수정</button>
+                    <button style={{border:"1px solid black",borderRadius:"5px",padding:"5px"}} onClick={clickedReview}>
+                        {review.reviewNo ? "수정" : "작성"}
+                    </button>
                 </div>
             </ReviewContentModal>
         </Wrapper>

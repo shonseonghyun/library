@@ -173,7 +173,7 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
             }
         })
         .catch((err)=>{
-            alert("Fialed to fetch User: "+ err);
+            alert("사용자 요청에 실패하였습니다. 잠시 후 다시 시도해주세요.");
         })
         ;
     };

@@ -1,5 +1,5 @@
 import { UseFormReset } from "react-hook-form";
-import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
+import { QueryClient, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "react-query";
 import { checkExistUserId, delBook, delHeartBook, delReviewByReviewNo, delUser, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 
 
@@ -46,11 +46,13 @@ export const useGetMyPage = ({userNo,onSuccess}:IGetApiProps)=>{
 }
 
 export const useModifyUser = (userNo:number) =>{
+    const queryClient = useQueryClient();
     const mutate = useMutation((data:IUserModifyProps)=>modifyUser(userNo,data),
         {
             onSuccess(data){
                 if(data.code === "S00"){
                     alert("사용자 수정 완료하였습니다.");
+                    queryClient.invalidateQueries("myPage");
                 }else{
                     alert(data.msg);
 
@@ -200,10 +202,12 @@ export const useDelHeartBook= (queryClient:QueryClient)=>{
 }
 
 export const useRentBook= ()=>{
+    const queryClient = useQueryClient();
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>rentBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
                 alert("대출 완료하였습니다.");
+                queryClient.invalidateQueries();
             }else{
                 alert(data.msg);
             }
@@ -213,9 +217,11 @@ export const useRentBook= ()=>{
 }
 
 export const useExtendBook= ()=>{
+    const queryClient = useQueryClient();
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>extendBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
+                queryClient.invalidateQueries("getRentStatus");
                 alert("연장 완료하였습니다.");
             }else{
                 alert(data.msg);
@@ -226,10 +232,12 @@ export const useExtendBook= ()=>{
 }
 
 export const useReturnBook= ()=>{
+    const queryClient = useQueryClient();
     const mutate= useMutation(({userNo, bookNo}:IHeartBookMutateProps)=>returnBook(userNo,bookNo),{
         onSuccess(data) {
             if(data.code === "S00"){
                 alert("반납 완료하였습니다.");
+                queryClient.invalidateQueries("getRentStatus");
             }else{
                 alert(data.msg);
             }
@@ -252,8 +260,10 @@ interface IRegReview{
 }
 
 export const useRegReview= (onSuccess:any)=>{
+    const queryClient = useQueryClient();
     const mutate= useMutation(({userNo,bookNo,reviewContent}:IRegReview)=>postReviewOfBook(userNo,bookNo,reviewContent),{
         onSuccess(data) {
+            queryClient.invalidateQueries("getReviewHistory");
             onSuccess(data);
         },
     })
@@ -334,10 +344,13 @@ export const useGetReviewHistory = ({userNo,currentPage,sizePerPage,totalCount,o
 }
 
 export const useDelReview= ()=>{
+    const queryClient = useQueryClient();
+
     const mutate= useMutation((reviewNo:number)=>delReviewByReviewNo(reviewNo),{
         onSuccess(data) {
             if(data.code === "S00"){
                 alert("리뷰 삭제하였습니다.");
+                queryClient.invalidateQueries("getReviewHistory");
             }else{
                 alert(data.msg);
             }
@@ -352,11 +365,14 @@ interface IReviewModifyProps{
 }
 
 export const useModifyReview=()=>{
+    const queryClient = useQueryClient();
     const mutate= useMutation(({reviewNo,reviewContent}:IReviewModifyProps)=>modifyReviewByReviewNo(reviewNo,reviewContent),{
         onSuccess(data) {
             if(data.code === "S00"){
                 alert("리뷰 수정하였습니다.");
-            }else{
+                queryClient.invalidateQueries("getReviewHistory");
+                }
+            else{
                 alert(data.msg);
             }
         },
