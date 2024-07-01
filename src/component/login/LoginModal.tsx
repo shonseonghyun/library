@@ -198,12 +198,12 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
     },[])
 
     const naverLogin=  useCallback(() =>{
-        const url = "http://localhost:8000/api/user/oauth2/authorize/naver"
+        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/naver`
         window.location.href=url;
     },[])
 
     const naverGoogle=  useCallback(() =>{
-        const url = "http://localhost:8000/api/user/oauth2/authorize/google"
+        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/google`
         window.location.href=url;
     },[])
 
