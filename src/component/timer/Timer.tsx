@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface ITimeLeftState {
     timeLeft: number;
@@ -7,25 +7,29 @@ interface ITimeLeftState {
   }
 
 function Timer({timeLeft,setTimeLeft,setIsExpired}:ITimeLeftState){
-
-    const formatTime = (time:number) => {
+    const formatTime = useCallback((time:number) => {
         const minutes = Math.floor(time / 60);
         const seconds = time % 60;
         return `${minutes.toString().padStart(2, '0')}:${seconds
           .toString()
           .padStart(2, '0')}`;
-      };
+      },[]);
     
+    useEffect(()=>{
+        if(timeLeft==0){
+            setIsExpired(true);
+        }
+    },[timeLeft]);
 
     useEffect(()=>{
         const timer = setInterval(()=>{
             setTimeLeft((prevTime)=>prevTime-1);
         },1000);
 
-        return ()=>{
+        return ()=>{ //해당 effect청소 전 마지막 수행
             clearInterval(timer);
             setTimeLeft(timeLeft); // 시간 원복
-    } //해당 effect청소 전 마지막 수행
+        } 
     },[]);
     
     return (

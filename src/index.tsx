@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
   defaultOptions:{
     queries:{
       useErrorBoundary:true,
-      // refetchOnWindowFocus:false,
+      refetchOnWindowFocus:true,
       onError: queryErrorHandler,
       retry:0,
     },
@@ -31,7 +31,7 @@ const queryClient = new QueryClient({
 });
 
 root.render(
-  <QueryClientProvider client={queryClient}>
+<QueryClientProvider client={queryClient}>
     <RecoilRoot>
       <CookiesProvider>
           <App />

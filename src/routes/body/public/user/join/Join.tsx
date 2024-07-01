@@ -1,11 +1,14 @@
-import {  useEffect, useState } from "react";
-import {  useForm } from "react-hook-form";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { IRequestField, joinUserFetch } from "../../../../../api/api";
+import { getAuthNumber } from "../../../../../component/emailAuth/GetAuthNumber";
 import { ISendEmailHandlerProps, sendEmailAuthNumber } from "../../../../../component/emailAuth/sendEmailAuthNumber";
 import Timer from "../../../../../component/timer/Timer";
-import { getAuthNumber } from "../../../../../component/emailAuth/GetAuthNumber";
-import {  IRequestField, checkExistUserIdFetch, joinUserFetch } from "../../../../../api/api";
-import { useNavigate } from "react-router-dom";
+import { useCheckIdExist } from "../../../../../hooks/hooks";
+import Radio from "../../../private/user/myPage/Radio";
+import RadioGroup from "../../../private/user/myPage/RadioGroup";
 
 const Wrapper = styled.div`
     width  : 80% ;
@@ -26,7 +29,7 @@ const ErrMsg =styled.p`
 `;
 
 const Form = styled.form`
-    background-color: white;
+    background-color: ${props=>props.theme.bgColor};
     width: 350px;
     border: 2px solid black;
     padding: 10px 30px 30px;
@@ -36,9 +39,7 @@ const Form = styled.form`
 `;
 
 const Btn = styled.button`
-    background-color: rgb(93, 93, 230);
     font-size: 16px;
-    color: white;
     font-weight: 600;
     cursor: pointer;
 `;
@@ -54,8 +55,11 @@ interface IInputField{
     gender:string
 }
 
+const emailAuthExpiredTime = 60;
+const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/;
 
 function Join(){
+    const [gender,setGender] = useState("");
     //아이디 중복체크여부
     const [isIdChecked,setIsIdChecked] = useState(false);
     //이메일 인증 요청 유효시간
@@ -65,7 +69,7 @@ function Join(){
     //인증번호
     const [authNumber,setAuthNumber] = useState("");
     //타이머
-    const time = 20;
+    const time = emailAuthExpiredTime;
     const [timeLeft,setTimeLeft] = useState(time);
 
     const navigate = useNavigate();
@@ -87,7 +91,7 @@ function Join(){
             {mode:"onChange",},
     );
 
-    const convertRequestParam = (data:IInputField)=>{
+    const convertRequestParam = useCallback((data:IInputField)=>{
         const requestParam =
         {
             userId:data.userId,
@@ -99,56 +103,64 @@ function Join(){
             useFlg: 0
         }
         return requestParam;       
-    }
+    },[]);
 
-    const onValid= (data:IInputField)=>{
+    //form submit
+    const onValid= useCallback((data:IInputField)=>{
         //앞서서 모든 유효성 검증(ex.이메일 형식,비밀번호 자릿수 등)이 완료된 후 해당 onSubmit으로 들어오게 된다.
         //따라서 해당 부분에선 errors에 대한 처리가 불가하다.
         const requestParam = convertRequestParam(data);
+
+        // console.log(requestParam);
         const response = joinUserFetch(requestParam as IRequestField)
         response.then((response)=>{
             if(response.code=="S00"){
                 alert("회원가입 완료되었습니다. 로그인 바랍니다.");
-                navigate("/login");
+                navigate("/");
             }
             else{
                 alert(response.msg);
             }
         })
-    }
+    },[]);
 
-    const onInValid= (data:any)=>{
-    }
+    //아이디 체크
+    const [doIdCheck,setDoIdCheck] = useState(false);
+    const onSuccess=useCallback((data:any)=>{
+        const idExistFlg = data.data ;
 
-    const handleCheckValidId= ()=>{
+        if(idExistFlg){
+            setError("userId",{message:"중복 아이디 입니다."});
+            setIsIdChecked(false);
+        }else{
+            clearErrors("userId");
+            alert("사용 가능한 아이디입니다.");
+            setIsIdChecked(true);
+        }
+        setDoIdCheck(false);
+    },[]);
+    useCheckIdExist(getValues("userId"),doIdCheck,setDoIdCheck,onSuccess);
+    const handleCheckValidId= useCallback(()=>{
         const userInputId = getValues("userId");
-        if(userInputId==null){
+        if(userInputId==null || userInputId.trim().length==0){
             alert("아이디를 입력해주세요.")
             return ;
         }
-        
-        const reponse = checkExistUserIdFetch(userInputId);
-        reponse.then((response)=>{
-            const idExistFlg = response.data; 
-            if(idExistFlg){
-                setError("userId",{message:"중복 아이디 입니다."});
-                setIsIdChecked(false);
-            }else{
-                clearErrors("userId");
-                alert("사용 가능한 아이디입니다.");
-                setIsIdChecked(true);
-            }
-        })
-    }
-    
-    useEffect(()=>{
-        if(timeLeft==0){
-            setIsExpired(true);
-        }
-    },[timeLeft]);
+        setDoIdCheck(true);
+    },[]);
 
-    
-    const sendEmailAuthNumberHandler=()=>{
+    //이메일 형식 체크
+    const emailCheck = useCallback((email:string)=>{
+        return emailRegEx.test(email);
+    },[]);
+
+    const sendEmailAuthNumberHandler=useCallback(()=>{
+        console.log(getValues("email"));
+        if(!emailCheck(getValues("email"))){
+            alert("메일 형식이 유효하지 않습니다.");
+            return ;
+        }
+
         setIsEmailAuth(false);
         const authNumber = getAuthNumber();
         setAuthNumber(authNumber);
@@ -158,13 +170,14 @@ function Join(){
             authNumber: authNumber
         } 
         setIsExpired(false);
+        setTimeLeft(emailAuthExpiredTime);
         sendEmailAuthNumber(params);
-    }
+    },[]);
 
-    const checkEmailAuthNumber=()=>{
-        if(!isExpired){
+    const checkEmailAuthNumber=useCallback(()=>{
+        if(!isExpired){ //해당 조건식에서 isExpired state값을 사용하기 떄문에 useCallback의존성배열에 포함
             //인증번호 유효한 경우
-            if(authNumber==getValues("authNumber")){
+            if(authNumber==getValues("authNumber")){ //해당 조건식에서 authNumber state값을 사용하기 떄문에 useCallback의존성배열에 포함
                 //인증번호 통과
                 clearErrors("authNumber");
                 setIsEmailAuth(true);
@@ -176,9 +189,10 @@ function Join(){
             //인증번호 유효하지 않은 경우
             setError("authNumber",{message:"인증번호 유효시간이 초과하였습니다. 재인증 바랍니다."})
         }
-    }
+    },[isExpired,authNumber]);
 
-    const ValidAll=(e:React.MouseEvent<HTMLButtonElement>)=>{
+    //이메일 및 아이디 중복 인증 체크
+    const ValidAll=useCallback((e:React.MouseEvent<HTMLButtonElement>)=>{
         if(!isIdChecked){
             alert("아이디 중복 체크 부탁드립니다.");
             e.preventDefault();
@@ -187,12 +201,12 @@ function Join(){
             alert("이메일 인증 부탁드립니다.");
             e.preventDefault();
         }
-    }
+    },[isIdChecked,isEmailAuth]);
 
     return (
         <Wrapper>
 
-        <Form onSubmit={handleSubmit(onValid,onInValid)}>
+        <Form onSubmit={handleSubmit(onValid)}>
             <Input type="text" {...register("userName",{
                 required:{value:true,message:'이름을 입력하세요'}
                 })} placeholder="이름" />
@@ -235,7 +249,9 @@ function Join(){
                     <Input type="text" {...register("authNumber")} placeholder="인증번호" readOnly={isEmailAuth} />
                     {isEmailAuth
                         ?<span>확인 완료</span>
-                        :<button disabled={!watch("authNumber")} type="button" onClick={checkEmailAuthNumber}>인증 하기</button>
+                        :<button 
+                        // disabled={!watch("authNumber")} 
+                        type="button" onClick={checkEmailAuthNumber}>인증 하기</button>
                     }
                 </>
             }
@@ -250,10 +266,14 @@ function Join(){
             <ErrMsg>{errors.tel?.message}</ErrMsg>
 
             <div>
-                <label>남성</label>
+                <RadioGroup value={gender} onChange={setGender}>
+                        <Radio register={register("gender")} value="M">남성</Radio>
+                        <Radio register={register("gender")} value="W">여성</Radio>
+                </RadioGroup>
+                {/* <label>남성</label>
                 <Input  id="male" type="radio"  value="M"  {...register("gender")} />
                 <label>여성</label>
-                <Input id="female" type="radio" checked value="W"  {...register("gender")} />
+                <Input id="female" type="radio" checked value="W"  {...register("gender")} /> */}
             </div>
 
             <Btn onClick={ValidAll}>회원가입</Btn>

@@ -1,6 +1,6 @@
 import { UseFormReset } from "react-hook-form";
 import { QueryClient, useInfiniteQuery, useMutation, useQuery } from "react-query";
-import { delBook, delHeartBook, delReviewByReviewNo, delUser, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
+import { checkExistUserId, delBook, delHeartBook, delReviewByReviewNo, delUser, extendBook, getBookInfoByBookNoFetch, getHeartBooks, getRentHistory, getRentStatus, getReviewsHistory, getUserPage, inquiryBooks, modifyReviewByReviewNo, modifyUser, postReviewOfBook, regBook, regHeartBook, rentBook, returnBook } from "../api/api";
 
 
 export interface IUserModifyProps{
@@ -12,6 +12,24 @@ export interface IUserModifyProps{
 interface IGetApiProps{
     userNo:number,
     onSuccess(data:any):void
+}
+
+export const useCheckIdExist = (inputId:string,doIdCheck:boolean,setDoIdCheck:any,onSuccess:any)=>{
+    useQuery(
+        ["checkIdExist",inputId],
+        ()=> checkExistUserId(inputId),
+        {
+            onSuccess(data) {
+                onSuccess(data);
+            },
+            onError(err){
+                alert("잠시 후 재시도 부탁드립니다.");
+                setDoIdCheck(false);
+            },
+            useErrorBoundary:false,
+            enabled: doIdCheck
+        }
+    );
 }
 
 export const useGetMyPage = ({userNo,onSuccess}:IGetApiProps)=>{
@@ -252,7 +270,6 @@ export const useGetRentStatus= ({userNo,onSuccess}:IGetApiProps) =>{
             onSuccess(data) {
                 onSuccess(data);
             },
-            refetchOnWindowFocus:false
         }
     ) 
     return {isLoading};

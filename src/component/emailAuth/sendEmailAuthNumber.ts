@@ -1,8 +1,5 @@
-import { SetStateAction, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { getAuthNumber } from "./GetAuthNumber";
 import config from "../../config";
-import { error } from "console";
 
 
 export interface ISendEmailHandlerProps{
@@ -12,7 +9,6 @@ export interface ISendEmailHandlerProps{
 }
 
 export interface IResponse{
-    // authNumber:string,
     rslt: boolean,
     msg:string
 }
