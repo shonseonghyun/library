@@ -199,6 +199,7 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
 
     const naverLogin=  useCallback(() =>{
         const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/naver`;
+        console.log(url);
         window.location.href = url;
     },[])
 
@@ -279,10 +280,10 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
                     </Form>
                     <SocialLogins>
                         <SocialLoginBtn onClick={naverLogin}>
-                            <SocialLoginImg src={`${process.env.PUBLIC_URL}/img/socialLogin/naver.PNG`} />
+                            <SocialLoginImg src={`${process.env.PUBLIC_URL}/images/socialLogin/naver.PNG`} />
                         </SocialLoginBtn>
                         <SocialLoginBtn onClick={googleLogin}>
-                            <SocialLoginImg src={`${process.env.PUBLIC_URL}/img/socialLogin/google.PNG`} />
+                            <SocialLoginImg src={`${process.env.PUBLIC_URL}/images/socialLogin/google.PNG`} />
                         </SocialLoginBtn>
                     </SocialLogins>
                 </LoginFormWrapper>
