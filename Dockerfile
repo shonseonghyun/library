@@ -24,6 +24,9 @@ WORKDIR /app
 # work dir 에 build 폴더 생성 /app/build
 RUN mkdir ./build
 
+# work dir 에 public/img 폴더 생성 /app/public/img
+# RUN mkdir ./public/img -> 컨테이너 구동 시 볼륨 옵션추가할 때 생성될 것으로 보임
+
 # host pc의 현재경로의 build 폴더를 workdir 의 build 폴더로 복사
 ADD ./build ./build
 
