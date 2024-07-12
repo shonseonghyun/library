@@ -204,8 +204,9 @@ const LoginModal = ({setShowing,loginAfterUrl,isEnteredInPrivateRoute}:ILoginMod
     },[])
 
     const googleLogin=  useCallback(() =>{
-        const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/google`;   
-        window.location.href=url;
+        alert("현재 지원되지 않는 소셜로그인 입니다.");
+        // const url = `${process.env.REACT_APP_BASE_URL}/api/user/oauth2/authorize/google`;   
+        // window.location.href=url;
     },[])
 
     return (
