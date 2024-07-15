@@ -9,7 +9,9 @@
 - React
 
 # 주요 기능
-<a href="https://github.com/shonseonghyun/library-front/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5"> 주요기능 </a>
+<a href="https://github.com/shonseonghyun/library-front/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5">
+ 주요 기능
+</a>
 
 
 # 구현 페이지
