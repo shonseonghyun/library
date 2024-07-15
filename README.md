@@ -1,46 +1,87 @@
-# Getting Started with Create React App
+# 📖도서관 프로젝트
+도서관리 시스템 개발
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 개발 기간
+2024.03.01 ~ ?
 
-## Available Scripts
+# ⚙개발 환경
+- React
 
-In the project directory, you can run:
+# 주요 기능
+## 회원
+### 👨내서재
+## 대출 현황
+ - 현재 대출한 도서 정보 노출
+ - 사용자에게 아래 정보 노출
+   1. 순번
+   2. 도서 제목(클릭 시 해당 도서 상세페이지로 이동)
+   3. 대출일
+   4. 반납 예정일
+   5. 반납 연기 버튼
+- 차순 정리는 **대출일**, **반납 예정일** 로 가능
 
-### `npm start`
+## 대출 이력
+ - 과거 대출하였던 도서 정보 노출
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+  - 사용자에게 아래 정보 노출
+    1. 순번
+    2. 도서 제목(클릭 시 해당 도서 상세페이지로 이동)
+    3. 대출일
+    4. 반납일
+    5. 상태
+    6. 연체(연체일자)
+- 차순 정리는 **대출일**, **반납일** 로 가능
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 💜내 책장
+- 내가 찜한 책 노출
 
-### `npm test`
+## 🔍도서 조회
+- 도서 조회는 누구나 가능
+- 조회 조건은 **도서 제목**, **저자명** 으로 가능
+- 차순 정리는 **발행년도**, **도서제목** 으로 가능
+- 간단 조회 결과 시 사용자에게 아래 내용 노출
+  1. 제목
+  2. 저자
+  3. 발행년도
+  4. 도서 상태
+  5. 이미지
+ 
+- 상세 조회 결과 시 사용자에 아래 내용 노출
+  1. 제목
+  2. 저자
+  3. 발행연도
+  4. 도서상태
+  5. 이미지
+  6. 리뷰 내용
+  7. 내용 설명
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 📝도서 리뷰
+ - 대여했던 도서에 한해 회원은 1회 후기 작성 가능
+ - 도서 상세 조회 결과 시 해당 내용 노출
+     
+## 도서 대출/반납/연장
+ - 회원만 가능
+ - 반납 기한은 대출일로부터 +7일
+ - 반납 연장 1회 가능하며, 연장반납은 반납예정일로부터 +7일
+ - 회원 당 최대 2권 대여 가능
+   
+## 🚫도서 연체
+- 도서 연체 판단은 **대출한 도서의 반납예정일 넘기는 조건**
+- 도서 연체 시 최초 연체 일자부터 연체된 도서의 마지막 반납일+7일까지  도서 대출 불가
 
-### `npm run build`
+## 🔉알림
+- 도서 대출 성공 
+- 도서 반납 성공(연체된 도서 포함)
+- 도서 연체 시 반납 완료 전까지 연체 알림 발송
+- 연체 종료
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 페이지
+[메인 페이지]
+<p align="center">
+  <img width="1180" alt="main" src="https://github.com/user-attachments/assets/7071468f-6931-4676-aa34-442cc43c08f8">
+</p>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# 프로젝트를 통한 배운 경험
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+#
