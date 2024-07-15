@@ -9,6 +9,7 @@
 
 # ⚙개발 환경 및 사용 기술
 - IDE: Visual Studio Code
+- AWS EC2
 - React
   * React Query
 
