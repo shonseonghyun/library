@@ -77,6 +77,16 @@
 
 
 # 페이지
+[라이트모드/다크모드]
+- 다크 모드
+<p align="center">
+ <img width="877" alt="darkMode" src="https://github.com/user-attachments/assets/4053bc57-995f-4147-814c-961717415df6"></p> 
+
+ - 라이트 모드
+<p align="center">
+ <img width="872" alt="lightMode" src="https://github.com/user-attachments/assets/166d5f12-0ba9-4538-a0e4-a2761838d3ae"> 
+</p> 
+
 [메인 페이지]
 <p align="center">
   <img width="1180" alt="main" src="https://github.com/user-attachments/assets/7071468f-6931-4676-aa34-442cc43c08f8">
@@ -101,6 +111,41 @@
  - GridType
 <p align="center">
  <img width="685" alt="booksSearch-gridType" src="https://github.com/user-attachments/assets/8e04354e-a4b1-4a38-ac17-485e6a4b11b8">
+</p>
+
+[특정 도서 조회]
+<p align="center">
+ <img width="701" alt="booInfo" src="https://github.com/user-attachments/assets/ef9d803d-897b-4481-844d-2998b5b5f865">
+</p>
+
+[도서 등록]
+<p align="center">
+ <img width="703" alt="도서등록" src="https://github.com/user-attachments/assets/fc5e0cc1-fd27-441e-84ba-5b96c8054b67">
+</p>
+
+[마이 페이지]
+<p align="center">
+ <img width="704" alt="mypage" src="https://github.com/user-attachments/assets/526705ea-0822-4d88-84d7-502e9a77f8ef">
+</p>
+
+[내서재(대출 현황)]
+<p align="center">
+ <img width="722" alt="내서재(대출현황)" src="https://github.com/user-attachments/assets/8864553f-c210-4e1f-8b84-a31f686defba">
+</p>
+
+[내서재(대출 이력)]
+<p align="center">
+ <img width="692" alt="내서재(대출이력)" src="https://github.com/user-attachments/assets/376c6160-4fb8-4436-b70b-fcd61c573d79">
+</p>
+
+[내서재(마이 책장)]
+<p align="center">
+ <img width="713" alt="내서재(내책장0" src="https://github.com/user-attachments/assets/ca66a105-681a-436b-919a-0989e5538ac8">
+</p>
+
+[내서재(마이 리뷰)]
+<p align="center">
+ <img width="698" alt="내서재(내리뷰)" src="https://github.com/user-attachments/assets/62088f31-7277-42d3-b345-1386378a8996">
 </p>
 
 
