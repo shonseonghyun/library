@@ -82,6 +82,28 @@
   <img width="1180" alt="main" src="https://github.com/user-attachments/assets/7071468f-6931-4676-aa34-442cc43c08f8">
 </p>
 
+[로그인]
+<p align="center">
+ <img width="1147" alt="login" src="https://github.com/user-attachments/assets/3d8de355-4612-4794-ae88-00e602e4adfd">
+</p>
+
+[회원가입]
+<p align="center">
+ <img width="1193" alt="join" src="https://github.com/user-attachments/assets/76ab6ca6-60f0-48cd-be53-00733fc7153a">
+</p>
+
+[도서 검색]
+ - ListType 
+<p align="center">
+ <img width="713" alt="booksSearch" src="https://github.com/user-attachments/assets/24d16f8b-b683-4e57-892b-6a1b6faa6007">
+</p>
+
+ - GridType
+<p align="center">
+ <img width="685" alt="booksSearch-gridType" src="https://github.com/user-attachments/assets/8e04354e-a4b1-4a38-ac17-485e6a4b11b8">
+</p>
+
+
 # 프로젝트를 통한 배운 경험
 
 #
