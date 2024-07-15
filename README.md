@@ -151,8 +151,14 @@ __[내서재(마이 책장)]__
 </p>
 
 __[내서재(마이 리뷰)]__
+ - 작성 전
 <p align="center">
  <img width="698" alt="내서재(내리뷰)" src="https://github.com/user-attachments/assets/62088f31-7277-42d3-b345-1386378a8996">
+</p>
+
+- 작성 후
+<p align="center">
+ <img width="688" alt="내서재(내리뷰-작성완료)" src="https://github.com/user-attachments/assets/cd215c43-fb27-413b-81d9-92dbfbe39fd2">
 </p>
 
 # 개선 사항
