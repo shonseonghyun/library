@@ -94,11 +94,6 @@ __[라이트모드/다크모드]__
  <img width="872" alt="lightMode" src="https://github.com/user-attachments/assets/166d5f12-0ba9-4538-a0e4-a2761838d3ae"> 
 </p> 
 
-__[메인 페이지]__
-<p align="center">
-  <img width="1180" alt="main" src="https://github.com/user-attachments/assets/7071468f-6931-4676-aa34-442cc43c08f8">
-</p>
-
 __[로그인]__
 <p align="center">
  <img width="1147" alt="login" src="https://github.com/user-attachments/assets/3d8de355-4612-4794-ae88-00e602e4adfd">
